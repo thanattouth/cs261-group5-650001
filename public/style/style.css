@@ -9,7 +9,7 @@ body, html {
     align-items: center;
     background-image: 
         linear-gradient(rgba(246, 176, 119, 0.5), rgba(251, 211, 211, 0.5)),
-        url('01-1-1024x576-1.jpg'); /* ใส่ภาพพื้นหลัง */
+        url('/public/image/01-1-1024x576-1.jpg'); /* ใส่ภาพพื้นหลัง */
     background-size: cover;
     background-position: center;
     font-family: Arial, sans-serif;

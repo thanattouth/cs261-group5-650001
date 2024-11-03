@@ -1,0 +1,90 @@
+/* ตั้งค่าพื้นฐาน */
+body, html {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-image: 
+        linear-gradient(rgba(246, 176, 119, 0.5), rgba(251, 211, 211, 0.5)),
+        url('01-1-1024x576-1.jpg'); /* ใส่ภาพพื้นหลัง */
+    background-size: cover;
+    background-position: center;
+    font-family: Arial, sans-serif;
+}
+/* สไตล์สำหรับกล่อง Login */
+.login-container {
+    padding: 40px;
+    border-radius: 30px;
+    text-align: center;
+    box-shadow: 0 4px 8px rgba(249, 248, 248, 0.53);
+    /* border: 2px solid rgb(249, 248, 248); /* กำหนดเส้นกรอบเป็นสีดำและหนา 2px */
+    background-color: rgb(251, 247, 247);
+}
+.login-container {
+    width: 300px;
+}
+.login-container h1 {
+    margin-bottom: 20px;
+    font-size: 28px;
+    color: rgb(0, 0, 0);
+    font-family: 'Poppins';
+    font-weight: bold;
+}
+.login-container input[type="text"], .login-container input[type="password"] {
+    width: 100%;
+    padding: 10px;
+    margin: 5px 0;
+    border: 1px solid #ccc;
+    border-radius: 15px;
+    box-sizing: border-box;
+}
+.login-container button {
+    width: 100%;
+    padding: 10px;
+    background-color: #ff891b;
+    color: white;
+    border: none;
+    border-radius: 25px;
+    cursor: pointer;
+    font-size: 16px;
+}
+.login-container button:hover {
+    background-color: #333;
+}
+.login-container label {
+    display: block;
+    margin-top: 10px;
+    font-size: 12px;
+    color: #555;
+    cursor: pointer;
+}
+
+.show-password {
+    text-align: left;
+    font-size: 16px;
+    color: rgb(0, 0, 0) !important;
+    cursor: pointer;
+    margin: -5px 0 20px; /* จัดระยะห่าง */
+}
+.passwordbox {
+    margin-bottom: -12px;
+}
+.login-container h2 {
+    margin-bottom: -1px;
+    font-size: 13px;
+    text-align: left;
+    color: rgb(0, 0, 0);
+}
+.login-container h3 {
+    margin-bottom: -12px;
+    font-size: 13px;
+    text-align: left;
+    color: rgb(0, 0, 0);
+}
+.logo {
+    display: block;
+    margin: 0 auto 10px;
+}

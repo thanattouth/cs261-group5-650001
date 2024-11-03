@@ -1,11 +1,28 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="th">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Login Page</title>
+    <link rel="stylesheet" href="style.css"> <!-- ลิงก์ไปยังไฟล์ CSS -->
 </head>
 <body>
-    
+    <!-- หน้า Login -->
+    <div class="login-container">
+        <img src="Emblem_of_Thammasat_University.svg.png" width="100" height="100" alt="TU-Logo" class="img-fluid logo">
+        <h1>LOGIN</h1>
+        <form>
+            <h2>Username</h2>
+            <input type="text" placeholder="example.sth1@dome.tu.ac.th" required>
+            <h3>Password</h3>
+            <label class="passwordbox">
+                <input type="password" placeholder="Password" required>
+            </label>
+            <label class="show-password">
+                <input type="checkbox"> show password
+            </label>
+            <button type="submit">Login</button>
+        </form>
+    </div>
 </body>
 </html>

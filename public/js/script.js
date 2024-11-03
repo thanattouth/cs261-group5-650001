@@ -46,14 +46,6 @@ function validateForm(event) {
     }
 }
 
-function showWelcomeMessage(data) {
-
-    const welcomeMessage = `Welcome, ${data.displayname_en}!`;
-    alert(welcomeMessage);{
-        submitLogin();
-    }
-}
-
 function createModal() {
     const modal = document.createElement('div');
     modal.className = 'modal-overlay';

@@ -49,9 +49,7 @@ function validateForm(event) {
 function showWelcomeMessage(data) {
 
     const welcomeMessage = `Welcome, ${data.displayname_en}!`;
-    alert(welcomeMessage);
-
-        // Call submitLogin with the form values
+    alert(welcomeMessage);{
         submitLogin();
     }
 }

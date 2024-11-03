@@ -50,7 +50,11 @@ function validateForm(event) {
     return false;
 }
 
-function submitLogin(username, password) {
+function submitLogin() {
+
+    const username = document.getElementById('username').value;
+    const password = document.getElementById('password').value;
+
     fetch('https://restapi.tu.ac.th/api/v1/auth/Ad/verify', {
         method: 'POST',
         headers: {
@@ -66,7 +70,7 @@ function submitLogin(username, password) {
     .then(data => {
         if (data.status) {
             // Login successful
-            window.location.href = '/dashboard'; // Redirect to dashboard
+            window.location.href = '/home.html'; // Redirect to dashboard
         } else {
             // Show error message
             const errorMessage = document.getElementById('error-message');

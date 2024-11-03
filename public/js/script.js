@@ -51,6 +51,44 @@ function showWelcomeMessage(data) {
     const welcomeMessage = `Welcome, ${data.displayname_en}!`;
     alert(welcomeMessage);
 
+        // Call submitLogin with the form values
+        submitLogin();
+    }
+}
+
+// Add this at the beginning of your script
+function createModal() {
+    const modal = document.createElement('div');
+    modal.className = 'modal-overlay';
+    modal.innerHTML = `
+        <div class="modal-container">
+            <div class="success-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+            </div>
+            <div class="welcome-text">Welcome</div>
+            <div class="user-name"></div>
+        </div>
+    `;
+    document.body.appendChild(modal);
+    return modal;
+}
+
+function showWelcomeMessage(data) {
+    const modal = createModal();
+    const userName = modal.querySelector('.user-name');
+    userName.textContent = data.displayname_en || 'User';
+    
+    // Show modal with animation
+    setTimeout(() => {
+        modal.classList.add('active');
+    }, 100);
+
+    // Redirect after animation
+    setTimeout(() => {
+        window.location.href = '/home.html';
+    }, 2000);
 }
 
 function submitLogin() {
@@ -75,6 +113,9 @@ function submitLogin() {
         
         if (data && data.status === true) {  // Explicitly check for true
             // Clear any existing error messages
+        console.log('API Response:', data);
+        
+        if (data && data.status === true) {
             const errorMessage = document.getElementById('error-message');
             errorMessage.textContent = '';
             errorMessage.style.display = 'none';
@@ -88,6 +129,21 @@ function submitLogin() {
             window.location.href = '/home.html';
             
             // Return to prevent further execution
+            return;
+        }
+        
+        // Only show error if login wasn't successful
+        const errorMessage = document.getElementById('error-message');
+        errorMessage.textContent = data.message || 'Invalid username or password';
+        errorMessage.style.display = 'block';
+            errorMessage.textContent = '';
+            errorMessage.style.display = 'none';
+            
+            // Store user data
+            localStorage.setItem('userData', JSON.stringify(data));
+            
+            // Show animated welcome message
+            showWelcomeMessage(data);
             return;
         }
         

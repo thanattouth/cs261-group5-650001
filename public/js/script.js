@@ -27,7 +27,6 @@ function validateForm(event) {
     
     const username = document.getElementById('username');
     const password = document.getElementById('password');
-    const errorMessage = document.getElementById('error-message');
     
     const usernameValid = validateInput(
         username, 
@@ -42,12 +41,16 @@ function validateForm(event) {
     );
 
     if (usernameValid && passwordValid) {
-        // Proceed with API call
-        submitLogin(username.value, password.value);
-        return false;
+        // Call submitLogin with the form values
+        submitLogin();
     }
+}
 
-    return false;
+function showWelcomeMessage(data) {
+
+    const welcomeMessage = `Welcome, ${data.displayname_en}!`;
+    alert(welcomeMessage);
+
 }
 
 function submitLogin() {
@@ -68,15 +71,30 @@ function submitLogin() {
     })
     .then(response => response.json())
     .then(data => {
-        if (data.status) {
-            // Login successful
-            window.location.href = '/home.html'; // Redirect to dashboard
-        } else {
-            // Show error message
+        console.log('API Response:', data);
+        
+        if (data && data.status === true) {  // Explicitly check for true
+            // Clear any existing error messages
             const errorMessage = document.getElementById('error-message');
-            errorMessage.textContent = 'Invalid username or password';
-            errorMessage.style.display = 'block';
+            errorMessage.textContent = '';
+            errorMessage.style.display = 'none';
+
+            // Show welcome message
+            showWelcomeMessage(data);
+            
+            // Store user data if needed
+            localStorage.setItem('userData', JSON.stringify(data));
+            
+            window.location.href = '/home.html';
+            
+            // Return to prevent further execution
+            return;
         }
+        
+        // Only show error if login wasn't successful
+        const errorMessage = document.getElementById('error-message');
+        errorMessage.textContent = data.message || 'Invalid username or password';
+        errorMessage.style.display = 'block';
     })
     .catch(error => {
         console.error('Error:', error);

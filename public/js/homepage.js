@@ -4,8 +4,10 @@ const userData = JSON.parse(localStorage.getItem('userData'));
 // ตรวจสอบว่าข้อมูลมีอยู่หรือไม่
 if (userData && userData.displayname_th) {
     document.getElementById("welcome-message-name").innerHTML = `
-        <div>ชื่อ : ${userData.displayname_th}</div>
-        <div>ID : ${userData.username}</div>
+        <div><strong>ชื่อ :</strong> ${userData.displayname_th}</div>
+        <div><strong>ID :</strong> ${userData.username}</div>
+        <div><strong>คณะ :</strong> ${userData.faculty}</div>
+        <div><strong>สาขา :</strong> ${userData.department}</div>
     `;
 }
 

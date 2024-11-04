@@ -25,7 +25,7 @@ body {
 /* Sidebar styling */
 .sidebar {
     width: 200px;
-    background-color: rgba(171, 0, 0, 0.762); /* Semi-transparent red */
+    background-color: rgba(171, 0, 0, 0.762);
     color: white;
     display: flex;
     flex-direction: column;
@@ -110,46 +110,4 @@ body {
     font-size: 24px;
     color: #990000;
     line-height: 1.2;
-}
-
-.welcome {
-    font-size: 24px;
-    color: #000000;
-    font-weight: bold;
-    text-decoration: underline;
-}
-
-#welcome-message-name {
-    text-align: left;
-    font-size: 18px;
-    color: #000000;
-    font-family: 'Sarabun', sans-serif;
-    padding: 15px 30px;
-    background-color: rgba(255, 238, 224, 0.9); 
-    border: 2px solid rgba(0, 0, 0, 0.7);
-    border-radius: 12px;
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.15);
-    width: 70%;            /* กำหนดความกว้างให้อยู่ในระดับเดียวกัน */
-    margin: 20px 0;        /* เพิ่มช่องว่างระหว่าง div */
-}
-
-/* Styling for individual sections within main content */
-.description {
-    text-align: left;
-    font-size: 20px;
-    color: #000000;
-    font-family: 'Sarabun', sans-serif;
-    padding: 15px 30px;
-    background-color: rgba(255, 238, 224, 0.9); 
-    border: 2px solid rgba(0, 0, 0, 0.7);
-    border-radius: 12px;
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.15);
-    width: 70%;            /* กำหนดความกว้างให้อยู่ในระดับเดียวกัน */
-    margin: 10px 0;        /* เพิ่มช่องว่างระหว่าง div */
-}
-
-.description-p {
-    text-align: left;
-    font-weight: bold;
-    text-decoration: underline;
 }

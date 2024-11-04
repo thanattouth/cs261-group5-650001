@@ -46,8 +46,20 @@ body {
 
 }
 
+.sidebar a {
+    text-decoration: none;
+    color: inherit;
+    font-weight: normal;
+    transition: color 0.3s;
+}
+
+.active {
+    color: rgb(255, 255, 255); /* Change this to the color you want */
+    background-color: rgba(255, 117, 24, 0.884);
+}
+
 .sidebar ul li:hover {
-    background-color: rgba(255, 0, 0, 0.9);
+    background-color: rgba(169, 0, 0, 0.9);
 }
 
 /* Main content styling */
@@ -56,7 +68,6 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    color: black;
     padding: 20px;
 }
 
@@ -86,10 +97,43 @@ body {
 }
 
 .welcome {
-    margin-top: 30px; /* เพิ่มระยะห่างด้านบน */
-    text-align: center;
+    font-size: 24px;
+    color: #000000;
+    font-weight: bold;
+    text-decoration: underline;
 }
-.welcome p {
+
+#welcome-message-name {
+    text-align: center;
+    font-size: 18px;
+    color: #000000;
+    font-family: 'Sarabun', sans-serif;
+    padding: 15px 30px;
+    background-color: rgba(255, 238, 224, 0.9); 
+    border: 2px solid rgba(0, 0, 0, 0.7);
+    border-radius: 12px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.15);
+    width: 35%;            /* กำหนดความกว้างให้อยู่ในระดับเดียวกัน */
+    margin: 10px 0;        /* เพิ่มช่องว่างระหว่าง div */
+}
+
+/* Styling for individual sections within main content */
+.description {
+    text-align: left;
     font-size: 20px;
-    margin: 5px 0;
+    color: #000000;
+    font-family: 'Sarabun', sans-serif;
+    padding: 15px 30px;
+    background-color: rgba(255, 238, 224, 0.9); 
+    border: 2px solid rgba(0, 0, 0, 0.7);
+    border-radius: 12px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.15);
+    width: 68%;            /* กำหนดความกว้างให้อยู่ในระดับเดียวกัน */
+    margin: 10px 0;        /* เพิ่มช่องว่างระหว่าง div */
+}
+
+.description-p {
+    text-align: left;
+    font-weight: bold;
+    text-decoration: underline;
 }

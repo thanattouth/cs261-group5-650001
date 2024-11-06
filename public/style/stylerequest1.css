@@ -20,11 +20,13 @@ body {
     display: flex;
     margin-top: 0px;
     background-color: rgba(255, 238, 224, 0.719);
+    flex-direction: row; /* เพิ่มบรรทัดนี้เพื่อกำหนดทิศทางการวางตัว */
+    min-height: 100vh; /* ให้ container มีความสูงขั้นต่ำเท่ากับความสูงของ viewport */
 }
 
 .sidebar {
     width: 200px;
-    background-color: rgba(171, 0, 0, 0.762);
+    background-color: rgba(171, 0, 0, 0.762); /* Semi-transparent red */
     color: white;
     display: flex;
     flex-direction: column;
@@ -81,9 +83,10 @@ body {
     flex: 1;
     display: flex;
     flex-direction: column;
-    margin-left: 40px;
-    margin-right: 40px;
     padding: 20px;
+    margin: 0 auto; /* ใช้ auto margin เพื่อจัดกึ่งกลาง */
+    max-width: 1200px; /* กำหนดความกว้างสูงสุด */
+    width: 100%; /* ให้ใช้พื้นที่ที่เหลือทั้งหมด */
 }
 
 .header {
@@ -118,36 +121,27 @@ body {
     margin-bottom: 15px;
 }
 .form-group {
-    margin-bottom: 15px;
+    margin-bottom: 20px;
+    width: 100%;
 }
+
 .form-group label {
     display: block;
-    margin-bottom: 10px;
+    margin-bottom: 8px;
     font-weight: bold;
 }
+
 .date-input {
     width: 250px !important; /* เปลี่ยนขนาดให้เหมาะสม */
     padding: 10px; /* เพื่อให้มีความกว้างมากขึ้น */
     border: 1px solid #ccc;
     border-radius: 40px;
 }
-.p-input {
-    width: 100px !important; /* เปลี่ยนขนาดให้เหมาะสม */
-    padding: 10px; /* เพื่อให้มีความกว้างมากขึ้น */
-    border: 1px solid #ccc;
-    border-radius: 40px;
-}
-.name-input {
-    width: 400px !important; /* เปลี่ยนขนาดให้เหมาะสม */
-    padding: 10px; /* เพื่อให้มีความกว้างมากขึ้น */
-    border: 1px solid #ccc;
-    border-radius: 40px;
-}
+.p-input,
+.name-input,
 .faculty-input {
-    width: 300px !important; /* เปลี่ยนขนาดให้เหมาะสม */
-    padding: 10px; /* เพื่อให้มีความกว้างมากขึ้น */
-    border: 1px solid #ccc;
-    border-radius: 40px;
+    max-width: 100%; /* ไม่ให้ input กว้างเกินกว่า container */
+    box-sizing: border-box; /* รวม padding และ border เข้าไปในความกว้าง */
 }
 .form-group input,
 .form-group textarea {
@@ -167,8 +161,38 @@ body {
     display: flex;
     gap: 20px;
     margin-top: 15px;
+    flex-wrap: wrap; /* เพิ่มการ wrap เมื่อหน้าจอแคบ */
 }
 
 .multi-column > div {
     flex: 1;
+    min-width: 250px; /* กำหนดความกว้างขั้นต่ำของแต่ละคอลัมน์ */
+}
+
+@media screen and (max-width: 768px) {
+    .container {
+        flex-direction: column; /* เปลี่ยนเป็นแนวตั้งเมื่อหน้าจอแคบ */
+    }
+
+    .sidebar {
+        width: 100%; /* ให้ sidebar กินความกว้างเต็มหน้าจอ */
+        min-height: auto; /* ปรับความสูงตามเนื้อหา */
+    }
+
+    .main-content {
+        margin: 0;
+        padding: 10px;
+    }
+
+    /* ปรับขนาด input fields สำหรับหน้าจอเล็ก */
+    .date-input,
+    .p-input,
+    .name-input,
+    .faculty-input {
+        width: 100% !important; /* ให้ input เต็มความกว้างที่มี */
+    }
+
+    .multi-column > div {
+        flex: 1 1 100%; /* ให้แต่ละคอลัมน์ใช้พื้นที่เต็มความกว้าง */
+    }
 }

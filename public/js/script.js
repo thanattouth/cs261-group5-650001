@@ -74,9 +74,16 @@ function showWelcomeMessage(data) {
         modal.classList.add('active');
     }, 100);
 
-    // Redirect after animation
+    // ตรวจสอบ session ก่อน redirect
     setTimeout(() => {
-        window.location.href = './home.html';
+        if (sessionManager.checkSession()) {
+            window.location.href = './home.html';
+        } else {
+            console.error('Session creation failed');
+            const errorMessage = document.getElementById('error-message');
+            errorMessage.textContent = 'Failed to create session. Please try again.';
+            errorMessage.style.display = 'block';
+        }
     }, 2000);
 }
 
@@ -105,10 +112,10 @@ function submitLogin() {
             errorMessage.textContent = '';
             errorMessage.style.display = 'none';
             
-            // Store user data
-            localStorage.setItem('userData', JSON.stringify(data));
+            // สร้าง session ก่อนที่จะแสดง welcome message
+            sessionManager.createSession(data);
             
-            // Show animated welcome message
+            // Show animated welcome message และ redirect
             showWelcomeMessage(data);
             return;
         }

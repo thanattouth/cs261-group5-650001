@@ -2,12 +2,19 @@ class SessionManager {
     constructor() {
         this.TIMEOUT_DURATION = 30 * 60 * 1000; // 30 นาที
         this.timeoutId = null;
+        this.SESSION_KEY = 'tuSession';
         this.initLogoutModal();
         
-        // เพิ่ม event listener สำหรับ popstate
         window.addEventListener('popstate', () => {
             if (sessionStorage.getItem('isLoggedOut') === 'true') {
                 this.redirectToLogin();
+            }
+        });
+
+        // เพิ่ม event listener สำหรับตรวจสอบการเปลี่ยนแปลงของ session storage
+        window.addEventListener('storage', (e) => {
+            if (e.key === this.SESSION_KEY) {
+                console.log('Session state changed:', e.newValue ? 'active' : 'inactive');
             }
         });
     }
@@ -87,14 +94,60 @@ class SessionManager {
         modal.style.display = 'none';
     }
 
+    createSession(userData) {
+        const sessionData = {
+            userId: userData.username,
+            loginTime: new Date().toISOString(),
+            lastActivity: new Date().toISOString(),
+            expiresAt: new Date(Date.now() + this.TIMEOUT_DURATION).toISOString()
+        };
+
+        // เก็บข้อมูล session ใน sessionStorage
+        sessionStorage.setItem(this.SESSION_KEY, JSON.stringify(sessionData));
+        
+        // เก็บข้อมูลผู้ใช้ใน localStorage
+        localStorage.setItem('userData', JSON.stringify(userData));
+        
+        console.log('Session created:', sessionData);
+        this.setupSessionTimeout();
+    }
+
     // ตรวจสอบ session
     checkSession() {
+        const sessionData = this.getSessionData();
         const userData = JSON.parse(localStorage.getItem('userData'));
-        if (!userData) {
+
+        if (!sessionData || !userData) {
+            console.log('Session check failed: No session data or user data found');
             this.redirectToLogin();
             return false;
         }
+
+        // ตรวจสอบว่า session หมดอายุหรือยัง
+        if (new Date(sessionData.expiresAt) < new Date()) {
+            console.log('Session expired');
+            this.logout();
+            return false;
+        }
+
+        // อัพเดท lastActivity
+        this.updateSessionActivity();
+        console.log('Session valid:', sessionData);
         return true;
+    }
+
+    updateSessionActivity() {
+        const sessionData = this.getSessionData();
+        if (sessionData) {
+            sessionData.lastActivity = new Date().toISOString();
+            sessionData.expiresAt = new Date(Date.now() + this.TIMEOUT_DURATION).toISOString();
+            sessionStorage.setItem(this.SESSION_KEY, JSON.stringify(sessionData));
+        }
+    }
+
+    getSessionData() {
+        const sessionStr = sessionStorage.getItem(this.SESSION_KEY);
+        return sessionStr ? JSON.parse(sessionStr) : null;
     }
 
     redirectToLogin() {
@@ -105,26 +158,32 @@ class SessionManager {
 
     // จัดการ logout
     logout() {
-        // ลบข้อมูลทั้งหมดที่ได้จาก TU API
+        // Log session state before clearing
+        const sessionData = this.getSessionData();
+        console.log('Logging out. Session data before clearing:', sessionData);
+
+        // ลบข้อมูล session
+        sessionStorage.removeItem(this.SESSION_KEY);
+        
+        // ลบข้อมูลผู้ใช้
         localStorage.removeItem('userData');
         sessionStorage.clear();
         
         // เพิ่ม flag สำหรับป้องกันการกด back
         sessionStorage.setItem('isLoggedOut', 'true');
         
+        console.log('Session cleared. All storage data removed.');
+
         // ลบข้อมูลที่แสดงในหน้า home (ถ้ามี)
         const welcomeMessage = document.getElementById('welcome-message-name');
         if (welcomeMessage) {
             welcomeMessage.innerHTML = '';
         }
 
-        // แทนที่ history ด้วย login page
+        // จัดการ history
         window.history.replaceState(null, '', './index.html');
-        
-        // เพิ่ม state ใหม่เพื่อป้องกันการย้อนกลับ
         window.history.pushState(null, '', './index.html');
         
-        // redirect ไปหน้า login
         this.redirectToLogin();
     }
 
@@ -149,21 +208,56 @@ class SessionManager {
         sessionStorage.removeItem('isLoggedOut');
     }
 
-    // ตั้งค่า session timeout
     setupSessionTimeout() {
         const resetTimeout = () => {
             clearTimeout(this.timeoutId);
             this.timeoutId = setTimeout(() => {
+                console.log('Session timeout triggered');
                 alert('Your session has expired. Please login again.');
                 this.logout();
             }, this.TIMEOUT_DURATION);
+
+            // อัพเดท lastActivity เมื่อมีการทำกิจกรรม
+            this.updateSessionActivity();
         };
 
+        // เพิ่ม event listeners สำหรับการตรวจจับกิจกรรมของผู้ใช้
         ['mousemove', 'keypress', 'click', 'scroll'].forEach(event => {
             document.addEventListener(event, resetTimeout);
         });
 
         resetTimeout();
+    }
+
+    setupLoginPage() {
+        console.log('Setting up login page');
+        const sessionData = this.getSessionData();
+        const userData = JSON.parse(localStorage.getItem('userData'));
+        
+        console.log('Current session data:', sessionData);
+        console.log('Current user data:', userData);
+
+        if (userData && sessionData) {
+            console.log('Active session found, redirecting to home');
+            window.location.replace('./home.html');
+            return;
+        }
+        sessionStorage.removeItem('isLoggedOut');
+    }
+
+    // แสดงสถานะ session ปัจจุบัน (สำหรับการตรวจสอบ)
+    debugSession() {
+        const sessionData = this.getSessionData();
+        const userData = JSON.parse(localStorage.getItem('userData'));
+        const isLoggedOut = sessionStorage.getItem('isLoggedOut');
+
+        console.log('=== Session Debug Info ===');
+        console.log('Session Data:', sessionData);
+        console.log('User Data:', userData);
+        console.log('Logged Out Flag:', isLoggedOut);
+        console.log('Session Storage Keys:', Object.keys(sessionStorage));
+        console.log('Local Storage Keys:', Object.keys(localStorage));
+        console.log('========================');
     }
 
     // ตั้งค่าการป้องกันในหน้าที่ต้องล็อกอิน

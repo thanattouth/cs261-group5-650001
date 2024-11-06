@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Thammasat University - Faculty of Public Health</title>
+    <title>Thammasat University</title>
     <link rel="stylesheet" href="./style/stylerequest1.css">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=K2D:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800&family=Sarabun:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800&family=Trirong:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=K2D:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800&family=Sarabun:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800&display=swap');
     </style>
 </head>
 <body>
@@ -25,11 +25,91 @@
             </div>
         </nav>
         <div class="main-content">
-            <h1>Hello</h1>
+            <h1>เขียนคำร้องขอจดทะเบียนล่าช้า</h1>
+            <form>
+                <div class="form-group">
+                    <label>วันที่</label>
+                    <input type="text" class="date-input" placeholder="วว/ดด/ปปปป">
+                </div>
+                <div class="form-group multi-column">
+                    <div>
+                        <label>ชื่อ-นามสกุล</label>
+                        <input type="text" class="name-input">
+                    </div>
+                    <div>
+                        <label>เลขทะเบียน</label>
+                        <input type="text">
+                    </div>
+                    <div>
+                        <label>สาขา</label>
+                        <input type="text" class="faculty-input">
+                    </div>
+                    <div>
+                        <label>ชั้นปี</label>
+                        <input type="text" class="p-input">
+                    </div>
+                </div>
+                <div class="form-group multi-column">
+                    <div>
+                        <label>ที่อยู่ที่ติดต่อได้</label>
+                        <input type="text">
+                    </div>
+                    <div>
+                        <label>แขวง/ตำบล</label>
+                        <input type="text">
+                    </div>
+                    <div>
+                        <label>เขต/อำเภอ</label>
+                        <input type="text">
+                    </div>
+                    <div>
+                        <label>จังหวัด</label>
+                        <input type="text">
+                    </div>
+                </div>
+                <div class="form-group multi-column">
+                    <div>
+                        <label>โทรศัพท์นักศึกษา</label>
+                        <input type="text">
+                    </div>
+                    <div>
+                        <label>โทรศัพท์ผู้ปกครอง</label>
+                        <input type="text">
+                    </div>
+                    <div>
+                        <label>อาจารย์ที่ปรึกษา</label>
+                        <input type="text">
+                    </div>
+                </div>
+                <div class = "textt">
+                    <h3>ประสงค์จะยื่นคำร้องจดทะเบียนล่าช้า</h3>
+                </div>
+                <div class="form-group multi-column">
+                    <div>
+                        <label>ภาคเรียนที่</label>
+                        <input type="text" placeholder="เช่น 1/2566">
+                    </div>
+                    <div>
+                        <label>รหัสวิชา</label>
+                        <input type="text">
+                    </div>
+                    <div>
+                        <label>ชื่อวิชา</label>
+                        <input type="text">
+                    </div>
+                    <div>
+                        <label>section</label>
+                        <input type="text">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>เหตุผลที่ยื่นคำร้องเนื่องจาก</label>
+                    <textarea rows="4"></textarea>
+                </div>
+            </form>
         </div>
     </div>
     <script src="./js/request1.js"></script>
     <script src="./js/logout.js"></script>
-
 </body>
 </html>

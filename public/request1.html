@@ -110,6 +110,12 @@
         </div>
     </div>
     <script src="./js/request1.js"></script>
+    <script src="./js/sessionUtils.js"></script>
     <script src="./js/logout.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            sessionManager.setupProtectedPage();
+        });
+    </script>
 </body>
 </html>

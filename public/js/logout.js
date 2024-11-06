@@ -1,15 +1,26 @@
-function logout() {
-    const userData = JSON.parse(localStorage.getItem('userData'));
+document.addEventListener('DOMContentLoaded', function() {
+    const logoutButton = document.getElementById('logout-nav');
+    
+    if (logoutButton) {
+        logoutButton.addEventListener('click', function(e) {
+            e.preventDefault();
+            sessionManager.showLogoutModal();
+        });
+    }
 
-    // ลบข้อมูลการเข้าสู่ระบบจาก localStorage หรือ sessionStorage
-    localStorage.removeItem("userData"); // ตัวอย่างลบข้อมูลที่เก็บอยู่ใน localStorage
+    // Event listeners สำหรับปุ่มใน Modal
+    document.getElementById('confirmLogout').addEventListener('click', function() {
+        sessionManager.logout();
+    });
 
-    alert("Logout สำเร็จ");
+    document.getElementById('cancelLogout').addEventListener('click', function() {
+        sessionManager.hideLogoutModal();
+    });
 
-    // นำผู้ใช้ไปยังหน้า login
-    window.location.href = "./index.html";
-}
-
-// ผูกฟังก์ชัน logout เข้ากับปุ่ม "ออกจากระบบ"
-document.getElementById("logout-nav").addEventListener("click", logout);
-
+    // ปิด Modal เมื่อคลิกพื้นหลัง
+    document.getElementById('logoutModal').addEventListener('click', function(e) {
+        if (e.target === this) {
+            sessionManager.hideLogoutModal();
+        }
+    });
+});

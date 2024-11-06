@@ -10,9 +10,10 @@ body {
     background: 
         linear-gradient(rgba(246, 176, 119, 0.5), rgba(251, 211, 211, 0.5)) ,
         url('../image/01-1-1024x576-1.jpg') no-repeat center center/cover ;
-    height: 100vh;
+    min-height: 100vh;
     display: flex;
     flex-direction: column;
+    background-attachment: fixed;
 }
 
 .container {

@@ -26,92 +26,139 @@
         </nav>
         <div class="main-content">
             <h1>เขียนคำร้องขอจดทะเบียนล่าช้า</h1>
-            <form>
+            <form id="requestForm" onsubmit="return validateForm()">
                 <div class="form-group">
                     <label>วันที่</label>
-                    <input type="text" class="date-input" placeholder="วว/ดด/ปปปป">
+                    <input  
+                        type="text" 
+                        class="date-input"
+                        id="date" 
+                        placeholder="วว/ดด/ปปปป"
+                        required 
+                        maxlength="10"
+                        
+                    >       
+
                 </div>
                 <div class="form-group multi-column">
                     <div>
                         <label>ชื่อ-นามสกุล</label>
-                        <input type="text" class="name-input">
+                        <input type="text" id="name" required>
                     </div>
                     <div>
                         <label>เลขทะเบียน</label>
-                        <input type="text">
+                        <input 
+                        type="text" 
+                        id="id" 
+                        placeholder="เลขทะเบียน" 
+                        required 
+                        maxlength="10"
+                        oninput="this.value = this.value.replace(/[^0-9]/g, '')"
+                        >
                     </div>
                     <div>
                         <label>สาขา</label>
-                        <input type="text" class="faculty-input">
+                        <input type="text" id="faculty" required>
                     </div>
                     <div>
                         <label>ชั้นปี</label>
-                        <input type="text" class="p-input">
+                        <input  
+                        type="text" class="p-input"
+                        id="ชั้นปี" 
+                        placeholder="ชั้นปี" 
+                        required 
+                        maxlength="1"
+                        oninput="this.value = this.value.replace(/[^1-8]/g, '')"
+                        
+                        >
                     </div>
                 </div>
                 <div class="form-group multi-column">
                     <div>
                         <label>ที่อยู่ที่ติดต่อได้</label>
-                        <input type="text">
+                        <input type="text" id="address" required>
                     </div>
                     <div>
                         <label>แขวง/ตำบล</label>
-                        <input type="text">
+                        <input type="text" id="district" required>
                     </div>
                     <div>
                         <label>เขต/อำเภอ</label>
-                        <input type="text">
+                        <input type="text" id="subdistrict" required>
                     </div>
                     <div>
                         <label>จังหวัด</label>
-                        <input type="text">
+                        <input type="text" id="province" required>
                     </div>
                 </div>
                 <div class="form-group multi-column">
                     <div>
                         <label>โทรศัพท์นักศึกษา</label>
-                        <input type="text">
+                        <input 
+                        type="text" 
+                        id="student-tel" 
+                        placeholder="เบอร์โทรศัพท์นักศึกษา" 
+                        required 
+                        maxlength="10"
+                        oninput="this.value = this.value.replace(/[^0-9]/g, '')"
+                        >
                     </div>
                     <div>
                         <label>โทรศัพท์ผู้ปกครอง</label>
-                        <input type="text">
+                        <input 
+                        type="text" 
+                        id="parent-tel" 
+                        placeholder="เบอร์โทรศัพท์ผู้ปกครอง" 
+                        required 
+                        maxlength="10"
+                        oninput="this.value = this.value.replace(/[^0-9]/g, '')"
+                        >
                     </div>
                     <div>
                         <label>อาจารย์ที่ปรึกษา</label>
-                        <input type="text">
+                        <input type="text" id="advisor" required>
                     </div>
                 </div>
-                <div class = "textt">
+                <div class="textt">
                     <h3>ประสงค์จะยื่นคำร้องจดทะเบียนล่าช้า</h3>
                 </div>
                 <div class="form-group multi-column">
                     <div>
                         <label>ภาคเรียนที่</label>
-                        <input type="text" placeholder="เช่น 1/2566">
+                        <input type="text" 
+                        id="semester"  
+                        placeholder="เช่น 1/2566" 
+                        required 
+                        maxlength="6"
+                        oninput="formatSemester(this)"
+                        oninput="this.value = this.value.replace(/[^0-9]/g, '')"
+                        >
                     </div>
                     <div>
                         <label>รหัสวิชา</label>
-                        <input type="text">
+                        <input type="text" id="courseCode" required>
                     </div>
                     <div>
                         <label>ชื่อวิชา</label>
-                        <input type="text">
+                        <input type="text" id="courseName" required>
                     </div>
                     <div>
                         <label>section</label>
-                        <input type="text">
+                        <input type="text" id="section" required>
                     </div>
                 </div>
                 <div class="form-group">
                     <label>เหตุผลที่ยื่นคำร้องเนื่องจาก</label>
-                    <textarea rows="4"></textarea>
+                    <textarea rows="4" id="reason" required></textarea>
                 </div>
             </form>
         </div>
     </div>
+
     <script src="./js/request1.js"></script>
     <script src="./js/sessionUtils.js"></script>
     <script src="./js/logout.js"></script>
+    <script src="./js/validate.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             sessionManager.setupProtectedPage();
@@ -119,3 +166,4 @@
     </script>
 </body>
 </html>
+

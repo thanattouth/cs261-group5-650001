@@ -84,12 +84,22 @@ function validateForm() {
     return true;
 }
 
-document.addEventListener('DOMContentLoaded', function() {
-    // Check if the current page is the home page
-    const currentPage = window.location.pathname.split('/').pop(); // Gets the current file name
+document.addEventListener("DOMContentLoaded", function() {
+    // แสดง modal เมื่อกดปุ่ม "ส่งคำร้อง"
+    document.getElementById("submitButton").onclick = function() {
+        document.getElementById("myModal").style.display = "block";
+    };
 
-    // Assuming this file is named "home.html"
-    if (currentPage === 'request1.html') {
-        document.getElementById('req1-nav').classList.add('active'); // Add the active class
-    }
+    // ซ่อน modal เมื่อกดปุ่ม "ยกเลิก"
+    document.getElementById("cancelBtn").onclick = function() {
+        document.getElementById("myModal").style.display = "none";
+    };
+
+    // ดำเนินการยืนยันการส่งคำร้อง
+    document.getElementById("confirmBtn").onclick = function() {
+        document.getElementById("myModal").style.display = "none";
+        alert("ส่งคำร้องเรียบร้อยแล้ว");
+        // เพิ่มโค้ดการส่งคำร้องจริงที่นี่ เช่น submit form หรือเรียกใช้งาน API
+    };
 });
+

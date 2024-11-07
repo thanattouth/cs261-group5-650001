@@ -17,14 +17,6 @@ function validateForm() {
     const courseName = document.getElementById("courseName").value;
     const section = document.getElementById("section").value;
     const reason = document.getElementById("reason").value;
-
-    
-    
-    
-    
-    
-    
-    
     
     // Validate date (dd/mm/yyyy)
     const dateRegex = /^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[0-2])\/\d{4}$/;
@@ -91,3 +83,13 @@ function validateForm() {
 
     return true;
 }
+
+document.addEventListener('DOMContentLoaded', function() {
+    // Check if the current page is the home page
+    const currentPage = window.location.pathname.split('/').pop(); // Gets the current file name
+
+    // Assuming this file is named "home.html"
+    if (currentPage === 'request1.html') {
+        document.getElementById('req1-nav').classList.add('active'); // Add the active class
+    }
+});

@@ -143,13 +143,19 @@ body {
     max-width: 100%; /* ไม่ให้ input กว้างเกินกว่า container */
     box-sizing: border-box; /* รวม padding และ border เข้าไปในความกว้าง */
 }
-.form-group input,
-.form-group textarea {
+.form-group input {
     width: 100%;
     padding: 10px;
     border: 1px solid #ccc;
     border-radius: 40px;
 }
+.form-group textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 20px;
+}
+
 .form-group input[type="text"] {
     display: inline-block;
     margin-right: 10px;

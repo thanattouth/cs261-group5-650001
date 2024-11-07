@@ -285,3 +285,65 @@ body {
         flex: 1 1 100%; /* ให้แต่ละคอลัมน์ใช้พื้นที่เต็มความกว้าง */
     }
 }
+
+/* สไตล์พื้นฐานของ modal */
+.modal {
+    display: none; /* ซ่อนไว้ก่อน */
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.4);
+}
+.modal-content {
+    background-color: white;
+    margin: 15% auto;
+    padding:80px; /* ลด padding ลงเพื่อให้ปุ่มจัดเรียงได้ดีขึ้น */
+    width: 500px;
+    text-align: center;
+    border-radius: 20px;
+}
+
+.button-container {
+    display: flex;
+    justify-content: space-between;
+    gap: 30px; /* เพิ่มระยะห่างระหว่างปุ่ม */
+    margin-top: 30px;
+}
+
+.button {
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 10px;
+    flex: 1; /* ให้ปุ่มมีขนาดเท่ากัน */
+    max-width: 120px; /* จำกัดความกว้างของปุ่ม */
+}
+
+.confirm-btn, .cancel-btn {
+    background-color: rgba(171, 0, 0, 0.762);
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    
+    margin-top: 35px;
+}
+.cancel-btn {
+    margin-left: 100px;
+}
+.confirm-btn:hover, .cancel-btn:hover {
+    background-color: rgba(255, 117, 24, 0.884);
+}
+.modal-content p {
+    font-size: 20px; /* ปรับขนาดฟอนต์ */
+    font-weight: normal; /* ตั้งค่าความหนาของฟอนต์ */
+    margin-bottom: 15px; /* เพิ่มระยะห่าง */
+}
+
+

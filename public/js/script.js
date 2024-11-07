@@ -112,6 +112,11 @@ function submitLogin() {
             errorMessage.textContent = '';
             errorMessage.style.display = 'none';
             
+            //ส่งข้อมูลไป save ใน databse
+            //commentปิดไว้ให้ ถ้าจะเปิดลองให้ต้องมีdockerของdatabase กับ รันCRUDก่อน
+           // const studentLoginLog = new StudentLoginLog();
+           // studentLoginLog.fetchUserData(username);
+
             // สร้าง session ก่อนที่จะแสดง welcome message
             sessionManager.createSession(data);
             

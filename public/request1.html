@@ -151,6 +151,15 @@
                     <label>เหตุผลที่ยื่นคำร้องเนื่องจาก</label>
                     <textarea rows="4" id="reason" required></textarea>
                 </div>
+                <div class="form-group">
+                    <label>แนบไฟล์:</label>
+                    <button type="button" class="custom-file-button" onclick="document.getElementById('attachment').click();">Choose Files</button>
+                    <input type="file" id="attachment" name="attachments" class="file-input" style="display: none;" multiple>
+                    <div id="file-list"></div>
+                    
+                    <label>รวมไฟล์ PDF ทั้งหมดเป็น PDF เดียวกัน:</label>
+                    <button type="button" class="custom-file-button merge-pdf-button">รวมไฟล์เป็น PDF</button> 
+                </div>
             </form>
         </div>
     </div>
@@ -159,11 +168,123 @@
     <script src="./js/sessionUtils.js"></script>
     <script src="./js/logout.js"></script>
     <script src="./js/validate.js"></script>
+    <script src="js/request1.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
+    
+
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            sessionManager.setupProtectedPage();
+      document.addEventListener('DOMContentLoaded', function() {
+    const attachmentInput = document.getElementById('attachment');
+    const fileListContainer = document.getElementById('file-list');
+    const dt = new DataTransfer();
+
+    attachmentInput.addEventListener('change', function() {
+        if (dt.items.length + this.files.length > 5) {
+            alert("คุณสามารถแนบไฟล์ได้สูงสุด 5 ไฟล์");
+            return;
+        }
+
+        const files = Array.from(this.files);
+        files.forEach(file => {
+            if ((file.type === "application/pdf" || file.type.startsWith('image/')) && file.size > 302400) {
+                alert("ไฟล์ PDF และไฟล์รูปภาพต้องมีขนาดไม่เกิน 300 KB");
+                return;
+            }
+            dt.items.add(file);
+            addFileItem(file);
         });
+
+        attachmentInput.files = dt.files;
+    });
+
+    function addFileItem(file) {
+        const fileItem = document.createElement('div');
+        fileItem.classList.add('file-item');
+
+        const fileLink = document.createElement('a');
+        fileLink.href = URL.createObjectURL(file);
+        fileLink.download = file.name;
+        fileLink.classList.add('file-name');
+        fileLink.target = '_blank';
+        fileLink.textContent = file.type === "application/pdf" ? '📄 ' : (file.type.startsWith('image/') ? '🖼️ ' : '📄 ');
+        fileLink.appendChild(document.createTextNode(` ${file.name} (${(file.size / 1024).toFixed(2)} KB)`));
+
+        fileItem.appendChild(fileLink);
+
+        const renameButton = createRenameButton(file, fileLink);
+        fileItem.appendChild(renameButton);
+
+        const removeButton = createRemoveButton(file, fileItem);
+        fileItem.appendChild(removeButton);
+
+        fileListContainer.appendChild(fileItem);
+    }
+
+    function createRenameButton(file, fileLink) {
+        const button = document.createElement('button');
+        button.textContent = "เปลี่ยนชื่อ";
+        button.classList.add('rename-file-button');
+        button.onclick = () => {
+            const newName = prompt("กรุณากรอกชื่อไฟล์ใหม่:", file.name);
+            if (newName && newName !== file.name) {
+                const updatedFile = new File([file], newName, { type: file.type });
+                dt.items.remove(Array.from(dt.files).indexOf(file));
+                dt.items.add(updatedFile);
+                attachmentInput.files = dt.files;
+                fileLink.href = URL.createObjectURL(updatedFile);
+                fileLink.download = newName; // อัปเดตชื่อไฟล์สำหรับดาวน์โหลด
+                fileLink.textContent = `${fileLink.textContent.split(' ')[0]} ${newName} (${(updatedFile.size / 1024).toFixed(2)} KB)`; // แสดงชื่อไฟล์ใหม่แทนที่ชื่อเก่า
+            }
+        };
+        return button;
+    }
+
+    function createRemoveButton(file, fileItem) {
+        const button = document.createElement('button');
+        button.innerHTML = "&#10006;";
+        button.classList.add('remove-file-button');
+        button.onclick = () => {
+            dt.items.remove(Array.from(dt.files).indexOf(file));
+            attachmentInput.files = dt.files;
+            fileItem.remove();
+        };
+        return button;
+    }
+
+    document.querySelector('.merge-pdf-button').addEventListener('click', async function() {
+        const pdfFiles = Array.from(dt.files).filter(file => file.type === "application/pdf");
+        if (pdfFiles.length === 0) {
+            alert("กรุณาเลือกไฟล์ PDF สำหรับการรวม");
+            return;
+        }
+
+        const { PDFDocument } = PDFLib;
+        const mergedPdf = await PDFDocument.create();
+        for (const file of pdfFiles) {
+            const arrayBuffer = await file.arrayBuffer();
+            const pdf = await PDFDocument.load(arrayBuffer);
+            const copiedPages = await mergedPdf.copyPages(pdf, pdf.getPageIndices());
+            copiedPages.forEach(page => mergedPdf.addPage(page));
+        }
+
+        const pdfBytes = await mergedPdf.save();
+        const blob = new Blob([pdfBytes], { type: "application/pdf" });
+        const mergedFile = new File([blob], "merged.pdf", { type: "application/pdf" });
+
+        // Clear all old PDF files and add the new merged PDF
+        const nonPdfFiles = Array.from(dt.files).filter(file => file.type !== "application/pdf");
+        dt.items.clear();
+        dt.items.add(mergedFile);
+        nonPdfFiles.forEach(file => dt.items.add(file));
+        attachmentInput.files = dt.files;
+
+        // Clear and re-add all files including the new merged PDF
+        fileListContainer.innerHTML = '';
+        Array.from(dt.files).forEach(file => addFileItem(file));
+    });
+});
+
+
     </script>
 </body>
 </html>
-

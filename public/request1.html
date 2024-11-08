@@ -64,7 +64,7 @@
                         <label>ชั้นปี</label>
                         <input  
                         type="text" class="p-input"
-                        id="ชั้นปี" 
+                        id="year" 
                         placeholder="ชั้นปี" 
                         required 
                         maxlength="1"
@@ -130,8 +130,7 @@
                         placeholder="เช่น 1/2566" 
                         required 
                         maxlength="6"
-                        oninput="formatSemester(this)"
-                        oninput="this.value = this.value.replace(/[^0-9]/g, '')"
+                        pattern="^[0-9]{1}/[0-9]{4}$"
                         >
                     </div>
                     <div>

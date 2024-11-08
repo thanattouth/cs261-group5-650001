@@ -2,15 +2,15 @@ function validateForm() {
     // Get form values
     const date = document.getElementById("date").value;
     const name = document.getElementById("name").value;
-    const regNumber = document.getElementById("regNumber").value;
+    const id = document.getElementById("id").value;
     const faculty = document.getElementById("faculty").value;
     const year = document.getElementById("year").value;
     const address = document.getElementById("address").value;
     const district = document.getElementById("district").value;
     const subdistrict = document.getElementById("subdistrict").value;
     const province = document.getElementById("province").value;
-    const studentPhone = document.getElementById("studentPhone").value;
-    const guardianPhone = document.getElementById("guardianPhone").value;
+    const studentPhone = document.getElementById("student-tel").value;
+    const guardianPhone = document.getElementById("parent-tel").value;
     const advisor = document.getElementById("advisor").value;
     const semester = document.getElementById("semester").value;
     const courseCode = document.getElementById("courseCode").value;
@@ -44,38 +44,9 @@ function validateForm() {
         return false;
     }
 
-
-    function formatSemester(input) {
-        // กำหนดให้รับเฉพาะตัวเลข
-        let value = input.value.replace(/[^0-9]/g, ''); // ลบตัวอักษรที่ไม่ใช่ตัวเลข
-    
-        // แทรกเครื่องหมาย '/' เมื่อกรอกตัวเลขครบ 1 ตัวสำหรับภาคเรียน และ 4 ตัวสำหรับปีการศึกษา
-        if (value.length >= 2) {
-            // หากมีตัวเลขครบ 2 ตัวแรก (ภาคเรียน) และตัวเลขต่อไปเป็นปีการศึกษา
-            value = value.substring(0, 1) + '/' + value.substring(1, 5);
-        }
-    
-        // จำกัดจำนวนตัวอักษรที่สามารถกรอกได้ (สูงสุด 7 ตัว)
-        if (value.length > 7) {
-            value = value.substring(0, 7);
-        }
-    
-        // อัปเดตค่าของ input
-        input.value = value;
-    }
-
-
-    // Validate semester (1 or 2 / yyyy)
-    const semesterRegex = /^[12]\/\d{4}$/;
-    if (!semesterRegex.test(semester)) {
-        alert("กรุณากรอกภาคเรียนให้ถูกต้อง (1/ปีการศึกษา หรือ 2/ปีการศึกษา)");
-        return false;
-    
-    }
-
     // Validate that all fields are filled
     if (
-        !name || !regNumber || !faculty || !address || !district || !subdistrict || !province || !advisor || !courseCode || !courseName || !section || !reason
+        !name || !id || !date || !faculty || !address || !district || !subdistrict || !province || !advisor || !courseCode || !courseName || !section || !reason
     ) {
         alert("กรุณากรอกข้อมูลให้ครบถ้วน");
         return false;
@@ -123,21 +94,21 @@ function getFormDataFromLocalStorage() {
     return {
       date: localStorage.getItem('date'),
       name: localStorage.getItem('name'),
-      regNumber: localStorage.getItem('regNumber'),
+      id: localStorage.getItem('id'),
       faculty: localStorage.getItem('faculty'),
       year: localStorage.getItem('year'),
       address: localStorage.getItem('address'),
       district: localStorage.getItem('district'),
       subdistrict: localStorage.getItem('subdistrict'),
       province: localStorage.getItem('province'),
-      studentPhone: localStorage.getItem('studentPhone'),
-      guardianPhone: localStorage.getItem('guardianPhone'),
+      studentPhone: localStorage.getItem('student-tel'),
+      guardianPhone: localStorage.getItem('parent-tel'),
       advisor: localStorage.getItem('advisor'),
       semester: localStorage.getItem('semester'),
       courseCode: localStorage.getItem('courseCode'),
       courseName: localStorage.getItem('courseName'),
       section: localStorage.getItem('section'),
-      reason: localStorage.getItem('reason')
+      reason: localStorage.getItem('reason'),
     };
 }
 
@@ -145,15 +116,15 @@ function getFormDataFromLocalStorage() {
 function saveFormDataToLocalStorage() {
     const date = document.getElementById('date').value;
     const name = document.getElementById('name').value;
-    const regNumber = document.getElementById('regNumber').value;
+    const id = document.getElementById('id').value;
     const faculty = document.getElementById('faculty').value;
     const year = document.getElementById('year').value;
     const address = document.getElementById('address').value;
     const district = document.getElementById('district').value;
     const subdistrict = document.getElementById('subdistrict').value;
     const province = document.getElementById('province').value;
-    const studentPhone = document.getElementById('studentPhone').value;
-    const guardianPhone = document.getElementById('guardianPhone').value;
+    const studentPhone = document.getElementById('student-tel').value;
+    const guardianPhone = document.getElementById('parent-tel').value;
     const advisor = document.getElementById('advisor').value;
     const semester = document.getElementById('semester').value;
     const courseCode = document.getElementById('courseCode').value;
@@ -163,15 +134,15 @@ function saveFormDataToLocalStorage() {
   
     localStorage.setItem('date', date);
     localStorage.setItem('name', name);
-    localStorage.setItem('regNumber', regNumber);
+    localStorage.setItem('id', id);
     localStorage.setItem('faculty', faculty);
     localStorage.setItem('year', year);
     localStorage.setItem('address', address);
     localStorage.setItem('district', district);
     localStorage.setItem('subdistrict', subdistrict);
     localStorage.setItem('province', province);
-    localStorage.setItem('studentPhone', studentPhone);
-    localStorage.setItem('guardianPhone', guardianPhone);
+    localStorage.setItem('student-tel', studentPhone);
+    localStorage.setItem('parent-tel', guardianPhone);
     localStorage.setItem('advisor', advisor);
     localStorage.setItem('semester', semester);
     localStorage.setItem('courseCode', courseCode);
@@ -186,15 +157,15 @@ document.addEventListener('DOMContentLoaded', function() {
   
     document.getElementById('date').value = formData.date;
     document.getElementById('name').value = formData.name;
-    document.getElementById('regNumber').value = formData.regNumber;
+    document.getElementById('id').value = formData.id;
     document.getElementById('faculty').value = formData.faculty;
     document.getElementById('year').value = formData.year;
     document.getElementById('address').value = formData.address;
     document.getElementById('district').value = formData.district;
     document.getElementById('subdistrict').value = formData.subdistrict;
     document.getElementById('province').value = formData.province;
-    document.getElementById('studentPhone').value = formData.studentPhone;
-    document.getElementById('guardianPhone').value = formData.guardianPhone;
+    document.getElementById('student-tel').value = formData.studentPhone;
+    document.getElementById('parent-tel').value = formData.guardianPhone;
     document.getElementById('advisor').value = formData.advisor;
     document.getElementById('semester').value = formData.semester;
     document.getElementById('courseCode').value = formData.courseCode;

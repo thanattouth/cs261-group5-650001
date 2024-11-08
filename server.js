@@ -16,6 +16,22 @@ app.use((err, req, res, next) => {
     res.status(500).send('Something broke!');
 });
 
+app.post('/log-session', (req, res) => {
+    const { sessionData, userData, message } = req.body;
+
+    if (message) {
+        console.log('--- Notification ---');
+        console.log(message);
+    } else {
+        console.log('--- User Session Data ---');
+        console.log('User Data:', userData);
+        console.log('Session Data:', sessionData);
+        console.log('-------------------------');
+    }
+
+    res.json({ message: 'Session data or logout notification logged successfully' });
+});
+
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);

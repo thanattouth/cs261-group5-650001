@@ -101,15 +101,15 @@ class SessionManager {
             lastActivity: new Date().toISOString(),
             expiresAt: new Date(Date.now() + this.TIMEOUT_DURATION).toISOString()
         };
-
-        // เก็บข้อมูล session ใน sessionStorage
+    
         sessionStorage.setItem(this.SESSION_KEY, JSON.stringify(sessionData));
-        
-        // เก็บข้อมูลผู้ใช้ใน localStorage
         localStorage.setItem('userData', JSON.stringify(userData));
-        
+    
         console.log('Session created:', sessionData);
         this.setupSessionTimeout();
+    
+        // Send session data to server
+        this.sendSessionDataToServer();
     }
 
     // ตรวจสอบ session
@@ -158,54 +158,33 @@ class SessionManager {
 
     // จัดการ logout
     logout() {
-        // Log session state before clearing
         const sessionData = this.getSessionData();
         console.log('Logging out. Session data before clearing:', sessionData);
 
-        // ลบข้อมูล session
+        this.sendLogoutNotificationToServer();
+    
+        // Clear session and user data
         sessionStorage.removeItem(this.SESSION_KEY);
-        
-        // ลบข้อมูลผู้ใช้
         localStorage.removeItem('userData');
-        sessionStorage.clear();
-        
-        // เพิ่ม flag สำหรับป้องกันการกด back
         sessionStorage.setItem('isLoggedOut', 'true');
-        
+    
         console.log('Session cleared. All storage data removed.');
-
-        // ลบข้อมูลที่แสดงในหน้า home (ถ้ามี)
+    
+        // Clear welcome message in home if exists
         const welcomeMessage = document.getElementById('welcome-message-name');
         if (welcomeMessage) {
             welcomeMessage.innerHTML = '';
         }
-
-        // จัดการ history
-        window.history.replaceState(null, '', './index.html');
-        window.history.pushState(null, '', './index.html');
-        
-        this.redirectToLogin();
+    
+        // Redirect to login page without redundant history manipulation
+        window.location.replace('./index.html');
     }
 
     preventBackAfterLogout() {
         if (sessionStorage.getItem('isLoggedOut') === 'true') {
-            // ล้าง flag
             sessionStorage.removeItem('isLoggedOut');
-            
-            // แทนที่ history ทั้งหมดด้วยหน้า login
-            window.history.replaceState(null, '', './index.html');
             this.redirectToLogin();
         }
-    }
-
-    // ตั้งค่าหน้า login
-    setupLoginPage() {
-        const userData = JSON.parse(localStorage.getItem('userData'));
-        if (userData) {
-            window.location.replace('./home.html');
-            return;
-        }
-        sessionStorage.removeItem('isLoggedOut');
     }
 
     setupSessionTimeout() {
@@ -278,7 +257,48 @@ class SessionManager {
                     <div><strong>สาขา :</strong> ${userData.department}</div>`;
                 }
             }
+        } else {
+            this.redirectToLogin();
         }
+    }
+
+    sendSessionDataToServer() {
+        const sessionData = this.getSessionData();
+        const userData = JSON.parse(localStorage.getItem('userData'));
+        
+        if (sessionData && userData) {
+            fetch('/log-session', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ sessionData, userData })
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Session data logged on server:', data);
+            })
+            .catch(error => {
+                console.error('Error logging session data:', error);
+            });
+        }
+    }
+
+    sendLogoutNotificationToServer() {
+        fetch('/log-session', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ message: 'Session removed on logout' })
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log('Logout notification sent to server:', data);
+        })
+        .catch(error => {
+            console.error('Error sending logout notification:', error);
+        });
     }
 }
 

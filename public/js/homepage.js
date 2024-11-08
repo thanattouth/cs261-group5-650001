@@ -9,4 +9,6 @@ document.addEventListener('DOMContentLoaded', function() {
     if (currentPage === 'home.html') {
         document.getElementById('home-nav').classList.add('active'); // Add the active class
     }
+
+    sessionManager.setupProtectedPage();
 });

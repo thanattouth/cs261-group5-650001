@@ -87,7 +87,9 @@ function validateForm() {
 document.addEventListener("DOMContentLoaded", function() {
     // แสดง modal เมื่อกดปุ่ม "ส่งคำร้อง"
     document.getElementById("submitButton").onclick = function() {
-        document.getElementById("myModal").style.display = "block";
+        if (validateForm()) {
+          document.getElementById("myModal").style.display = "block";
+        }
     };
 
     // ซ่อน modal เมื่อกดปุ่ม "ยกเลิก"
@@ -97,9 +99,10 @@ document.addEventListener("DOMContentLoaded", function() {
 
     // ดำเนินการยืนยันการส่งคำร้อง
     document.getElementById("confirmBtn").onclick = function() {
-        document.getElementById("myModal").style.display = "none";
-        alert("ส่งคำร้องเรียบร้อยแล้ว");
-        // เพิ่มโค้ดการส่งคำร้องจริงที่นี่ เช่น submit form หรือเรียกใช้งาน API
+        if (validateForm()) {
+            document.getElementById("myModal").style.display = "none";
+            alert("ส่งคำร้องเรียบร้อยแล้ว");
+        }
     };
 });
 
@@ -115,3 +118,92 @@ document.addEventListener('DOMContentLoaded', function() {
     sessionManager.setupProtectedPage();
 });
 
+// Retrieve form data from localStorage
+function getFormDataFromLocalStorage() {
+    return {
+      date: localStorage.getItem('date'),
+      name: localStorage.getItem('name'),
+      regNumber: localStorage.getItem('regNumber'),
+      faculty: localStorage.getItem('faculty'),
+      year: localStorage.getItem('year'),
+      address: localStorage.getItem('address'),
+      district: localStorage.getItem('district'),
+      subdistrict: localStorage.getItem('subdistrict'),
+      province: localStorage.getItem('province'),
+      studentPhone: localStorage.getItem('studentPhone'),
+      guardianPhone: localStorage.getItem('guardianPhone'),
+      advisor: localStorage.getItem('advisor'),
+      semester: localStorage.getItem('semester'),
+      courseCode: localStorage.getItem('courseCode'),
+      courseName: localStorage.getItem('courseName'),
+      section: localStorage.getItem('section'),
+      reason: localStorage.getItem('reason')
+    };
+}
+
+// Save form data to localStorage
+function saveFormDataToLocalStorage() {
+    const date = document.getElementById('date').value;
+    const name = document.getElementById('name').value;
+    const regNumber = document.getElementById('regNumber').value;
+    const faculty = document.getElementById('faculty').value;
+    const year = document.getElementById('year').value;
+    const address = document.getElementById('address').value;
+    const district = document.getElementById('district').value;
+    const subdistrict = document.getElementById('subdistrict').value;
+    const province = document.getElementById('province').value;
+    const studentPhone = document.getElementById('studentPhone').value;
+    const guardianPhone = document.getElementById('guardianPhone').value;
+    const advisor = document.getElementById('advisor').value;
+    const semester = document.getElementById('semester').value;
+    const courseCode = document.getElementById('courseCode').value;
+    const courseName = document.getElementById('courseName').value;
+    const section = document.getElementById('section').value;
+    const reason = document.getElementById('reason').value;
+  
+    localStorage.setItem('date', date);
+    localStorage.setItem('name', name);
+    localStorage.setItem('regNumber', regNumber);
+    localStorage.setItem('faculty', faculty);
+    localStorage.setItem('year', year);
+    localStorage.setItem('address', address);
+    localStorage.setItem('district', district);
+    localStorage.setItem('subdistrict', subdistrict);
+    localStorage.setItem('province', province);
+    localStorage.setItem('studentPhone', studentPhone);
+    localStorage.setItem('guardianPhone', guardianPhone);
+    localStorage.setItem('advisor', advisor);
+    localStorage.setItem('semester', semester);
+    localStorage.setItem('courseCode', courseCode);
+    localStorage.setItem('courseName', courseName);
+    localStorage.setItem('section', section);
+    localStorage.setItem('reason', reason);
+}
+
+// Load form data from localStorage when the page loads
+document.addEventListener('DOMContentLoaded', function() {
+    const formData = getFormDataFromLocalStorage();
+  
+    document.getElementById('date').value = formData.date;
+    document.getElementById('name').value = formData.name;
+    document.getElementById('regNumber').value = formData.regNumber;
+    document.getElementById('faculty').value = formData.faculty;
+    document.getElementById('year').value = formData.year;
+    document.getElementById('address').value = formData.address;
+    document.getElementById('district').value = formData.district;
+    document.getElementById('subdistrict').value = formData.subdistrict;
+    document.getElementById('province').value = formData.province;
+    document.getElementById('studentPhone').value = formData.studentPhone;
+    document.getElementById('guardianPhone').value = formData.guardianPhone;
+    document.getElementById('advisor').value = formData.advisor;
+    document.getElementById('semester').value = formData.semester;
+    document.getElementById('courseCode').value = formData.courseCode;
+    document.getElementById('courseName').value = formData.courseName;
+    document.getElementById('section').value = formData.section;
+    document.getElementById('reason').value = formData.reason;
+});
+  
+// Save form data to localStorage when the user interacts with the form
+document.querySelectorAll('input, textarea, select').forEach(function(element) {
+    element.addEventListener('input', saveFormDataToLocalStorage);
+});

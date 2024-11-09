@@ -109,8 +109,8 @@ function submitLogin() {
             
             //ส่งข้อมูลไป save ใน databse
             //commentปิดไว้ให้ ถ้าจะเปิดลองให้ต้องมีdockerของdatabase กับ รันCRUDก่อน
-           // const studentLoginLog = new StudentLoginLog();
-           // studentLoginLog.fetchUserData(username);
+            //const studentLoginLog = new StudentLoginLog();
+            //studentLoginLog.fetchUserData(username);
             
             // Show animated welcome message และ redirect
             showWelcomeMessage(data);

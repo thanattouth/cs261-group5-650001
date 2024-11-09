@@ -19,6 +19,37 @@ class SessionManager {
         });
     }
 
+    async login(userData) {
+        try {
+            const response = await fetch('/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(userData)
+            });
+            const data = await response.json();
+            console.log('Login response:', data);
+            if (data.session) {
+                this.redirectToHome();
+            }
+        } catch (error) {
+            console.error('Error during login:', error);
+        }
+    }
+
+    async logout() {
+        try {
+            const response = await fetch('/logout', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' }
+            });
+            const data = await response.json();
+            console.log('Logout response:', data);
+            this.redirectToLogin();
+        } catch (error) {
+            console.error('Error during logout:', error);
+        }
+    }
+
     // สร้าง Modal HTML
     initLogoutModal() {
         const modalHTML = `
@@ -94,57 +125,6 @@ class SessionManager {
         modal.style.display = 'none';
     }
 
-    createSession(userData) {
-        const sessionData = {
-            userId: userData.username,
-            loginTime: new Date().toISOString(),
-            lastActivity: new Date().toISOString(),
-            expiresAt: new Date(Date.now() + this.TIMEOUT_DURATION).toISOString()
-        };
-    
-        sessionStorage.setItem(this.SESSION_KEY, JSON.stringify(sessionData));
-        localStorage.setItem('userData', JSON.stringify(userData));
-    
-        console.log('Session created:', sessionData);
-        this.setupSessionTimeout();
-    
-        // Send session data to server
-        this.sendSessionDataToServer();
-    }
-
-    // ตรวจสอบ session
-    checkSession() {
-        const sessionData = this.getSessionData();
-        const userData = JSON.parse(localStorage.getItem('userData'));
-
-        if (!sessionData || !userData) {
-            console.log('Session check failed: No session data or user data found');
-            this.redirectToLogin();
-            return false;
-        }
-
-        // ตรวจสอบว่า session หมดอายุหรือยัง
-        if (new Date(sessionData.expiresAt) < new Date()) {
-            console.log('Session expired');
-            this.logout();
-            return false;
-        }
-
-        // อัพเดท lastActivity
-        this.updateSessionActivity();
-        console.log('Session valid:', sessionData);
-        return true;
-    }
-
-    updateSessionActivity() {
-        const sessionData = this.getSessionData();
-        if (sessionData) {
-            sessionData.lastActivity = new Date().toISOString();
-            sessionData.expiresAt = new Date(Date.now() + this.TIMEOUT_DURATION).toISOString();
-            sessionStorage.setItem(this.SESSION_KEY, JSON.stringify(sessionData));
-        }
-    }
-
     getSessionData() {
         const sessionStr = sessionStorage.getItem(this.SESSION_KEY);
         return sessionStr ? JSON.parse(sessionStr) : null;
@@ -160,8 +140,6 @@ class SessionManager {
     logout() {
         const sessionData = this.getSessionData();
         console.log('Logging out. Session data before clearing:', sessionData);
-
-        this.sendLogoutNotificationToServer();
     
         // Clear session and user data
         sessionStorage.removeItem(this.SESSION_KEY);
@@ -187,27 +165,6 @@ class SessionManager {
         }
     }
 
-    setupSessionTimeout() {
-        const resetTimeout = () => {
-            clearTimeout(this.timeoutId);
-            this.timeoutId = setTimeout(() => {
-                console.log('Session timeout triggered');
-                alert('Your session has expired. Please login again.');
-                this.logout();
-            }, this.TIMEOUT_DURATION);
-
-            // อัพเดท lastActivity เมื่อมีการทำกิจกรรม
-            this.updateSessionActivity();
-        };
-
-        // เพิ่ม event listeners สำหรับการตรวจจับกิจกรรมของผู้ใช้
-        ['mousemove', 'keypress', 'click', 'scroll'].forEach(event => {
-            document.addEventListener(event, resetTimeout);
-        });
-
-        resetTimeout();
-    }
-
     setupLoginPage() {
         console.log('Setting up login page');
         const sessionData = this.getSessionData();
@@ -223,84 +180,6 @@ class SessionManager {
         }
         sessionStorage.removeItem('isLoggedOut');
     }
-
-    // แสดงสถานะ session ปัจจุบัน (สำหรับการตรวจสอบ)
-    debugSession() {
-        const sessionData = this.getSessionData();
-        const userData = JSON.parse(localStorage.getItem('userData'));
-        const isLoggedOut = sessionStorage.getItem('isLoggedOut');
-
-        console.log('=== Session Debug Info ===');
-        console.log('Session Data:', sessionData);
-        console.log('User Data:', userData);
-        console.log('Logged Out Flag:', isLoggedOut);
-        console.log('Session Storage Keys:', Object.keys(sessionStorage));
-        console.log('Local Storage Keys:', Object.keys(localStorage));
-        console.log('========================');
-    }
-
-    // ตั้งค่าการป้องกันในหน้าที่ต้องล็อกอิน
-    setupProtectedPage() {
-        if (this.checkSession()) {
-            this.preventBackAfterLogout();
-            this.setupSessionTimeout();
-            
-            // แสดงข้อมูลผู้ใช้ในหน้า home
-            const userData = JSON.parse(localStorage.getItem('userData'));
-            if (userData && userData.displayname_th) {
-                const welcomeMessage = document.getElementById('welcome-message-name');
-                if (welcomeMessage) {
-                    welcomeMessage.innerHTML = `
-                    <div><strong>ชื่อ :</strong> ${userData.displayname_th}</div>
-                    <div><strong>ID :</strong> ${userData.username}</div>
-                    <div><strong>คณะ :</strong> ${userData.faculty}</div>
-                    <div><strong>สาขา :</strong> ${userData.department}</div>`;
-                }
-            }
-        } else {
-            this.redirectToLogin();
-        }
-    }
-
-    sendSessionDataToServer() {
-        const sessionData = this.getSessionData();
-        const userData = JSON.parse(localStorage.getItem('userData'));
-        
-        if (sessionData && userData) {
-            fetch('/log-session', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ sessionData, userData })
-            })
-            .then(response => response.json())
-            .then(data => {
-                console.log('Session data logged on server:', data);
-            })
-            .catch(error => {
-                console.error('Error logging session data:', error);
-            });
-        }
-    }
-
-    sendLogoutNotificationToServer() {
-        fetch('/log-session', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ message: 'Session removed on logout' })
-        })
-        .then(response => response.json())
-        .then(data => {
-            console.log('Logout notification sent to server:', data);
-        })
-        .catch(error => {
-            console.error('Error sending logout notification:', error);
-        });
-    }
 }
 
-// สร้าง instance ของ SessionManager
 const sessionManager = new SessionManager();

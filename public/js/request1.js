@@ -1,6 +1,5 @@
 function validateForm() {
     // Get form values
-    const date = document.getElementById("date").value;
     const name = document.getElementById("name").value;
     const id = document.getElementById("id").value;
     const faculty = document.getElementById("faculty").value;
@@ -17,13 +16,6 @@ function validateForm() {
     const courseName = document.getElementById("courseName").value;
     const section = document.getElementById("section").value;
     const reason = document.getElementById("reason").value;
-    
-    // Validate date (dd/mm/yyyy)
-    const dateRegex = /^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[0-2])\/\d{4}$/;
-    if (!dateRegex.test(date)) {
-        alert("กรุณากรอกวันที่ให้ถูกต้อง (วัน/เดือน/ปี: วว/ดด/ปปปป)");
-        return false;
-    }
 
     // Validate year (1-8)
     if (year < 1 || year > 8 || isNaN(year) || year.length !== 1) {
@@ -56,6 +48,26 @@ function validateForm() {
 }
 
 document.addEventListener("DOMContentLoaded", function() {
+
+    // Function to display the custom notification
+    function showNotification(message) {
+        // Create a new notification element
+        const notification = document.createElement("div");
+        notification.className = "notification-popup";
+        notification.innerText = message;
+        
+        // Append the notification to the body
+        document.body.appendChild(notification);
+
+        // Automatically remove the notification after 3 seconds
+        setTimeout(() => {
+            notification.classList.add("fade-out");
+            setTimeout(() => {
+                notification.remove();
+            }, 500); // Wait for fade-out animation to complete
+        }, 3000); // Display for 3 seconds
+    }
+
     // แสดง modal เมื่อกดปุ่ม "ส่งคำร้อง"
     document.getElementById("submitButton").onclick = function() {
         if (validateForm()) {
@@ -72,8 +84,20 @@ document.addEventListener("DOMContentLoaded", function() {
     document.getElementById("confirmBtn").onclick = function() {
         if (validateForm()) {
             document.getElementById("myModal").style.display = "none";
-            alert("ส่งคำร้องเรียบร้อยแล้ว");
+            showNotification("ส่งคำร้องเรียบร้อยแล้ว");
         }
+        clearNonReadOnlyFields();
+        const userId = sessionStorage.getItem('userId') || 'defaultUser';
+        const fields = [
+            'name', 'id', 'faculty', 'year', 'address', 'district', 
+            'subdistrict', 'province', 'student-tel', 'parent-tel', 
+            'advisor', 'semester', 'courseCode', 'courseName', 
+            'section', 'reason'
+        ];
+        
+        fields.forEach(field => {
+            localStorage.removeItem(getStorageKey(field, userId));  // Remove only the form-related keys
+        });
     };
 });
 
@@ -85,96 +109,105 @@ document.addEventListener('DOMContentLoaded', function() {
     if (currentPage === 'request1.html') {
         document.getElementById('req1-nav').classList.add('active'); // Add the active class
     }
-
-    sessionManager.setupProtectedPage();
 });
 
-// Retrieve form data from localStorage
+function getStorageKey(fieldName, userId) {
+    return `form_${userId}_${fieldName}`;
+}
+
+// Function to get data from localStorage
 function getFormDataFromLocalStorage() {
-    return {
-      date: localStorage.getItem('date'),
-      name: localStorage.getItem('name'),
-      id: localStorage.getItem('id'),
-      faculty: localStorage.getItem('faculty'),
-      year: localStorage.getItem('year'),
-      address: localStorage.getItem('address'),
-      district: localStorage.getItem('district'),
-      subdistrict: localStorage.getItem('subdistrict'),
-      province: localStorage.getItem('province'),
-      studentPhone: localStorage.getItem('student-tel'),
-      guardianPhone: localStorage.getItem('parent-tel'),
-      advisor: localStorage.getItem('advisor'),
-      semester: localStorage.getItem('semester'),
-      courseCode: localStorage.getItem('courseCode'),
-      courseName: localStorage.getItem('courseName'),
-      section: localStorage.getItem('section'),
-      reason: localStorage.getItem('reason'),
-    };
+    const userId = sessionStorage.getItem('userId') || 'defaultUser';
+    const fields = ['name', 'id', 'faculty', 'year', 'address', 'district', 'subdistrict', 'province', 'student-tel', 'parent-tel', 'advisor', 'semester', 'courseCode', 'courseName', 'section', 'reason'];
+    
+    fields.forEach(field => {
+        const value = localStorage.getItem(getStorageKey(field, userId));
+        if (value) document.getElementById(field).value = value;
+    });
 }
 
-// Save form data to localStorage
 function saveFormDataToLocalStorage() {
-    const date = document.getElementById('date').value;
-    const name = document.getElementById('name').value;
-    const id = document.getElementById('id').value;
-    const faculty = document.getElementById('faculty').value;
-    const year = document.getElementById('year').value;
-    const address = document.getElementById('address').value;
-    const district = document.getElementById('district').value;
-    const subdistrict = document.getElementById('subdistrict').value;
-    const province = document.getElementById('province').value;
-    const studentPhone = document.getElementById('student-tel').value;
-    const guardianPhone = document.getElementById('parent-tel').value;
-    const advisor = document.getElementById('advisor').value;
-    const semester = document.getElementById('semester').value;
-    const courseCode = document.getElementById('courseCode').value;
-    const courseName = document.getElementById('courseName').value;
-    const section = document.getElementById('section').value;
-    const reason = document.getElementById('reason').value;
-  
-    localStorage.setItem('date', date);
-    localStorage.setItem('name', name);
-    localStorage.setItem('id', id);
-    localStorage.setItem('faculty', faculty);
-    localStorage.setItem('year', year);
-    localStorage.setItem('address', address);
-    localStorage.setItem('district', district);
-    localStorage.setItem('subdistrict', subdistrict);
-    localStorage.setItem('province', province);
-    localStorage.setItem('student-tel', studentPhone);
-    localStorage.setItem('parent-tel', guardianPhone);
-    localStorage.setItem('advisor', advisor);
-    localStorage.setItem('semester', semester);
-    localStorage.setItem('courseCode', courseCode);
-    localStorage.setItem('courseName', courseName);
-    localStorage.setItem('section', section);
-    localStorage.setItem('reason', reason);
+    const userId = sessionStorage.getItem('userId') || 'defaultUser'; // Fallback if no userId
+    const fields = ['name', 'id', 'faculty', 'year', 'address', 'district', 'subdistrict', 'province', 'student-tel', 'parent-tel', 'advisor', 'semester', 'courseCode', 'courseName', 'section', 'reason'];
+    
+    fields.forEach(field => {
+        const value = document.getElementById(field).value;
+        localStorage.setItem(getStorageKey(field, userId), value);
+    });
 }
 
-// Load form data from localStorage when the page loads
-document.addEventListener('DOMContentLoaded', function() {
-    const formData = getFormDataFromLocalStorage();
-  
-    document.getElementById('date').value = formData.date;
-    document.getElementById('name').value = formData.name;
-    document.getElementById('id').value = formData.id;
-    document.getElementById('faculty').value = formData.faculty;
-    document.getElementById('year').value = formData.year;
-    document.getElementById('address').value = formData.address;
-    document.getElementById('district').value = formData.district;
-    document.getElementById('subdistrict').value = formData.subdistrict;
-    document.getElementById('province').value = formData.province;
-    document.getElementById('student-tel').value = formData.studentPhone;
-    document.getElementById('parent-tel').value = formData.guardianPhone;
-    document.getElementById('advisor').value = formData.advisor;
-    document.getElementById('semester').value = formData.semester;
-    document.getElementById('courseCode').value = formData.courseCode;
-    document.getElementById('courseName').value = formData.courseName;
-    document.getElementById('section').value = formData.section;
-    document.getElementById('reason').value = formData.reason;
-});
+// Add a function to clear user-specific form data when logging out
+function clearUserFormData() {
+    const userId = sessionStorage.getItem('userId') || 'defaultUser';
+    const formFields = [
+        'date', 'name', 'id', 'faculty', 'year', 'address', 'district', 
+        'subdistrict', 'province', 'student-tel', 'parent-tel', 'advisor', 
+        'semester', 'courseCode', 'courseName', 'section', 'reason'
+    ];
+    
+    formFields.forEach(field => {
+        localStorage.removeItem(getStorageKey(field, userId))
+    });
+}
   
 // Save form data to localStorage when the user interacts with the form
 document.querySelectorAll('input, textarea, select').forEach(function(element) {
     element.addEventListener('input', saveFormDataToLocalStorage);
 });
+
+document.addEventListener('DOMContentLoaded', function() {
+    const dateInput = document.getElementById('date');
+
+    getFormDataFromLocalStorage();
+
+    const userData = JSON.parse(localStorage.getItem('userData'));
+    if (userData) {
+        // Populate each field and make it readonly if data exists
+        function setFieldReadOnly(fieldId, value) {
+            const field = document.getElementById(fieldId);
+            field.value = value || "";
+            field.setAttribute("readonly", true);
+            field.style.backgroundColor = '#f0f0f0';  // Optional: make it visually clear
+            field.style.cursor = 'not-allowed';       // Optional: change cursor to indicate uneditable
+        }
+    // Populate fields and make them readonly
+        setFieldReadOnly("name", userData.displayname_th);
+        setFieldReadOnly("id", userData.username);
+        setFieldReadOnly("faculty", userData.faculty);
+    }
+
+    // Save data to localStorage when the form fields change
+    document.querySelectorAll('input, textarea, select').forEach(element => {
+        element.addEventListener('input', saveFormDataToLocalStorage);
+    });
+    
+    // Get current date in YYYY-MM-DD format for the input value
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = String(today.getMonth() + 1).padStart(2, '0');
+    const day = String(today.getDate()).padStart(2, '0');
+    const formattedDate = `${year}-${month}-${day}`;
+
+    // Set the value and make it readonly
+    dateInput.value = formattedDate;
+    dateInput.setAttribute('readonly', true);
+    
+    // Optional: Add some styling to make it look readonly
+    dateInput.style.backgroundColor = '#f0f0f0';
+    dateInput.style.cursor = 'not-allowed';
+});
+
+function clearNonReadOnlyFields() {
+    const fields = [
+        'year', 'address', 'district', 'subdistrict', 'province', 
+        'student-tel', 'parent-tel', 'advisor', 'semester', 
+        'courseCode', 'courseName', 'section', 'reason'
+    ];
+    
+    fields.forEach(fieldId => {
+        const field = document.getElementById(fieldId);
+        if (!field.hasAttribute("readonly")) {
+            field.value = "";  // Clear only non-read-only fields
+        }
+    });
+}

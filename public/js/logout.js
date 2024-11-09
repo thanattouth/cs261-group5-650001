@@ -5,6 +5,7 @@ document.addEventListener('DOMContentLoaded', function() {
         logoutButton.addEventListener('click', function(e) {
             e.preventDefault();
             sessionManager.showLogoutModal();
+            clearUserFormData();
         });
     }
 

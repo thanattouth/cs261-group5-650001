@@ -76,14 +76,7 @@ function showWelcomeMessage(data) {
 
     // ตรวจสอบ session ก่อน redirect
     setTimeout(() => {
-        if (sessionManager.checkSession()) {
-            window.location.href = './home.html';
-        } else {
-            console.error('Session creation failed');
-            const errorMessage = document.getElementById('error-message');
-            errorMessage.textContent = 'Failed to create session. Please try again.';
-            errorMessage.style.display = 'block';
-        }
+        window.location.href = './home.html';
     }, 2000);
 }
 
@@ -111,14 +104,13 @@ function submitLogin() {
             const errorMessage = document.getElementById('error-message');
             errorMessage.textContent = '';
             errorMessage.style.display = 'none';
+
+            localStorage.setItem('userData', JSON.stringify(data));
             
             //ส่งข้อมูลไป save ใน databse
             //commentปิดไว้ให้ ถ้าจะเปิดลองให้ต้องมีdockerของdatabase กับ รันCRUDก่อน
            // const studentLoginLog = new StudentLoginLog();
            // studentLoginLog.fetchUserData(username);
-
-            // สร้าง session ก่อนที่จะแสดง welcome message
-            sessionManager.createSession(data);
             
             // Show animated welcome message และ redirect
             showWelcomeMessage(data);

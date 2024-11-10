@@ -239,55 +239,74 @@ document.addEventListener('DOMContentLoaded', function() {
         button.classList.add('rename-file-button');
     
         button.onclick = (event) => {
-            // ป้องกันการส่งฟอร์มเมื่อคลิกปุ่มเปลี่ยนชื่อ
             event.preventDefault();
-    
             const newName = prompt("กรุณากรอกชื่อไฟล์ใหม่:", file.name);
             if (newName && newName !== file.name) {
                 const updatedFile = new File([file], newName, { type: file.type });
+                
+                // หาตำแหน่งของไฟล์เดิมใน DataTransfer
+                const fileIndex = Array.from(dt.files).findIndex(f => f === file);
+                if (fileIndex !== -1) {
+                    // สร้าง DataTransfer ใหม่และคัดลอกไฟล์ทั้งหมด
+                    const newDt = new DataTransfer();
+                    Array.from(dt.files).forEach((f, index) => {
+                        // แทนที่ไฟล์เดิมด้วยไฟล์ที่เปลี่ยนชื่อแล้ว
+                        newDt.items.add(index === fileIndex ? updatedFile : f);
+                    });
     
-                // อัปเดต DataTransfer ให้มีไฟล์ที่ถูกเปลี่ยนชื่อแล้ว
-                const newDt = new DataTransfer();
-                Array.from(dt.files).forEach(f => {
-                    // ใช้ไฟล์ที่ถูกเปลี่ยนชื่อแทนไฟล์เก่า
-                    newDt.items.add(f === file ? updatedFile : f);
-                });
+                    // อัปเดต DataTransfer หลัก
+                    dt.items.clear();
+                    Array.from(newDt.files).forEach(f => dt.items.add(f));
+                    
+                    // อัปเดต input file
+                    attachmentInput.files = dt.files;
     
-                // อัปเดต input file และไฟล์ที่แสดงใน UI
-                dt.items.clear();
-                Array.from(newDt.files).forEach(f => dt.items.add(f));
-                attachmentInput.files = dt.files;
+                    // อัปเดต UI
+                    fileLink.href = URL.createObjectURL(updatedFile);
+                    fileLink.download = newName;
+                    const fileIcon = fileLink.textContent.split(' ')[0];
+                    fileLink.textContent = `${fileIcon} ${newName} (${(updatedFile.size / 1024).toFixed(2)} KB)`;
     
-                fileLink.href = URL.createObjectURL(updatedFile);
-                fileLink.download = newName;
-                fileLink.textContent = `${fileLink.textContent.split(' ')[0]} ${newName} (${(updatedFile.size / 1024).toFixed(2)} KB)`;
+                    // อัปเดตการอ้างอิงไฟล์สำหรับปุ่มลบ
+                    const removeButton = fileLink.parentElement.querySelector('.remove-file-button');
+                    if (removeButton) {
+                        removeButton.onclick = createRemoveButton(updatedFile, fileLink.parentElement).onclick;
+                    }
+                }
             }
         };
         return button;
-    }    
-
+    }
+    
     function createRemoveButton(file, fileItem) {
         const button = document.createElement('button');
         button.innerHTML = "&#10006;";
         button.classList.add('remove-file-button');
         button.onclick = () => {
-            // สร้าง DataTransfer ใหม่และคัดลอกไฟล์ที่เหลือ
-            const newDt = new DataTransfer();
-            Array.from(dt.files).forEach(f => {
-                if (f !== file) newDt.items.add(f);
-            });
+            // หาตำแหน่งของไฟล์ที่จะลบใน DataTransfer
+            const fileIndex = Array.from(dt.files).findIndex(f => 
+                f.name === file.name && f.size === file.size && f.type === file.type
+            );
             
-            // อัปเดต DataTransfer และ input
-            dt.items.clear();
-            Array.from(newDt.files).forEach(f => dt.items.add(f));
-            attachmentInput.files = dt.files;
-
-            // ลบ UI element
-            fileItem.remove();
-            
-            // เพิ่มการแจ้งเตือนจำนวนไฟล์ที่เหลือ
-            const remainingFiles = dt.files.length;
-            showNotification(`ลบไฟล์เรียบร้อย (เหลือ ${remainingFiles} จาก ${MAX_FILES} ไฟล์)`);
+            if (fileIndex !== -1) {
+                // สร้าง DataTransfer ใหม่และคัดลอกไฟล์ที่เหลือ
+                const newDt = new DataTransfer();
+                Array.from(dt.files).forEach((f, index) => {
+                    if (index !== fileIndex) newDt.items.add(f);
+                });
+                
+                // อัปเดต DataTransfer และ input
+                dt.items.clear();
+                Array.from(newDt.files).forEach(f => dt.items.add(f));
+                attachmentInput.files = dt.files;
+    
+                // ลบ UI element
+                fileItem.remove();
+                
+                // แสดงการแจ้งเตือนจำนวนไฟล์ที่เหลือ
+                const remainingFiles = dt.files.length;
+                showNotification(`ลบไฟล์เรียบร้อย (เหลือ ${remainingFiles} จาก ${MAX_FILES} ไฟล์)`);
+            }
         };
         return button;
     }

@@ -238,45 +238,57 @@
                 const button = document.createElement('button');
                 button.textContent = "เปลี่ยนชื่อ";
                 button.classList.add('rename-file-button');
-    
-                button.onclick = (event) => {
-                    event.preventDefault();
-                    const newName = prompt("กรุณากรอกชื่อไฟล์ใหม่:", file.name);
-                    if (newName && newName !== file.name) {
-                        const updatedFile = new File([file], newName, { type: file.type });
-                
-                        // หาตำแหน่งของไฟล์เดิมใน DataTransfer
-                        const fileIndex = Array.from(dt.files).findIndex(f => f === file);
-                        if (fileIndex !== -1) {
-                            // สร้าง DataTransfer ใหม่และคัดลอกไฟล์ทั้งหมด
-                            const newDt = new DataTransfer();
-                            Array.from(dt.files).forEach((f, index) => {
-                                // แทนที่ไฟล์เดิมด้วยไฟล์ที่เปลี่ยนชื่อแล้ว
-                                newDt.items.add(index === fileIndex ? updatedFile : f);
-                            });
-    
-                            // อัปเดต DataTransfer หลัก
-                            dt.items.clear();
-                            Array.from(newDt.files).forEach(f => dt.items.add(f));
+
+                const updateRenameHandler = (currentFile) => {
+                    return (event) => {
+                        event.preventDefault();
+                        const newName = prompt("กรุณากรอกชื่อไฟล์ใหม่:", currentFile.name);
+                        if (newName && newName !== currentFile.name) {
+                            const updatedFile = new File([currentFile], newName, { type: currentFile.type });
+        
+                            // หาตำแหน่งของไฟล์เดิมใน DataTransfer
+                            const fileIndex = Array.from(dt.files).findIndex(f => 
+                                f.name === currentFile.name && 
+                                f.size === currentFile.size && 
+                                f.type === currentFile.type
+                            );
+
+                            if (fileIndex !== -1) {
+                                // สร้าง DataTransfer ใหม่และคัดลอกไฟล์ทั้งหมด
+                                const newDt = new DataTransfer();
+                                Array.from(dt.files).forEach((f, index) => {
+                                    // แทนที่ไฟล์เดิมด้วยไฟล์ที่เปลี่ยนชื่อแล้ว
+                                    newDt.items.add(index === fileIndex ? updatedFile : f);
+                                });
+
+                                // อัปเดต DataTransfer หลัก
+                                dt.items.clear();
+                                Array.from(newDt.files).forEach(f => dt.items.add(f));
+            
+                                // อัปเดต input file
+                                attachmentInput.files = dt.files;
+
+                                // อัปเดต UI
+                                fileLink.href = URL.createObjectURL(updatedFile);
+                                fileLink.download = newName;
+                                const fileIcon = fileLink.textContent.split(' ')[0];
+                                fileLink.textContent = `${fileIcon} ${newName} (${(updatedFile.size / 1024).toFixed(2)} KB)`;
                     
-                            // อัปเดต input file
-                            attachmentInput.files = dt.files;
-    
-                            // อัปเดต UI
-                            fileLink.href = URL.createObjectURL(updatedFile);
-                            fileLink.download = newName;
-                            const fileIcon = fileLink.textContent.split(' ')[0];
-                            fileLink.textContent = `${fileIcon} ${newName} (${(updatedFile.size / 1024).toFixed(2)} KB)`;
-                            
-                            // อัปเดตการอ้างอิงไฟล์สำหรับปุ่มลบ
-                            const removeButton = fileLink.parentElement.querySelector('.remove-file-button');
-                            if (removeButton) {
-                                removeButton.onclick = createRemoveButton(updatedFile, fileLink.parentElement).onclick;
+                                // อัปเดตการอ้างอิงไฟล์สำหรับปุ่มลบ
+                                const removeButton = fileLink.parentElement.querySelector('.remove-file-button');
+                                if (removeButton) {
+                                    removeButton.onclick = createRemoveButton(updatedFile, fileLink.parentElement).onclick;
+                                }
+
+                                // อัปเดต handler ของปุ่มเปลี่ยนชื่อให้ใช้ไฟล์ใหม่
+                                button.onclick = updateRenameHandler(updatedFile);
                             }
                         }
-                    }
+                    };
                 };
-                return button;
+
+            button.onclick = updateRenameHandler(file);
+            return button;
             }
     
             function createRemoveButton(file, fileItem) {

@@ -139,7 +139,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Populate fields and make them readonly
         setFieldReadOnly("name", userData.displayname_th);
         setFieldReadOnly("id", userData.username);
-        setFieldReadOnly("faculty", userData.faculty);
+        setFieldReadOnly("faculty", userData.department);
     }
 
     // Save data to localStorage when the form fields change

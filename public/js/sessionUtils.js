@@ -3,20 +3,56 @@ class SessionManager {
         this.TIMEOUT_DURATION = 30 * 60 * 1000; // 30 นาที
         this.timeoutId = null;
         this.SESSION_KEY = 'tuSession';
+        this.LAST_ACTIVITY_KEY = 'lastActivity';
         this.initLogoutModal();
-        
-        window.addEventListener('popstate', () => {
-            if (sessionStorage.getItem('isLoggedOut') === 'true') {
-                this.redirectToLogin();
-            }
-        });
 
-        // เพิ่ม event listener สำหรับตรวจสอบการเปลี่ยนแปลงของ session storage
-        window.addEventListener('storage', (e) => {
-            if (e.key === this.SESSION_KEY) {
-                console.log('Session state changed:', e.newValue ? 'active' : 'inactive');
-            }
+        // เพิ่มการตรวจสอบ session timeout
+        this.initSessionTimeout();
+
+        // ตรวจสอบการย้อนกลับหลัง logout
+        window.addEventListener('popstate', this.handlePopState.bind(this));
+        window.addEventListener('load', this.checkSessionValidity.bind(this));
+        
+        // ติดตามกิจกรรมของผู้ใช้
+        ['click', 'keypress', 'scroll', 'mousemove'].forEach(event => {
+            document.addEventListener(event, () => this.updateLastActivity());
         });
+        
+        // ตรวจสอบ session ระหว่าง tabs
+        window.addEventListener('storage', this.handleStorageChange.bind(this));
+    }
+
+    initSessionTimeout() {
+        setInterval(() => {
+            const lastActivity = parseInt(localStorage.getItem(this.LAST_ACTIVITY_KEY) || '0');
+            if (Date.now() - lastActivity > this.TIMEOUT_DURATION) {
+                this.handleSessionTimeout();
+            }
+        }, 1000); // ตรวจสอบทุกๆ 1 วินาที
+    }
+
+    updateLastActivity() {
+        localStorage.setItem(this.LAST_ACTIVITY_KEY, Date.now().toString());
+    }
+
+    handleSessionTimeout() {
+        if (this.getSessionData()) {
+            alert('เซสชันหมดอายุ กรุณาเข้าสู่ระบบใหม่');
+            this.logout();
+        }
+    }
+
+    handleStorageChange(e) {
+        if (e.key === this.SESSION_KEY && !e.newValue) {
+            // Session ถูกลบในแท็บอื่น
+            this.redirectToLogin();
+        }
+    }
+
+    handlePopState(e) {
+        if (!this.getSessionData() || sessionStorage.getItem('isLoggedOut') === 'true') {
+            this.redirectToLogin();
+        }
     }
 
     async login(userData) {
@@ -24,11 +60,14 @@ class SessionManager {
             const response = await fetch('/login', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
+                credentials: 'include', // สำคัญสำหรับ session cookie
                 body: JSON.stringify(userData)
             });
+            
             const data = await response.json();
-            console.log('Login response:', data);
             if (data.session) {
+                sessionStorage.setItem(this.SESSION_KEY, JSON.stringify(data.session));
+                this.updateLastActivity();
                 this.redirectToHome();
             }
         } catch (error) {
@@ -38,16 +77,33 @@ class SessionManager {
 
     async logout() {
         try {
-            const response = await fetch('/logout', {
+            await fetch('/logout', {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' }
+                headers: { 'Content-Type': 'application/json' },
+                credentials: 'include'
             });
-            const data = await response.json();
-            console.log('Logout response:', data);
-            this.redirectToLogin();
+            
+            // ล้างข้อมูล session ทั้งหมด
+            sessionStorage.clear();
+            localStorage.removeItem(this.LAST_ACTIVITY_KEY);
+            sessionStorage.setItem('isLoggedOut', 'true');
+            
+            // ทำลาย history stack เดิมและสร้างใหม่
+            window.location.replace('./index.html');
         } catch (error) {
             console.error('Error during logout:', error);
         }
+    }
+
+    checkSessionValidity() {
+        const sessionData = this.getSessionData();
+        const lastActivity = parseInt(localStorage.getItem(this.LAST_ACTIVITY_KEY) || '0');
+        
+        if (sessionData && Date.now() - lastActivity > this.TIMEOUT_DURATION) {
+            this.handleSessionTimeout();
+            return false;
+        }
+        return !!sessionData;
     }
 
     // สร้าง Modal HTML
@@ -131,11 +187,11 @@ class SessionManager {
     }
 
     redirectToLogin() {
-        // เพิ่มการป้องกันการย้อนกลับโดยแทนที่ history
-        window.history.replaceState(null, '', './index.html');
-        window.location.replace('./index.html');
+        if (window.location.pathname !== './index.html') {
+            window.location.replace('./index.html');
+        }
     }
-
+    
     // จัดการ logout
     logout() {
         const sessionData = this.getSessionData();

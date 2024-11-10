@@ -182,17 +182,25 @@ document.addEventListener('DOMContentLoaded', function() {
     const attachmentInput = document.getElementById('attachment');
     const fileListContainer = document.getElementById('file-list');
     const dt = new DataTransfer();
+    const MAX_FILES = 5;
+    const MAX_SIZE = 302400; // 300 KB in bytes
 
     attachmentInput.addEventListener('change', function() {
-        if (dt.items.length + this.files.length > 5) {
-            alert("คุณสามารถแนบไฟล์ได้สูงสุด 5 ไฟล์");
+        const newFiles = Array.from(this.files);
+        const currentFileCount = dt.items.length;
+        
+        // ตรวจสอบจำนวนไฟล์ทั้งหมดที่จะมีหลังจากเพิ่มไฟล์ใหม่
+        if (currentFileCount + newFiles.length > MAX_FILES) {
+            showNotification(`คุณสามารถแนบไฟล์ได้สูงสุด ${MAX_FILES} ไฟล์ (ปัจจุบัน: ${currentFileCount} ไฟล์)`);
+            // รีเซ็ต input เพื่อให้สามารถเลือกไฟล์เดิมได้อีก
+            this.value = '';
             return;
         }
 
-        const files = Array.from(this.files);
-        files.forEach(file => {
-            if ((file.type === "application/pdf" || file.type.startsWith('image/')) && file.size > 302400) {
-                alert("ไฟล์ PDF และไฟล์รูปภาพต้องมีขนาดไม่เกิน 300 KB");
+        newFiles.forEach(file => {
+            // ตรวจสอบขนาดไฟล์สำหรับ PDF และรูปภาพ
+            if ((file.type === "application/pdf" || file.type.startsWith('image/')) && file.size > MAX_SIZE) {
+                showNotification("ไฟล์ PDF และไฟล์รูปภาพต้องมีขนาดไม่เกิน 300 KB");
                 return;
             }
             dt.items.add(file);
@@ -229,54 +237,57 @@ document.addEventListener('DOMContentLoaded', function() {
         const button = document.createElement('button');
         button.textContent = "เปลี่ยนชื่อ";
         button.classList.add('rename-file-button');
-        button.onclick = () => {
+    
+        button.onclick = (event) => {
+            // ป้องกันการส่งฟอร์มเมื่อคลิกปุ่มเปลี่ยนชื่อ
+            event.preventDefault();
+    
             const newName = prompt("กรุณากรอกชื่อไฟล์ใหม่:", file.name);
             if (newName && newName !== file.name) {
                 const updatedFile = new File([file], newName, { type: file.type });
-
-                // สร้าง DataTransfer ใหม่เพื่อเก็บรายการไฟล์ทั้งหมดรวมถึงไฟล์ที่เปลี่ยนชื่อแล้ว
+    
+                // อัปเดต DataTransfer ให้มีไฟล์ที่ถูกเปลี่ยนชื่อแล้ว
                 const newDt = new DataTransfer();
                 Array.from(dt.files).forEach(f => {
                     // ใช้ไฟล์ที่ถูกเปลี่ยนชื่อแทนไฟล์เก่า
                     newDt.items.add(f === file ? updatedFile : f);
                 });
-
-                // อัปเดต `dt` และ `attachmentInput` ด้วย `newDt`
+    
+                // อัปเดต input file และไฟล์ที่แสดงใน UI
                 dt.items.clear();
                 Array.from(newDt.files).forEach(f => dt.items.add(f));
                 attachmentInput.files = dt.files;
-
-                // อัปเดตลิงก์และชื่อที่แสดงใน UI
+    
                 fileLink.href = URL.createObjectURL(updatedFile);
                 fileLink.download = newName;
                 fileLink.textContent = `${fileLink.textContent.split(' ')[0]} ${newName} (${(updatedFile.size / 1024).toFixed(2)} KB)`;
             }
         };
         return button;
-    }
+    }    
 
     function createRemoveButton(file, fileItem) {
         const button = document.createElement('button');
         button.innerHTML = "&#10006;";
         button.classList.add('remove-file-button');
         button.onclick = () => {
-        // สร้าง DataTransfer ใหม่เพื่ออัปเดตรายการไฟล์ที่เหลืออยู่
-        const newDt = new DataTransfer();
-
-        // เพิ่มไฟล์ที่เหลืออยู่ ยกเว้นไฟล์ที่ต้องการลบ เข้าไปใน newDt
-        Array.from(dt.files).forEach(f => {
-            if (f !== file) {
-                newDt.items.add(f);
-            }
-        });
-
-            // อัปเดต dt และ input field ด้วย DataTransfer ใหม่
+            // สร้าง DataTransfer ใหม่และคัดลอกไฟล์ที่เหลือ
+            const newDt = new DataTransfer();
+            Array.from(dt.files).forEach(f => {
+                if (f !== file) newDt.items.add(f);
+            });
+            
+            // อัปเดต DataTransfer และ input
             dt.items.clear();
             Array.from(newDt.files).forEach(f => dt.items.add(f));
             attachmentInput.files = dt.files;
 
-            // ลบ UI ของไฟล์ที่ถูกลบ
+            // ลบ UI element
             fileItem.remove();
+            
+            // เพิ่มการแจ้งเตือนจำนวนไฟล์ที่เหลือ
+            const remainingFiles = dt.files.length;
+            showNotification(`ลบไฟล์เรียบร้อย (เหลือ ${remainingFiles} จาก ${MAX_FILES} ไฟล์)`);
         };
         return button;
     }
@@ -300,40 +311,6 @@ document.addEventListener('DOMContentLoaded', function() {
         }, 3000); // Display for 3 seconds
     }
 
-    // แสดง modal เมื่อกดปุ่ม "ส่งคำร้อง"
-    document.getElementById("submitButton").onclick = function() {
-        if (validateForm()) {
-          document.getElementById("myModal").style.display = "block";
-        }
-    };
-
-    // ซ่อน modal เมื่อกดปุ่ม "ยกเลิก"
-    document.getElementById("cancelBtn").onclick = function() {
-        document.getElementById("myModal").style.display = "none";
-    };
-
-    // ดำเนินการยืนยันการส่งคำร้อง
-    document.getElementById("confirmBtn").onclick = function() {
-        if (validateForm()) {
-            document.getElementById("myModal").style.display = "none";
-            showNotification("ส่งคำร้องเรียบร้อยแล้ว");
-            clearNonReadOnlyFields();
-            // รีเซ็ตไฟล์แนบ
-            resetFiles();
-        }
-        const userId = sessionStorage.getItem('userId') || 'defaultUser';
-        const fields = [
-            'name', 'id', 'faculty', 'year', 'address', 'district', 
-            'subdistrict', 'province', 'student-tel', 'parent-tel', 
-            'advisor', 'semester', 'courseCode', 'courseName', 
-            'section', 'reason'
-        ];
-        
-        fields.forEach(field => {
-            localStorage.removeItem(getStorageKey(field, userId));  // Remove only the form-related keys
-        });
-    };
-
     function resetFiles() {
         // เคลียร์ DataTransfer object
         dt.items.clear();
@@ -348,12 +325,73 @@ document.addEventListener('DOMContentLoaded', function() {
         attachmentInput.files = dt.files;
     }
 
-    // แก้ไขฟังก์ชัน submitForm ให้ใช้ preventDefault() แทนการ return false
-    document.getElementById('requestForm').onsubmit = function(event) {
-        event.preventDefault();
+    // เพิ่ม CSS สำหรับการแสดงผล
+    const style = document.createElement('style');
+    style.textContent = `
+        .notification-popup {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            padding: 15px 20px;
+            background-color: #4CAF50;
+            color: white;
+            font-size: 16px;
+            border-radius: 5px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            opacity: 1;
+            transition: opacity 0.5s ease;
+            z-index: 1000;
+            animation: slideIn 0.5s ease-out;
+        }
+
+        .fade-out {
+            opacity: 0;
+            transition: opacity 0.5s;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+    `;
+    document.head.appendChild(style);
+
+    // แสดง modal เมื่อกดปุ่ม "ส่งคำร้อง"
+    document.getElementById("submitButton").onclick = function() {
         if (validateForm()) {
-            resetFiles();
-            this.submit();
+            document.getElementById("myModal").style.display = "block";
         }
     };
+
+    // ซ่อน modal เมื่อกดปุ่ม "ยกเลิก"
+    document.getElementById("cancelBtn").onclick = function() {
+        document.getElementById("myModal").style.display = "none";
+    };
+
+    // ดำเนินการยืนยันการส่งคำร้อง
+    document.getElementById("confirmBtn").onclick = function() {        
+        if (validateForm()) {
+            document.getElementById("myModal").style.display = "none";
+            showNotification("ส่งคำร้องเรียบร้อยแล้ว");
+            clearNonReadOnlyFields();
+            resetFiles();
+        }
+        const userId = sessionStorage.getItem('userId') || 'defaultUser';
+        const fields = [
+            'name', 'id', 'faculty', 'year', 'address', 'district', 
+            'subdistrict', 'province', 'student-tel', 'parent-tel', 
+            'advisor', 'semester', 'courseCode', 'courseName', 
+            'section', 'reason'
+        ];
+    
+        fields.forEach(field => {
+            localStorage.removeItem(getStorageKey(field, userId));  // Remove only the form-related keys
+        });
+    }
 });

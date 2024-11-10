@@ -9,6 +9,36 @@ const app = express();
 app.use(express.json());
 app.use(express.static('public'));
 
+const sessionConfig = {
+    secret: process.env.SESSION_SECRET || 'your-strong-secret-key',
+    name: 'sessionId', // เปลี่ยนชื่อ cookie จาก connect.sid เป็นชื่อที่กำหนดเอง
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        maxAge: 30 * 60 * 1000,
+        sameSite: 'strict'
+    },
+    rolling: true // ต่ออายุ session ทุกครั้งที่มีการ request
+};
+
+app.use(session(sessionConfig));
+
+// Middleware ตรวจสอบ session
+const checkSession = (req, res, next) => {
+    if (req.session && req.session.user) {
+        next();
+    } else {
+        res.status(401).json({ message: 'Unauthorized' });
+    }
+};
+
+// ใช้ middleware กับ routes ที่ต้องการป้องกัน
+app.get('/api/protected', checkSession, (req, res) => {
+    res.json({ data: 'Protected data' });
+});
+
 // เพิ่ม session middleware
 app.use(session({
     secret: 'secret-key',

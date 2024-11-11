@@ -15,6 +15,7 @@ function validateForm() {
     const courseName = document.getElementById("courseName").value;
     const section = document.getElementById("section").value;
     const reason = document.getElementById("reason").value;
+    const semesterInput = document.getElementById("semester").value;
 
     // Validate year (1-8)
     if (year < 1 || year > 8 || isNaN(year) || year.length !== 1) {
@@ -37,7 +38,7 @@ function validateForm() {
 
     // Validate that all fields are filled
     if (
-        !name || !id || !date || !faculty || !address || !district || !subdistrict || !province || !advisor || !courseCode || !courseName || !section || !reason
+        !name || !id || !faculty || !address || !district || !subdistrict || !province || !advisor || !courseCode || !courseName || !section || !reason || !semesterInput
     ) {
         alert("กรุณากรอกข้อมูลให้ครบถ้วน");
         return false;
@@ -50,20 +51,22 @@ function validateSemester() {
     const semesterInput = document.getElementById("semester");
     const semesterPattern = /^[0-9]{1}\/[0-9]{4}$/;
     const errorElement = document.getElementById("semester-error");
-
     // ถ้าฟิลด์ว่าง ให้ซ่อนข้อความเตือน
     if (semesterInput.value === "") {
         errorElement.style.display = "none";
         semesterInput.classList.remove("error");
         return;
     }
-
     // ตรวจสอบว่าข้อมูลตรงตามรูปแบบหรือไม่
     if (!semesterPattern.test(semesterInput.value)) {
         errorElement.style.display = "inline"; // แสดงข้อความเตือนเมื่อรูปแบบไม่ถูกต้อง
     } else {
-        errorElement.style.display = "none";    // ซ่อนข้อความเตือนเมื่อรูปแบบถูกต้อง
+        errorElement.style.display = "none"; // ซ่อนข้อความเตือนเมื่อรูปแบบถูกต้อง
         semesterInput.classList.remove("error");
+    }
+    if (!semesterInput) {
+        alert("กรุณากรอกข้อมูลให้ครบถ้วน");
+        return false;
     }
 }
 

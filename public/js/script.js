@@ -127,6 +127,11 @@ function submitLogin() {
             errorMessage.textContent = '';
             errorMessage.style.display = 'none';
 
+             //ส่งข้อมูลไป save ใน databse
+            //commentปิดไว้ให้ ถ้าจะเปิดลองให้ต้องมีdockerของdatabase กับ รันCRUDก่อน
+            //const studentLoginLog = new StudentLoginLog();
+           // studentLoginLog.fetchUserData(username);
+
             // Save user data in localStorage
             localStorage.setItem('userData', JSON.stringify(data));
             

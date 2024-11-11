@@ -1,4 +1,3 @@
-// server.js
 const express = require('express');
 const session = require('express-session');
 const path = require('path');
@@ -7,11 +6,13 @@ const app = express();
 
 // Middleware
 app.use(express.json());
-app.use(express.static('public'));
+app.use(express.static('public', {
+    index: 'index.html' // กำหนดให้ index.html เป็นหน้าแรกเสมอ
+}));
 
 const sessionConfig = {
     secret: process.env.SESSION_SECRET || 'your-strong-secret-key',
-    name: 'sessionId', // เปลี่ยนชื่อ cookie จาก connect.sid เป็นชื่อที่กำหนดเอง
+    name: 'sessionId',
     resave: false,
     saveUninitialized: false,
     cookie: {
@@ -20,49 +21,70 @@ const sessionConfig = {
         maxAge: 30 * 60 * 1000,
         sameSite: 'strict'
     },
-    rolling: true // ต่ออายุ session ทุกครั้งที่มีการ request
+    rolling: true
 };
 
 app.use(session(sessionConfig));
 
-// Middleware ตรวจสอบ session
-const checkSession = (req, res, next) => {
+// Middleware ตรวจสอบ authentication
+const checkAuth = (req, res, next) => {
     if (req.session && req.session.user) {
         next();
     } else {
-        res.status(401).json({ message: 'Unauthorized' });
+        // ถ้าเป็น API request
+        if (req.path.startsWith('/api/')) {
+            return res.status(401).json({ message: 'Unauthorized' });
+        }
+        // ถ้าเป็น page request
+        res.redirect('./index.html');
     }
 };
 
-// ใช้ middleware กับ routes ที่ต้องการป้องกัน
-app.get('/api/protected', checkSession, (req, res) => {
-    res.json({ data: 'Protected data' });
-});
+// Routes ที่ต้องการป้องกัน
+const protectedPages = [
+    './home.html',
+    './request1.html',
+    // เพิ่มหน้าอื่นๆ ที่ต้องการป้องกัน
+];
 
-// เพิ่ม session middleware
-app.use(session({
-    secret: 'secret-key',
-    resave: false,
-    saveUninitialized: false,
-    cookie: { maxAge: 30 * 60 * 1000 } // กำหนดเวลาหมดอายุของ session (30 นาที)
-}));
-
-app.post('/login', (req, res) => {
-    const { username } = req.body;
-    req.session.user = { username };
-    res.json({ message: 'Login successful', session: req.session.user });
-});
-
-app.post('/logout', (req, res) => {
-    req.session.destroy(err => {
-        if (err) return res.status(500).json({ message: 'Logout failed' });
-        res.clearCookie('connect.sid');
-        res.json({ message: 'Logout successful' });
+// Middleware สำหรับป้องกันการเข้าถึงหน้าที่ protected โดยตรง
+protectedPages.forEach(page => {
+    app.get(page, checkAuth, (req, res) => {
+        res.sendFile(path.join(__dirname, 'public', page.slice(1)));
     });
 });
 
-app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'public', 'index.html'));
+// API routes
+app.post('/api/login', (req, res) => {
+    const { username, userData } = req.body;
+    if (userData && userData.status === true) {
+        req.session.user = {
+            username,
+            ...userData
+        };
+        res.json({ success: true });
+    } else {
+        res.status(401).json({ success: false, message: 'Invalid login' });
+    }
+});
+
+app.post('/api/logout', (req, res) => {
+    req.session.destroy(err => {
+        if (err) {
+            return res.status(500).json({ success: false, message: 'Logout failed' });
+        }
+        res.clearCookie('sessionId');
+        res.json({ success: true });
+    });
+});
+
+// เพิ่ม route สำหรับตรวจสอบ session
+app.get('/api/check-auth', (req, res) => {
+    if (req.session && req.session.user) {
+        res.json({ authenticated: true });
+    } else {
+        res.json({ authenticated: false });
+    }
 });
 
 const PORT = process.env.PORT || 3000;

@@ -47,6 +47,12 @@ function validateForm(event) {
 }
 
 function createModal() {
+    // ลบ modal เก่าถ้ามีอยู่
+    const existingModal = document.querySelector('.modal-overlay');
+    if (existingModal) {
+        existingModal.remove();
+    }
+
     const modal = document.createElement('div');
     modal.className = 'modal-overlay';
     modal.innerHTML = `
@@ -74,13 +80,29 @@ function showWelcomeMessage(data) {
         modal.classList.add('active');
     }, 100);
 
-    // ตรวจสอบ session ก่อน redirect
+    // Redirect after welcome message
     setTimeout(() => {
-        window.location.href = './home.html';
+        // ใช้ fetch เพื่อตรวจสอบว่า session ยังคงอยู่ก่อน redirect
+        fetch('/api/check-auth')
+            .then(response => response.json())
+            .then(authData => {
+                if (authData.authenticated) {
+                    window.location.href = './home.html';
+                } else {
+                    // ถ้า session หมดอายุหรือมีปัญหา
+                    localStorage.removeItem('userData');
+                    window.location.href = '/';
+                }
+            })
+            .catch(error => {
+                console.error('Auth check failed:', error);
+                window.location.href = '/';
+            });
     }, 2000);
 }
 
-// Update your submitLogin function
+
+// script.js
 function submitLogin() {
     const username = document.getElementById('username').value;
     const password = document.getElementById('password').value;
@@ -105,27 +127,42 @@ function submitLogin() {
             errorMessage.textContent = '';
             errorMessage.style.display = 'none';
 
+            // Save user data in localStorage
             localStorage.setItem('userData', JSON.stringify(data));
             
-            //ส่งข้อมูลไป save ใน databse
-            //commentปิดไว้ให้ ถ้าจะเปิดลองให้ต้องมีdockerของdatabase กับ รันCRUDก่อน
-            //const studentLoginLog = new StudentLoginLog();
-            //studentLoginLog.fetchUserData(username);
-            
-            // Show animated welcome message และ redirect
-            showWelcomeMessage(data);
-            return;
+            // Create session with server
+            return fetch('/api/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    username: username,
+                    userData: data
+                })
+            });
+        } else {
+            throw new Error(data.message || 'Invalid username or password');
         }
-        
-        // Show error if login failed
-        const errorMessage = document.getElementById('error-message');
-        errorMessage.textContent = data.message || 'Invalid username or password';
-        errorMessage.style.display = 'block';
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Session creation failed');
+        }
+        return response.json();
+    })
+    .then(sessionResponse => {
+        if (sessionResponse.success) {
+            // Show welcome message and redirect
+            showWelcomeMessage(JSON.parse(localStorage.getItem('userData')));
+        } else {
+            throw new Error('Session creation failed');
+        }
     })
     .catch(error => {
         console.error('Error:', error);
         const errorMessage = document.getElementById('error-message');
-        errorMessage.textContent = 'An error occurred during login';
+        errorMessage.textContent = error.message || 'An error occurred during login';
         errorMessage.style.display = 'block';
     });
 }

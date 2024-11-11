@@ -411,7 +411,12 @@
             document.getElementById("confirmBtn").onclick = function() {        
                 if (validateForm()) {
                     document.getElementById("myModal").style.display = "none";
-                    showNotification("ส่งคำร้องเรียบร้อยแล้ว");
+                    Swal.fire({
+                        icon: "success",
+                        title: "ส่งคำร้องสำเร็จแล้ว",
+                        showConfirmButton: false,
+                        timer: 1500
+                    });
                     clearNonReadOnlyFields();
                     resetFiles();
                 }
@@ -461,5 +466,11 @@
         });
     </script>
     <script src="./js/auth.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+          sessionManager.preventBackAfterLogout();
+        });
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </body>
 </html>

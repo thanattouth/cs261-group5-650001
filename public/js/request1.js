@@ -17,22 +17,36 @@ function validateForm() {
     const reason = document.getElementById("reason").value;
     const semesterInput = document.getElementById("semester").value;
 
-    // Validate year (1-8)
     if (year < 1 || year > 8 || isNaN(year) || year.length !== 1) {
-        alert("กรุณากรอกชั้นปีเป็นตัวเลข 1-8");
+        Swal.fire({
+          icon: 'error',
+          title: 'กรุณากรอกชั้นปีเป็นตัวเลข 1-8',
+          text: '',
+          confirmButtonText: 'ตกลง'
+        });
         return false;
-    }
+    }      
 
     // Validate student phone (10 digits)
     if (studentPhone.length !== 10 || isNaN(studentPhone)) {
-        alert("กรุณากรอกหมายเลขโทรศัพท์นักศึกษาให้ครบ 10 หลัก");
+        Swal.fire({
+          icon: 'error', 
+          title: 'กรุณากรอกหมายเลขโทรศัพท์นักศึกษาให้ครบ 10 หลัก',
+          text: '',
+          confirmButtonText: 'ตกลง'
+        });
         return false;
     }
 
     
     // Validate guardian phone (10 digits)
     if (guardianPhone.length !== 10 || isNaN(guardianPhone)) {
-        alert("กรุณากรอกหมายเลขโทรศัพท์ผู้ปกครองให้ครบ 10 หลัก");
+        Swal.fire({
+            icon: 'error',
+            title: 'กรุณากรอกหมายเลขโทรศัพท์ผู้ปกครองให้ครบ 10 หลัก', 
+            text: '',
+            confirmButtonText: 'ตกลง'
+        });
         return false;
     }
 
@@ -40,7 +54,12 @@ function validateForm() {
     if (
         !name || !id || !faculty || !address || !district || !subdistrict || !province || !advisor || !courseCode || !courseName || !section || !reason || !semesterInput
     ) {
-        alert("กรุณากรอกข้อมูลให้ครบถ้วน");
+        Swal.fire({
+            icon: 'error',
+            title: 'กรุณากรอกข้อมูลให้ครบถ้วน',
+            text: '',
+            confirmButtonText: 'ตกลง'
+        });
         return false;
     }
 
@@ -63,10 +82,6 @@ function validateSemester() {
     } else {
         errorElement.style.display = "none"; // ซ่อนข้อความเตือนเมื่อรูปแบบถูกต้อง
         semesterInput.classList.remove("error");
-    }
-    if (!semesterInput) {
-        alert("กรุณากรอกข้อมูลให้ครบถ้วน");
-        return false;
     }
 }
 

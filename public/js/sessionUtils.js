@@ -216,8 +216,8 @@ class SessionManager {
 
     preventBackAfterLogout() {
         if (sessionStorage.getItem('isLoggedOut') === 'true') {
-            sessionStorage.removeItem('isLoggedOut');
-            this.redirectToLogin();
+          sessionStorage.removeItem('isLoggedOut');
+          this.redirectToLogin();
         }
     }
 

@@ -1,8 +1,11 @@
 const express = require('express');
 const session = require('express-session');
 const path = require('path');
+const cors = require('cors');
+require('dotenv').config();
 
 const app = express();
+app.use(cors());
 
 // Middleware
 app.use(express.json());

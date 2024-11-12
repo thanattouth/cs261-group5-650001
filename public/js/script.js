@@ -91,16 +91,15 @@ function showWelcomeMessage(data) {
                 } else {
                     // ถ้า session หมดอายุหรือมีปัญหา
                     localStorage.removeItem('userData');
-                    window.location.href = '/';
+                    window.location.href = './index.html';
                 }
             })
             .catch(error => {
                 console.error('Auth check failed:', error);
-                window.location.href = '/';
+                window.location.href = './index.html';
             });
     }, 2000);
 }
-
 
 // script.js
 function submitLogin() {

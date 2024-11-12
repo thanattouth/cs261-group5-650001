@@ -19,3 +19,17 @@ document.addEventListener('DOMContentLoaded', function() {
         document.getElementById('home-nav').classList.add('active'); // Add the active class
     }
 });
+
+// Add a function to clear user-specific form data when logging out
+function clearUserFormData() {
+    const userId = sessionStorage.getItem('userId') || 'defaultUser';
+    const formFields = [
+        'date', 'name', 'id', 'faculty', 'year', 'address', 'district', 
+        'subdistrict', 'province', 'student-tel', 'parent-tel', 'advisor', 
+        'semester', 'courseCode', 'courseName', 'section', 'reason'
+    ];
+    
+    formFields.forEach(field => {
+        localStorage.removeItem(getStorageKey(field, userId))
+    });
+}

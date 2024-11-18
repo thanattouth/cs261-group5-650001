@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thammasat University</title>
+    <link rel="stylesheet" href="./style/stylerequest.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=K2D:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800&family=Sarabun:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800&display=swap');
+    </style>
+</head>
+<body>
+    <header class="header">
+        <img src="./image/Emblem_of_Thammasat_University.svg.png" alt="Thammasat University Logo" class="logo">
+        <h1>มหาวิทยาลัยธรรมศาสตร์<br>THAMMASAT UNIVERSITY</h1>
+    </header>
+    <div class="container">
+        <nav class="sidebar">
+            <ul>
+                <a href="home.html"><li id="home-nav">หน้าแรก</li></a>
+                <a id="dynamicLink" href="request0.html">
+                    <li id="req1-nav">การเขียนคำร้อง</li>
+                </a>                
+            </ul>
+            <div class="logout-container">
+                <li class="logout" id="logout-nav">ออกจากระบบ</li>
+            </div>
+        </nav>
+        <div class="main-content">
+            <h1>เขียนคำร้อง</h1>
+            <form id="requestForm" onsubmit="return validateForm()">
+                <select name="request" id="request">
+                    <option value="0">เลือกหัวข้อคำร้อง</option>
+                    <option value="1">คำร้องขอจดทะเบียนล่าช้า</option>
+                    <option value="2">คำร้องขอเพิกถอน</option>
+                    <option value="3">คำร้องขอขาดสอบ</option>
+                    <option value="4">คำร้องขอลาป่วยหรือลากิจ</option>
+                </select>
+            </form>
+        </div>
+    </div>
+    <script src="./js/saveRequesttoBackend.js"></script>
+    <script src="./js/request.js"></script>
+    <script src="./js/sessionUtils.js"></script>
+    <script src="./js/auth.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+          sessionManager.preventBackAfterLogout();
+        });
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</body>
+</html>

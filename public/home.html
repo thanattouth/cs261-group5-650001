@@ -18,7 +18,9 @@
         <nav class="sidebar">
             <ul>
                 <a href="home.html"><li id="home-nav">หน้าแรก</li></a>
-                <a href="request1.html"><li id="req1-nav">การเขียนคำร้อง</li></a>
+                <a id="dynamicLink" href="request0.html">
+                    <li id="req1-nav">การเขียนคำร้อง</li>
+                </a>                
             </ul>
             <div class="logout-container">
                 <li id="logout-nav">ออกจากระบบ</li>
@@ -40,7 +42,7 @@
         </div>
     </div>
     <script src="./js/homepage.js"></script>
-    <!-- <script src="./js/logout.js"></script> -->
+    <script src="./js/request.js"></script>
     <script src="./js/sessionUtils.js"></script>
     <script src="./js/auth.js"></script>
     <script src="./js/requestHome.js"></script>

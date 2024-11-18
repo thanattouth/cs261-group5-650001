@@ -9,7 +9,6 @@ if (userData && userData.displayname_th) {
     `;
 }
 
-
 document.addEventListener('DOMContentLoaded', function() {
     // Check if the current page is the home page
     const currentPage = window.location.pathname.split('/').pop(); // Gets the current file name
@@ -33,3 +32,18 @@ function clearUserFormData() {
         localStorage.removeItem(getStorageKey(field, userId))
     });
 }
+
+document.addEventListener("DOMContentLoaded", function () {
+    const requestLink = document.getElementById("dynamicLink");
+
+    // โหลดคำร้องที่เลือกจาก localStorage
+    const selectedRequest = localStorage.getItem("selectedRequest");
+
+    // ถ้ามีการเลือกคำร้องจากหน้าแรก
+    if (selectedRequest) {
+        requestLink.href = `request${selectedRequest}.html`;
+    } else {
+        // ถ้าไม่มีการเลือก ค่าปริยายไปยัง request0.html
+        requestLink.href = "request0.html";
+    }
+});

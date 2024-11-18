@@ -46,7 +46,11 @@ const checkAuth = (req, res, next) => {
 // Routes ที่ต้องการป้องกัน
 const protectedPages = [
     './home.html',
+    './request0.html',
     './request1.html',
+    './request2.html',
+    './request3.html',
+    './request4.html'
     // เพิ่มหน้าอื่นๆ ที่ต้องการป้องกัน
 ];
 

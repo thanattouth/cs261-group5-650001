@@ -124,45 +124,6 @@ body {
     width: 100%;
 }
 
-.form-group label {
-    display: block;
-    margin-bottom: 8px;
-    font-weight: bold;
-    margin-top: 10px;
-}
-
-.date-input {
-    width: 250px !important; /* เปลี่ยนขนาดให้เหมาะสม */
-    padding: 10px; /* เพื่อให้มีความกว้างมากขึ้น */
-    border: 1px solid #ccc;
-    border-radius: 40px;
-}
-.p-input,
-.name-input,
-.faculty-input {
-    max-width: 100%; /* ไม่ให้ input กว้างเกินกว่า container */
-    box-sizing: border-box; /* รวม padding และ border เข้าไปในความกว้าง */
-}
-.form-group input {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 40px;
-}
-.form-group textarea {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 20px;
-}
-
-.form-group input[type="text"] {
-    display: inline-block;
-    margin-right: 10px;
-}
-.form-group input[type="text"]:last-child {
-    margin-right: 0;
-}
 .multi-column {
     display: flex;
     gap: 20px;
@@ -173,89 +134,6 @@ body {
 .multi-column > div {
     flex: 1;
     min-width: 250px; /* กำหนดความกว้างขั้นต่ำของแต่ละคอลัมน์ */
-}
-
-/* ปุ่ม choose file */
-
-#file-list {
-    margin-top: 10px;
-}
-
-.file-item {
-    display: flex;
-    align-items: center;
-    margin-top: 5px;
-}
-
-.file-name {
-    font-size: 14px;
-    color: #555;
-    margin-right: 10px;
-}
-
-.remove-file-button {
-    background-color: transparent;
-    color: #f44336;
-    border: none;
-    font-size: 20px;
-    cursor: pointer;
-    transition: color 0.3s ease;
-}
-
-.remove-file-button:hover {
-    color: #d32f2f;
-}
-
-.custom-file-button, .merge-file-button {
-    background-color: rgba(171, 0, 0, 0.762);
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    font-size: 16px;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-}
-
-.custom-file-button:hover, .merge-file-button:hover {
-    background-color: rgba(255, 117, 24, 0.884);
-}
-
-.confirm-button,
-.rename-file-button {
-    background-color: rgba(171, 0, 0, 0.762);
-    color: white;
-    border: none;
-    padding: 8px 16px;
-    font-size: 14px;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-    margin-left: 5px;
-}
-.confirm-button:hover,
-.rename-file-button:hover {
-    background-color: rgba(255, 117, 24, 0.884);
-}
-.file-name {
-    font-size: 16px;
-    font-weight: bold;
-    color: #333;
-    text-decoration: none;
-    margin-right: 10px;
-}
-
-.file-item {
-    margin-bottom: 10px; /* ระยะห่างระหว่างแต่ละไฟล์ */
-}
-
-.rename-file-button, .remove-file-button {
-    margin-left: 5px;
-    cursor: pointer; /* เมาส์เปลี่ยนเป็นรูปมือ */
-}
-
-.rename-file-button:hover{
-    background-color: rgba(255, 117, 24, 0.884);
 }
 
 @media screen and (max-width: 768px) {

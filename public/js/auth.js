@@ -87,6 +87,8 @@ document.addEventListener('DOMContentLoaded', function() {
             e.preventDefault();
             sessionManager.showLogoutModal();
             clearUserFormData();
+            localStorage.removeItem("selectedRequest");
+            localStorage.clear();
         });
     }
 

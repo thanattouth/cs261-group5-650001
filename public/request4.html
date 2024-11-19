@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thammasat University</title>
+    <link rel="stylesheet" href="./style/stylerequest2.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=K2D:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800&family=Sarabun:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800&display=swap');
+    </style>
+</head>
+<body>
+    <header class="header">
+        <img src="./image/Emblem_of_Thammasat_University.svg.png" alt="Thammasat University Logo" class="logo">
+        <h1>มหาวิทยาลัยธรรมศาสตร์<br>THAMMASAT UNIVERSITY</h1>
+    </header>
+    <div class="container">
+        <nav class="sidebar">
+            <ul>
+                <a href="home.html"><li id="home-nav">หน้าแรก</li></a>
+                <a id="dynamicLink" href="request0.html">
+                    <li id="req1-nav">การเขียนคำร้อง</li>
+                </a>                
+            </ul>
+            <div class="logout-container">
+                <li class="logout" id="logout-nav">ออกจากระบบ</li>
+            </div>
+        </nav>
+        <div class="main-content">
+            <h1>เขียนคำร้องขอลาป่วยหรือลากิจ</h1>
+            <form id="requestForm" onsubmit="return validateForm()">
+                <select name="request" id="request">
+                    <option value="0">เลือกหัวข้อคำร้อง</option>
+                    <option value="1">คำร้องขอจดทะเบียนล่าช้า</option>
+                    <option value="2">คำร้องขอเพิกถอน</option>
+                    <option value="3">คำร้องขอขาดสอบ</option>
+                    <option value="4">คำร้องขอลาป่วยหรือลากิจ</option>
+                </select>
+                <div class="form-group">
+                    <label>วันที่</label>
+                    <input  
+                        type="date" 
+                        class="date-input"
+                        id="date" 
+                        placeholder="วว/ดด/ปปปป"
+                        required 
+                        maxlength="10"
+                    >       
+
+                </div>
+                <div class="form-group multi-column">
+                    <div>
+                        <label>ชื่อ-นามสกุล</label>
+                        <input type="text" id="name" required>
+                    </div>
+                    <div>
+                        <label>เลขทะเบียน</label>
+                        <input 
+                        type="text" 
+                        id="id" 
+                        placeholder="เลขทะเบียน" 
+                        required 
+                        maxlength="10"
+                        oninput="this.value = this.value.replace(/[^0-9]/g, '')"
+                        >
+                    </div>
+                    <div>
+                        <label>สาขา</label>
+                        <input type="text" id="faculty" required>
+                    </div>
+                    <div>
+                        <label>ชั้นปี</label>
+                        <input  
+                        type="text" class="p-input"
+                        id="year" 
+                        placeholder="ชั้นปี" 
+                        required 
+                        maxlength="1"
+                        oninput="this.value = this.value.replace(/[^1-8]/g, '')"
+                        >
+                    </div>
+                </div>
+                <div class="form-group multi-column">
+                    <div>
+                        <label>ที่อยู่ที่ติดต่อได้</label>
+                        <input type="text" id="address" required>
+                    </div>
+                    <div>
+                        <label>แขวง/ตำบล</label>
+                        <input type="text" id="district" required>
+                    </div>
+                    <div>
+                        <label>เขต/อำเภอ</label>
+                        <input type="text" id="subdistrict" required>
+                    </div>
+                    <div>
+                        <label>จังหวัด</label>
+                        <input type="text" id="province" required>
+                    </div>
+                </div>
+                <div class="form-group multi-column">
+                    <div>
+                        <label>โทรศัพท์นักศึกษา</label>
+                        <input 
+                        type="text" 
+                        id="student-tel" 
+                        placeholder="เบอร์โทรศัพท์นักศึกษา" 
+                        required 
+                        maxlength="10"
+                        oninput="this.value = this.value.replace(/[^0-9]/g, '')"
+                        >
+                    </div>
+                    <div>
+                        <label>โทรศัพท์ผู้ปกครอง</label>
+                        <input 
+                        type="text" 
+                        id="parent-tel" 
+                        placeholder="เบอร์โทรศัพท์ผู้ปกครอง" 
+                        required 
+                        maxlength="10"
+                        oninput="this.value = this.value.replace(/[^0-9]/g, '')"
+                        >
+                    </div>
+                    <div>
+                        <label>อาจารย์ที่ปรึกษา</label>
+                        <input type="text" id="advisor" required>
+                    </div>
+                </div>
+                <div class="textt">
+                    <h3>ประสงค์จะยื่นคำร้องขอลาป่วยหรือลากิจ</h3>
+                </div>
+                <div class="form-group multi-column">
+                    <div>
+                        <label>ภาคเรียนที่</label>
+                        <input type="text" 
+                        id="semester"  
+                        placeholder="เช่น 1/2566" 
+                        required 
+                        maxlength="6"
+                        pattern="^[0-9]{1}/[0-9]{4}$"
+                        oninput="validateSemester()"
+                        >
+                        <span id="semester-error" style="color: red; display: none;">กรุณากรอกภาคการศึกษาให้ถูกต้อง เช่น 1/2566</span>
+                    </div>
+                    <div>
+                        <label>รหัสวิชา</label>
+                        <input type="text" id="courseCode" required>
+                    </div>
+                    <div>
+                        <label>ชื่อวิชา</label>
+                        <input type="text" id="courseName" required>
+                    </div>
+                    <div>
+                        <label>section</label>
+                        <input type="text" id="section" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>เหตุผลที่ยื่นคำร้องเนื่องจาก</label>
+                    <textarea rows="4" id="reason" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label>แนบไฟล์:</label>
+                    <button type="button" class="custom-file-button" onclick="document.getElementById('attachment').click();">Choose Files</button>
+                    <input type="file" id="attachment" name="attachments" class="file-input" style="display: none;" multiple>
+                    <div id="file-list"></div>
+                    
+                    <label>รวมไฟล์ PDF ทั้งหมดเป็น PDF เดียวกัน:</label>
+                    <button type="button" class="custom-file-button merge-pdf-button">รวมไฟล์เป็น PDF</button><br><br><br>
+                    <button type="button" class="custom-file-button submit" id = "submitButton">ส่งคำร้อง</button>
+                </div>
+                <div id="myModal" class="modal">
+                    <div class="modal-content">
+                        <p>ยืนยันการส่งคำร้อง<br>ขอจดทะเบียนล่าช้า</p><br>
+                        <button id="confirmBtn" class="button confirm-btn">ยืนยัน</button>
+                        <button id="cancelBtn" class="button cancel-btn">ยกเลิก</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <script src="./js/saveRequesttoBackend.js"></script>
+    <script src="./js/request1.js"></script>
+    <script src="./js/request.js"></script>
+    <script src="./js/sessionUtils.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>  
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const attachmentInput = document.getElementById('attachment');
+            const fileListContainer = document.getElementById('file-list');
+            const dt = new DataTransfer();
+            const MAX_FILES = 5;
+            const MAX_SIZE = 302400; // 300 KB in bytes
+
+            attachmentInput.addEventListener('change', function() {
+                const newFiles = Array.from(this.files);
+                const currentFileCount = dt.items.length;
+        
+                // ตรวจสอบจำนวนไฟล์ทั้งหมดที่จะมีหลังจากเพิ่มไฟล์ใหม่
+                if (currentFileCount + newFiles.length > MAX_FILES) {
+                    showNotification(`คุณสามารถแนบไฟล์ได้สูงสุด ${MAX_FILES} ไฟล์ (ปัจจุบัน: ${currentFileCount} ไฟล์)`);
+                    // รีเซ็ต input เพื่อให้สามารถเลือกไฟล์เดิมได้อีก
+                    this.value = '';
+                    return;
+                }
+
+                newFiles.forEach(file => {
+                    // ตรวจสอบขนาดไฟล์สำหรับ PDF และรูปภาพ
+                    if ((file.type === "application/pdf" || file.type.startsWith('image/')) && file.size > MAX_SIZE) {
+                        showNotification("ไฟล์ PDF และไฟล์รูปภาพต้องมีขนาดไม่เกิน 300 KB");
+                        return;
+                    }
+                    dt.items.add(file);
+                    addFileItem(file);
+                });
+
+                attachmentInput.files = dt.files;
+            });
+
+            function addFileItem(file) {
+                const fileItem = document.createElement('div');
+                fileItem.classList.add('file-item');
+
+                const fileLink = document.createElement('a');
+                fileLink.href = URL.createObjectURL(file);
+                fileLink.download = file.name;
+                fileLink.classList.add('file-name');
+                fileLink.target = '_blank';
+                fileLink.textContent = file.type === "application/pdf" ? '📄 ' : (file.type.startsWith('image/') ? '🖼️ ' : '📄 ');
+                fileLink.appendChild(document.createTextNode(` ${file.name} (${(file.size / 1024).toFixed(2)} KB)`));
+
+                fileItem.appendChild(fileLink);
+
+                const renameButton = createRenameButton(file, fileLink);
+                fileItem.appendChild(renameButton);
+
+                const removeButton = createRemoveButton(file, fileItem);
+                fileItem.appendChild(removeButton);
+
+                fileListContainer.appendChild(fileItem);
+                const remainingFiles = dt.files.length;
+                showNotification(`เพิ่มไฟล์เรียบร้อย (เหลือ ${remainingFiles} จาก ${MAX_FILES} ไฟล์)`);
+            }
+
+            function createRenameButton(file, fileLink) {
+                const button = document.createElement('button');
+                button.textContent = "เปลี่ยนชื่อ";
+                button.classList.add('rename-file-button');
+
+                const updateRenameHandler = (currentFile) => {
+                    return (event) => {
+                        event.preventDefault();
+                        const newName = prompt("กรุณากรอกชื่อไฟล์ใหม่:", currentFile.name);
+                        if (newName && newName !== currentFile.name) {
+                            const updatedFile = new File([currentFile], newName, { type: currentFile.type });
+        
+                            // หาตำแหน่งของไฟล์เดิมใน DataTransfer
+                            const fileIndex = Array.from(dt.files).findIndex(f => 
+                                f.name === currentFile.name && 
+                                f.size === currentFile.size && 
+                                f.type === currentFile.type
+                            );
+
+                            if (fileIndex !== -1) {
+                                // สร้าง DataTransfer ใหม่และคัดลอกไฟล์ทั้งหมด
+                                const newDt = new DataTransfer();
+                                Array.from(dt.files).forEach((f, index) => {
+                                    // แทนที่ไฟล์เดิมด้วยไฟล์ที่เปลี่ยนชื่อแล้ว
+                                    newDt.items.add(index === fileIndex ? updatedFile : f);
+                                });
+
+                                // อัปเดต DataTransfer หลัก
+                                dt.items.clear();
+                                Array.from(newDt.files).forEach(f => dt.items.add(f));
+            
+                                // อัปเดต input file
+                                attachmentInput.files = dt.files;
+
+                                // อัปเดต UI
+                                fileLink.href = URL.createObjectURL(updatedFile);
+                                fileLink.download = newName;
+                                const fileIcon = fileLink.textContent.split(' ')[0];
+                                fileLink.textContent = `${fileIcon} ${newName} (${(updatedFile.size / 1024).toFixed(2)} KB)`;
+                    
+                                // อัปเดตการอ้างอิงไฟล์สำหรับปุ่มลบ
+                                const removeButton = fileLink.parentElement.querySelector('.remove-file-button');
+                                if (removeButton) {
+                                    removeButton.onclick = createRemoveButton(updatedFile, fileLink.parentElement).onclick;
+                                }
+
+                                // อัปเดต handler ของปุ่มเปลี่ยนชื่อให้ใช้ไฟล์ใหม่
+                                button.onclick = updateRenameHandler(updatedFile);
+                            }
+                        }
+                    };
+                };
+
+            button.onclick = updateRenameHandler(file);
+            return button;
+            }
+    
+            function createRemoveButton(file, fileItem) {
+                const button = document.createElement('button');
+                button.innerHTML = "&#10006;";
+                button.classList.add('remove-file-button');
+                button.onclick = () => {
+                    // หาตำแหน่งของไฟล์ที่จะลบใน DataTransfer
+                    const fileIndex = Array.from(dt.files).findIndex(f => 
+                        f.name === file.name && f.size === file.size && f.type === file.type
+                    );
+            
+                    if (fileIndex !== -1) {
+                        // สร้าง DataTransfer ใหม่และคัดลอกไฟล์ที่เหลือ
+                        const newDt = new DataTransfer();
+                        Array.from(dt.files).forEach((f, index) => {
+                            if (index !== fileIndex) newDt.items.add(f);
+                        });
+                
+                        // อัปเดต DataTransfer และ input
+                        dt.items.clear();
+                        Array.from(newDt.files).forEach(f => dt.items.add(f));
+                        attachmentInput.files = dt.files;
+    
+                        // ลบ UI element
+                        fileItem.remove();
+                
+                        // แสดงการแจ้งเตือนจำนวนไฟล์ที่เหลือ
+                        const remainingFiles = dt.files.length;
+                        showNotification(`ลบไฟล์เรียบร้อย (เหลือ ${remainingFiles} จาก ${MAX_FILES} ไฟล์)`);
+                    }
+                };
+                return button;
+            }
+
+            // Function to display the custom notification
+            function showNotification(message) {
+                // Create a new notification element
+                const notification = document.createElement("div");
+                notification.className = "notification-popup";
+                notification.innerText = message;
+        
+                // Append the notification to the body
+                document.body.appendChild(notification);
+
+                // Automatically remove the notification after 3 seconds
+                setTimeout(() => {
+                    notification.classList.add("fade-out");
+                    setTimeout(() => {
+                        notification.remove();
+                    }, 500); // Wait for fade-out animation to complete
+                }, 3000); // Display for 3 seconds
+            }
+
+            function resetFiles() {
+                // เคลียร์ DataTransfer object
+                dt.items.clear();
+        
+                // รีเซ็ต input file
+                attachmentInput.value = '';
+        
+                // เคลียร์รายการไฟล์ที่แสดงใน UI
+                fileListContainer.innerHTML = '';
+        
+                // อัปเดต files ของ input
+                attachmentInput.files = dt.files;
+            }
+
+            // เพิ่ม CSS สำหรับการแสดงผล
+            const style = document.createElement('style');
+            style.textContent = `
+                .notification-popup {
+                    position: fixed;
+                    bottom: 20px;
+                    right: 20px;
+                    padding: 15px 20px;
+                    background-color: #4CAF50;
+                    color: white;
+                    font-size: 16px;
+                    border-radius: 5px;
+                    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+                    opacity: 1;
+                    transition: opacity 0.5s ease;
+                    z-index: 1000;
+                    animation: slideIn 0.5s ease-out;
+                }
+
+                .fade-out {
+                    opacity: 0;
+                    transition: opacity 0.5s;
+                }
+
+                @keyframes slideIn {
+                    from {
+                       transform: translateX(100%);
+                        opacity: 0;
+                    }
+                    to {
+                        transform: translateX(0);
+                        opacity: 1;
+                    }
+                }
+            `;
+            document.head.appendChild(style);
+
+            // แสดง modal เมื่อกดปุ่ม "ส่งคำร้อง"
+            document.getElementById("submitButton").onclick = function() {
+                if (validateForm()) {
+                    document.getElementById("myModal").style.display = "block";
+                }
+            };
+
+            // ซ่อน modal เมื่อกดปุ่ม "ยกเลิก"
+            document.getElementById("cancelBtn").onclick = function() {
+                document.getElementById("myModal").style.display = "none";
+            };
+
+            // ดำเนินการยืนยันการส่งคำร้อง
+            document.getElementById("confirmBtn").onclick = function() {        
+                if (validateForm()) {
+                    document.getElementById("myModal").style.display = "none";
+                    Swal.fire({
+                        icon: "success",
+                        title: "ส่งคำร้องสำเร็จแล้ว",
+                        showConfirmButton: false,
+                        timer: 1500
+                    });
+                    clearNonReadOnlyFields();
+                    resetFiles();
+                }
+                const userId = sessionStorage.getItem('userId') || 'defaultUser';
+                const fields = [
+                    'name', 'id', 'faculty', 'year', 'address', 'district', 
+                    'subdistrict', 'province', 'student-tel', 'parent-tel', 
+                    'advisor', 'semester', 'courseCode', 'courseName', 
+                    'section', 'reason'
+                ];
+    
+                fields.forEach(field => {
+                    localStorage.removeItem(getStorageKey(field, userId));  // Remove only the form-related keys
+                });
+            }
+            document.querySelector('.merge-pdf-button').addEventListener('click', async function() {
+                const pdfFiles = Array.from(dt.files).filter(file => file.type === "application/pdf");
+                if (pdfFiles.length === 0) {
+                    alert("กรุณาเลือกไฟล์ PDF สำหรับการรวม");
+                    return;
+                }
+
+                const { PDFDocument } = PDFLib;
+                const mergedPdf = await PDFDocument.create();
+                for (const file of pdfFiles) {
+                    const arrayBuffer = await file.arrayBuffer();
+                    const pdf = await PDFDocument.load(arrayBuffer);
+                    const copiedPages = await mergedPdf.copyPages(pdf, pdf.getPageIndices());
+                    copiedPages.forEach(page => mergedPdf.addPage(page));
+                }
+
+                const pdfBytes = await mergedPdf.save();
+                const blob = new Blob([pdfBytes], { type: "application/pdf" });
+                const mergedFile = new File([blob], "merged.pdf", { type: "application/pdf" });
+
+                // Clear all old PDF files and add the new merged PDF
+                const nonPdfFiles = Array.from(dt.files).filter(file => file.type !== "application/pdf");
+                dt.items.clear();
+                dt.items.add(mergedFile);
+                nonPdfFiles.forEach(file => dt.items.add(file));
+                attachmentInput.files = dt.files;
+
+                // Clear and re-add all files including the new merged PDF
+                fileListContainer.innerHTML = '';
+                Array.from(dt.files).forEach(file => addFileItem(file));
+            });
+        });
+    </script>
+    <script src="./js/auth.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+          sessionManager.preventBackAfterLogout();
+        });
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</body>
+</html>

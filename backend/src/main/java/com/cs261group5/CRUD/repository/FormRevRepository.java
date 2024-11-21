@@ -1,5 +1,5 @@
 package com.cs261group5.CRUD.repository;
-import com.cs261group5.CRUD.enitity.studentForm;
+import com.cs261group5.CRUD.enitity.FormDelayedReg;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -12,19 +12,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class studentFormRepository {
+public class FormRevRepository {
 
     @Value("${file.upload-dir}")
     private String uploadDir;  // รับค่าจาก properties บอกตำแหน่งว่าจะเก็บไฟล์ไว้ไหน
 
-    private final studentFormDAO repository;
+    private final FormRevocationDAO repository;
 
     // ใช้ instance variables สำหรับเก็บไฟล์และข้อมูล
-    public studentFormRepository (studentFormDAO repository) {
+    public FormRevRepository(FormRevocationDAO repository) {
         this.repository = repository;
     }
 
-    public studentForm saveStudentInfoWithFiles(studentForm studentForm, List<MultipartFile> files) throws IOException {
+    public FormDelayedReg saveStudentInfoWithFiles(FormDelayedReg FormDelayedReg, List<MultipartFile> files) throws IOException {
         List<String> filePaths = new ArrayList<>();
 
         for (MultipartFile file : files) {
@@ -55,10 +55,10 @@ public class studentFormRepository {
         }
 
         // กำหนดชื่อไฟล์ลงใน requestForm
-        studentForm.setAttachmentFiles(filePaths);
+        FormDelayedReg.setAttachmentFiles(filePaths);
 
         // บันทึกข้อมูลลงในฐานข้อมูล
-        return repository.save(studentForm);
+        return repository.save(FormDelayedReg);
     }
 
     private String getFileExtension(String fileName) {
@@ -72,11 +72,11 @@ public class studentFormRepository {
 
     public List<String> getFilesByStudentID(String studentID) {
         // ค้นหาฟอร์มที่ตรงกับ studentID
-        studentForm studentForm = repository.findByStudentID(studentID); // สมมติว่าใช้เมธอด findByStudentID()
+        FormDelayedReg FormDelayedReg = repository.findByStudentID(studentID); // สมมติว่าใช้เมธอด findByStudentID()
 
-        if (studentForm != null) {
+        if (FormDelayedReg != null) {
             // ถ้ามีข้อมูล studentForm, คืนค่ารายการไฟล์
-            return studentForm.getAttachmentFiles();
+            return FormDelayedReg.getAttachmentFiles();
         }
 
         // ถ้าไม่พบข้อมูล studentForm, คืนค่า empty list
@@ -84,7 +84,7 @@ public class studentFormRepository {
     }
 
 
-    public studentForm findByStudentID(String studentID) {
+    public FormDelayedReg findByStudentID(String studentID) {
         return repository.findByStudentID(studentID);  // เรียกใช้เมธอดที่มาจาก JpaRepository
     }
 

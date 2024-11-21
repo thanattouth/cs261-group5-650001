@@ -1,4 +1,4 @@
-// Java script หน้าเขียนคำร้องขอจดทะเบียนล่าช้า
+// Java script หน้าเขียนคำร้องขอเพิกถอน
 
 function validateForm() {
     // Get form values
@@ -258,3 +258,4 @@ document.addEventListener("DOMContentLoaded", function () {
         localStorage.setItem("selectedRequest", selectedValue);
     });
 });
+

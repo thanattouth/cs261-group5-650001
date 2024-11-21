@@ -1,3 +1,5 @@
+// Java script หน้าเลือกคำร้อง
+
 document.addEventListener('DOMContentLoaded', function() {
     const currentPage = window.location.pathname.split('/').pop(); // Gets the current file name
 

@@ -6,8 +6,8 @@ import java.sql.Date;
 import java.util.List;
 
 @Entity
-@Table(name="student_form")
-public class studentForm {
+@Table(name="form-delayed-reg")
+public class FormDelayedReg {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

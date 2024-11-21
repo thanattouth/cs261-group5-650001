@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Thammasat University</title>
-    <link rel="stylesheet" href="./style/stylerequest2.css">
+    <link rel="stylesheet" href="./style/stylerequest3.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=K2D:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800&family=Sarabun:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800&display=swap');
     </style>
@@ -79,69 +79,15 @@
                         oninput="this.value = this.value.replace(/[^1-8]/g, '')"
                         >
                     </div>
-                </div>
-                <div class="form-group multi-column">
-                    <div>
-                        <label>ที่อยู่ที่ติดต่อได้</label>
-                        <input type="text" id="address" required>
-                    </div>
-                    <div>
-                        <label>แขวง/ตำบล</label>
-                        <input type="text" id="district" required>
-                    </div>
-                    <div>
-                        <label>เขต/อำเภอ</label>
-                        <input type="text" id="subdistrict" required>
-                    </div>
-                    <div>
-                        <label>จังหวัด</label>
-                        <input type="text" id="province" required>
-                    </div>
-                </div>
-                <div class="form-group multi-column">
-                    <div>
-                        <label>โทรศัพท์นักศึกษา</label>
-                        <input 
-                        type="text" 
-                        id="student-tel" 
-                        placeholder="เบอร์โทรศัพท์นักศึกษา" 
-                        required 
-                        maxlength="10"
-                        oninput="this.value = this.value.replace(/[^0-9]/g, '')"
-                        >
-                    </div>
-                    <div>
-                        <label>โทรศัพท์ผู้ปกครอง</label>
-                        <input 
-                        type="text" 
-                        id="parent-tel" 
-                        placeholder="เบอร์โทรศัพท์ผู้ปกครอง" 
-                        required 
-                        maxlength="10"
-                        oninput="this.value = this.value.replace(/[^0-9]/g, '')"
-                        >
-                    </div>
                     <div>
                         <label>อาจารย์ที่ปรึกษา</label>
                         <input type="text" id="advisor" required>
                     </div>
                 </div>
                 <div class="textt">
-                    <h3>ประสงค์จะยื่นคำร้องขอขาดสอบ</h3>
+                    <h3>ประสงค์จะยื่นคำร้องกรณีขาดสอบ</h3>
                 </div>
                 <div class="form-group multi-column">
-                    <div>
-                        <label>ภาคเรียนที่</label>
-                        <input type="text" 
-                        id="semester"  
-                        placeholder="เช่น 1/2566" 
-                        required 
-                        maxlength="6"
-                        pattern="^[0-9]{1}/[0-9]{4}$"
-                        oninput="validateSemester()"
-                        >
-                        <span id="semester-error" style="color: red; display: none;">กรุณากรอกภาคการศึกษาให้ถูกต้อง เช่น 1/2566</span>
-                    </div>
                     <div>
                         <label>รหัสวิชา</label>
                         <input type="text" id="courseCode" required>
@@ -151,13 +97,40 @@
                         <input type="text" id="courseName" required>
                     </div>
                     <div>
-                        <label>section</label>
-                        <input type="text" id="section" required>
+                        <label>ซึ่งสอบในวันที่</label>
+                        <input type="text" id="date" placeholder="วว/ดด/ปปปป" required>
+                    </div>
+                </div>
+                <div class="form-group multi-column">
+                    <div>
+                        <label>อาจารย์ผู้สอน</label>
+                        <input type="text" id="Instructor" required >
+                    </div>
+                    <div>
+                        <label>ขาดสอบเนื่องจาก</label>
+                        <input type="text" id="reason" required >
                     </div>
                 </div>
                 <div class="form-group">
-                    <label>เหตุผลที่ยื่นคำร้องเนื่องจาก</label>
-                    <textarea rows="4" id="reason" required></textarea>
+                    <label>และได้แนบเอกสาร</label>
+                    <div class="checkbox-group">
+                      <label>
+                        <input type="checkbox" name="document1" value="medical_form" />
+                        สำเนาใบเสร็จรักษาพยาบาล
+                      </label>
+                      <label>
+                        <input type="checkbox" name="document2" value="doctor_certificate" />
+                        ใบรับรองแพทย์
+                      </label>
+                      <label>
+                        <input type="checkbox" name="document3" value="registration_card" />
+                        สำเนาบัตรเอกสารจดทะเบียน
+                      </label>
+                    </div>
+                  </div>
+                <div class="form-group">
+                    <label>เพราะฉะนั้น</label>
+                    <textarea rows="4" id="then" required></textarea>
                 </div>
                 <div class="form-group">
                     <label>แนบไฟล์:</label>

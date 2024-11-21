@@ -1,0 +1,440 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Sarabun' , sans-serif;
+}
+
+body {
+    background: 
+        linear-gradient(rgba(246, 176, 119, 0.5), rgba(251, 211, 211, 0.5)) ,
+        url('../image/01-1-1024x576-1.jpg') no-repeat center center/cover ;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    background-attachment: fixed;
+}
+
+.container {
+    flex: 1;
+    display: flex;
+    margin-top: 0px;
+    background-color: rgba(255, 238, 224, 0.719);
+    flex-direction: row; /* เพิ่มบรรทัดนี้เพื่อกำหนดทิศทางการวางตัว */
+    min-height: 100vh; /* ให้ container มีความสูงขั้นต่ำเท่ากับความสูงของ viewport */
+}
+
+.sidebar {
+    width: 200px;
+    background-color: rgba(171, 0, 0, 0.762); /* Semi-transparent red */
+    color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between; /* This pushes the logout button to the bottom */
+    padding-top: 5px;
+}
+
+.sidebar ul {
+    list-style: none;
+    padding: 0;
+    text-align: center;
+}
+
+.sidebar ul li {
+    padding: 20px 0;
+    border-bottom: 1px solid rgb(255, 255, 255);
+    cursor: pointer;
+
+}
+
+.sidebar a {
+    text-decoration: none;
+    color: inherit;
+    font-weight: normal;
+    transition: color 0.3s;
+}
+
+.logout-container {
+    text-align: center;
+    border-top: 1px solid rgb(255, 255, 255);
+}
+
+.logout-container li {
+    list-style: none;
+    cursor: pointer;
+    padding: 20px;
+}
+
+.logout-container li:hover {
+    background-color: rgba(169, 0, 0, 0.9);
+}
+
+.active {
+    color: rgb(255, 255, 255); /* Change this to the color you want */
+    background-color: rgba(255, 117, 24, 0.884);
+}
+
+.sidebar ul li:hover {
+    background-color: rgba(169, 0, 0, 0.9);
+}
+
+.main-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    margin: 0 auto; /* ใช้ auto margin เพื่อจัดกึ่งกลาง */
+    max-width: 1200px; /* กำหนดความกว้างสูงสุด */
+    width: 100%; /* ให้ใช้พื้นที่ที่เหลือทั้งหมด */
+}
+
+.header {
+    top: 0;
+    left: 0;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding: 20px;
+    text-align: center ;
+    justify-content: center;
+    background-color:linear-gradient(rgba(246, 176, 119, 0.5), rgba(251, 211, 211, 0.5)) ;
+    z-index: 10;
+}
+
+.logo {
+    width: 80px;
+}
+
+.header h1 {
+    font-size: 24px;
+    color: #990000;
+    line-height: 1.2;
+    margin: 0;
+}
+.main-content h1 {
+    font-size: 24px;
+    color: #000000;
+    font-weight: bold;
+    text-align: left !important;
+    margin-bottom: 15px;
+}
+.form-group {
+    margin-bottom: 20px;
+    width: 100%;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: bold;
+    margin-top: 10px;
+}
+
+.date-input {
+    width: 250px !important; /* เปลี่ยนขนาดให้เหมาะสม */
+    padding: 10px; /* เพื่อให้มีความกว้างมากขึ้น */
+    border: 1px solid #ccc;
+    border-radius: 40px;
+}
+.p-input,
+.name-input,
+.faculty-input {
+    max-width: 100%; /* ไม่ให้ input กว้างเกินกว่า container */
+    box-sizing: border-box; /* รวม padding และ border เข้าไปในความกว้าง */
+}
+.form-group input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 40px;
+}
+.form-group textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 20px;
+}
+
+.form-group input[type="text"] {
+    display: inline-block;
+    margin-right: 10px;
+}
+.form-group input[type="text"]:last-child {
+    margin-right: 0;
+}
+.multi-column {
+    display: flex;
+    gap: 20px;
+    margin-top: 15px;
+    flex-wrap: wrap; /* เพิ่มการ wrap เมื่อหน้าจอแคบ */
+}
+
+.multi-column > div {
+    flex: 1;
+    min-width: 250px; /* กำหนดความกว้างขั้นต่ำของแต่ละคอลัมน์ */
+}
+
+/* ปุ่ม choose file */
+
+#file-list {
+    margin-top: 10px;
+}
+
+.file-item {
+    display: flex;
+    align-items: center;
+    margin-top: 5px;
+}
+
+.file-name {
+    font-size: 14px;
+    color: #555;
+    margin-right: 10px;
+}
+
+.remove-file-button {
+    background-color: transparent;
+    color: #f44336;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+.remove-file-button:hover {
+    color: #d32f2f;
+}
+
+.custom-file-button, .merge-file-button {
+    background-color: rgba(171, 0, 0, 0.762);
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.custom-file-button:hover, .merge-file-button:hover {
+    background-color: rgba(255, 117, 24, 0.884);
+}
+
+.confirm-button,
+.rename-file-button {
+    background-color: rgba(171, 0, 0, 0.762);
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    font-size: 14px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-left: 5px;
+}
+.confirm-button:hover,
+.rename-file-button:hover {
+    background-color: rgba(255, 117, 24, 0.884);
+}
+.file-name {
+    font-size: 16px;
+    font-weight: bold;
+    color: #333;
+    text-decoration: none;
+    margin-right: 10px;
+}
+
+.file-item {
+    margin-bottom: 10px; /* ระยะห่างระหว่างแต่ละไฟล์ */
+}
+
+.rename-file-button, .remove-file-button {
+    margin-left: 5px;
+    cursor: pointer; /* เมาส์เปลี่ยนเป็นรูปมือ */
+}
+
+.rename-file-button:hover{
+    background-color: rgba(255, 117, 24, 0.884);
+}
+
+@media screen and (max-width: 768px) {
+    .container {
+        flex-direction: column; /* เปลี่ยนเป็นแนวตั้งเมื่อหน้าจอแคบ */
+    }
+
+    .sidebar {
+        width: 100%; /* ให้ sidebar กินความกว้างเต็มหน้าจอ */
+        min-height: auto; /* ปรับความสูงตามเนื้อหา */
+    }
+
+    .main-content {
+        margin: 0;
+        padding: 10px;
+    }
+
+    /* ปรับขนาด input fields สำหรับหน้าจอเล็ก */
+    .date-input,
+    .p-input,
+    .name-input,
+    .faculty-input {
+        width: 100% !important; /* ให้ input เต็มความกว้างที่มี */
+    }
+
+    .multi-column > div {
+        flex: 1 1 100%; /* ให้แต่ละคอลัมน์ใช้พื้นที่เต็มความกว้าง */
+    }
+}
+
+/* สไตล์พื้นฐานของ modal */
+.modal {
+    display: none; /* ซ่อนไว้ก่อน */
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.4);
+}
+.modal-content {
+    background-color: white;
+    margin: 15% auto;
+    padding:80px; /* ลด padding ลงเพื่อให้ปุ่มจัดเรียงได้ดีขึ้น */
+    width: 500px;
+    text-align: center;
+    border-radius: 20px;
+}
+
+.button-container {
+    display: flex;
+    justify-content: space-between;
+    gap: 30px; /* เพิ่มระยะห่างระหว่างปุ่ม */
+    margin-top: 30px;
+}
+
+.button {
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 10px;
+    flex: 1; /* ให้ปุ่มมีขนาดเท่ากัน */
+    max-width: 120px; /* จำกัดความกว้างของปุ่ม */
+}
+
+.confirm-btn, .cancel-btn {
+    background-color: rgba(171, 0, 0, 0.762);
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    
+    margin-top: 35px;
+}
+.cancel-btn {
+    margin-left: 100px;
+}
+.confirm-btn:hover, .cancel-btn:hover {
+    background-color: rgba(255, 117, 24, 0.884);
+}
+.modal-content p {
+    font-size: 20px; /* ปรับขนาดฟอนต์ */
+    font-weight: normal; /* ตั้งค่าความหนาของฟอนต์ */
+    margin-bottom: 15px; /* เพิ่มระยะห่าง */
+}
+
+/* Style for the notification popup */
+.notification-popup {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    padding: 15px 20px;
+    background-color: #4CAF50;
+    color: white;
+    font-size: 16px;
+    border-radius: 5px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    opacity: 1;
+    transition: opacity 0.5s ease;
+    z-index: 1000;
+}
+
+/* Fade-out effect */
+.notification-popup.fade-out {
+    opacity: 0;
+}
+
+/* Select Container Styles */
+select#request {
+    width: 100%;
+    max-width: 250px;
+    padding: 10px 10px 10px 10px;
+    font-family: 'Sarabun', sans-serif;
+    font-size: 12px;
+    font-weight: 400;
+    color: #2c3e50;
+    background-color: #ffffff;
+    border: 2px solid #e8e8e8;
+    border-radius: 40px;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+/* Hover State */
+select#request:hover {
+    border-color: #BC2424;
+    box-shadow: 0 2px 8px rgba(188, 36, 36, 0.1);
+    transform: translateY(-1px);
+}
+
+/* Focus State */
+select#request:focus {
+    outline: none;
+    border-color: #BC2424;
+    box-shadow: 0 0 0 3px rgba(188, 36, 36, 0.2);
+}
+
+/* Option Styles */
+select#request option {
+    padding: 12px;
+    font-family: 'Sarabun', sans-serif;
+    background-color: #ffffff;
+    color: #2c3e50;
+}
+
+/* Disabled Option Style */
+select#request option[disabled] {
+    color: #999;
+    font-style: italic;
+}
+
+/* Hover on Options */
+select#request option:hover,
+select#request option:focus {
+    background-color: #BC2424;
+    color: #ffffff;
+}
+body {
+    font-family: Arial, sans-serif;
+}
+
+form {
+    margin: 20px;
+}
+
+label {
+    display: block;
+    margin: 10px 0;
+    font-size: 18px;
+}
+
+input[type="radio"] {
+    margin-left: 10px;
+    transform: scale(1.5);
+}

@@ -146,3 +146,37 @@ document.getElementById("request").addEventListener("change", function () {
         window.location.href = "request0.html";
     }
 });
+
+document.addEventListener('DOMContentLoaded', () => {
+    const radioButtons = document.querySelectorAll('input[type="radio"]');
+    let lastSelected = null; // To track the last selected radio button
+
+    radioButtons.forEach((radio) => {
+        radio.addEventListener('click', (e) => {
+            // If the same radio button is clicked again, uncheck it
+            if (lastSelected === e.target) {
+                e.target.checked = false;
+                lastSelected = null; // Reset the tracker
+            } else {
+                // Otherwise, update the tracker to the currently clicked radio
+                lastSelected = e.target;
+            }
+        });
+    });
+});
+
+document.addEventListener('DOMContentLoaded', () => {
+    const radioButtons = document.querySelectorAll('input[type="radio"]');
+
+    radioButtons.forEach((radio) => {
+        radio.addEventListener('click', (e) => {
+            // If the clicked radio is already checked, uncheck it
+            if (radio.checked) {
+                radioButtons.forEach((btn) => {
+                    btn.checked = false; // Uncheck all radios first
+                });
+                radio.checked = true; // Check only the clicked one
+            }
+        });
+    });
+});

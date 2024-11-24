@@ -3,7 +3,7 @@ const session = require('express-session');
 const path = require('path');
 const cors = require('cors');
 const multer = require('multer');
-const formRevocationService = require('./form-revocation-service');
+const formRevocationService = require('./public/js/FormRevocationService.js');
 require('dotenv').config();
 
 const app = express();
@@ -97,38 +97,38 @@ app.get('/api/check-auth', (req, res) => {
 });
 
 // Upload new form with files
-router.post('/upload', upload.array('files'), async (req, res) => {
-    try {
-        const formData = {
-            date: req.body.date,
-            fullName: req.body.fullName,
-            studentID: req.body.studentID,
-            department: req.body.department,
-            year: parseInt(req.body.year),
-            address: req.body.address,
-            district: req.body.district,
-            subdistrict: req.body.subdistrict,
-            province: req.body.province,
-            studentTel: req.body.studentTel,
-            parentTel: req.body.parentTel,
-            advisor: req.body.advisor,
-            semester: req.body.semester,
-            courseID: req.body.courseID,
-            courseName: req.body.courseName,
-            section: req.body.section,
-            reason: req.body.reason
-        };
+// app.post('/upload', upload.array('files'), async (req, res) => {
+//     try {
+//         const formData = {
+//             date: req.body.date,
+//             fullName: req.body.fullName,
+//             studentID: req.body.studentID,
+//             department: req.body.department,
+//             year: parseInt(req.body.year),
+//             address: req.body.address,
+//             district: req.body.district,
+//             subdistrict: req.body.subdistrict,
+//             province: req.body.province,
+//             studentTel: req.body.studentTel,
+//             parentTel: req.body.parentTel,
+//             advisor: req.body.advisor,
+//             semester: req.body.semester,
+//             courseID: req.body.courseID,
+//             courseName: req.body.courseName,
+//             section: req.body.section,
+//             reason: req.body.reason
+//         };
 
-        const savedForm = await formRevocationService.saveFormWithFiles(formData, req.files);
-        res.status(201).json(savedForm);
-    } catch (err) {
-        console.error('Error in form upload:', err);
-        res.status(500).json({ message: 'Error uploading form' });
-    }
-});
+//         const savedForm = await formRevocationService.saveFormWithFiles(formData, req.files);
+//         res.status(201).json(savedForm);
+//     } catch (err) {
+//         console.error('Error in form upload:', err);
+//         res.status(500).json({ message: 'Error uploading form' });
+//     }
+// });
 
 // Get form by student ID
-router.get('/student/:studentId', async (req, res) => {
+app.get('/student/:studentId', async (req, res) => {
     try {
         const form = await formRevocationService.getFormByStudentId(req.params.studentId);
         if (form) {
@@ -142,7 +142,7 @@ router.get('/student/:studentId', async (req, res) => {
 });
 
 // Get all forms
-router.get('/', async (req, res) => {
+app.get('/', async (req, res) => {
     try {
         const forms = await formRevocationService.getAllForms();
         res.json(forms);
@@ -152,7 +152,7 @@ router.get('/', async (req, res) => {
 });
 
 // Update form
-router.put('/:id', async (req, res) => {
+app.put('/:id', async (req, res) => {
     try {
         await formRevocationService.updateForm(parseInt(req.params.id), req.body);
         res.json({ message: 'Form updated successfully' });
@@ -165,5 +165,3 @@ const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
 });
-
-module.exports = router;

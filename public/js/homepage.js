@@ -17,7 +17,44 @@ document.addEventListener('DOMContentLoaded', function() {
     if (currentPage === 'home.html') {
         document.getElementById('home-nav').classList.add('active'); // Add the active class
     }
+
+    disableCurrentPageLink();
+    updateDynamicLink();
 });
+
+// Function to disable current page link
+function disableCurrentPageLink() {
+    const currentPage = window.location.pathname.split('/').pop();
+    
+    // Disable home link if on home page
+    if (currentPage === 'home.html') {
+        const homeLink = document.querySelector('a[href="home.html"]');
+        if (homeLink) {
+            homeLink.style.pointerEvents = 'none';
+            homeLink.style.cursor = 'default';
+            document.getElementById('home-nav').classList.add('active');
+        }
+    }
+    
+    // Disable request link if on any request page
+    if (currentPage.startsWith('request') && currentPage.endsWith('.html')) {
+        const requestLink = document.getElementById('dynamicLink');
+        if (requestLink) {
+            requestLink.style.pointerEvents = 'none';
+            requestLink.style.cursor = 'default';
+            document.getElementById('req1-nav').classList.add('active');
+        }
+    }
+}
+
+// Update the dynamic link based on selected request
+function updateDynamicLink() {
+    const requestLink = document.getElementById('dynamicLink');
+    if (!requestLink) return;
+
+    const selectedRequest = localStorage.getItem('selectedRequest');
+    requestLink.href = selectedRequest ? `request${selectedRequest}.html` : 'request0.html';
+}
 
 // Add a function to clear user-specific form data when logging out
 function clearUserFormData() {

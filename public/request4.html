@@ -83,18 +83,44 @@
                 <div class="radio-group">
                     <label>
                       <input type="radio" name="document1" value="medical_form" />
-                      สำเนาใบเสร็จรักษาพยาบาล
+                      ลาป่วย
                     </label>
                     <br>
                     <label>
                       <input type="radio" name="document2" value="doctor_certificate" />
-                      ใบรับรองแพทย์
+                      ลากิจ
                     </label>
+                </div>
+                <div class="form-group">
+                    <label>เนื่องจาก</label>
+                    <textarea rows="4" id="reason" required></textarea>
+                </div>
+                <div class = "textt">
+                    <h3>ขออนุญาตหยุดเรียนตั้งแต่วันที่</h3>
+                <div class = "inputdate">
+                    <input type="text" id="start-date" name="start-date" placeholder="วว/ดด/ปปปป">
+                    <span>ถึง</span>
+                    <input type="text" id="end-date" name="end-date" placeholder="วว/ดด/ปปปป">
+                </div> 
+                <div class = "textt">
+                    <h3>ขณะลาพักข้าพเจ้าอาศัยอยู่ที่</h3>
                 </div>
                 <div class="form-group multi-column">
                     <div>
-                        <label>ที่อยู่ที่ติดต่อได้</label>
+                        <label>บ้านเลขที่</label>
                         <input type="text" id="address" required>
+                    </div>
+                    <div>
+                        <label>หมู่ที่</label>
+                        <input type="text" id="moo" required>
+                    </div>
+                    <div>
+                        <label>ซอย</label>
+                        <input type="text" id="soy" required>
+                    </div>
+                    <div>
+                        <label>ถนน</label>
+                        <input type="text" id="tanont" required>
                     </div>
                     <div>
                         <label>แขวง/ตำบล</label>
@@ -121,37 +147,14 @@
                         oninput="this.value = this.value.replace(/[^0-9]/g, '')"
                         >
                     </div>
-                    <div>
-                        <label>โทรศัพท์ผู้ปกครอง</label>
-                        <input 
-                        type="text" 
-                        id="parent-tel" 
-                        placeholder="เบอร์โทรศัพท์ผู้ปกครอง" 
-                        required 
-                        maxlength="10"
-                        oninput="this.value = this.value.replace(/[^0-9]/g, '')"
-                        >
-                    </div>
-                    <div>
-                        <label>อาจารย์ที่ปรึกษา</label>
-                        <input type="text" id="advisor" required>
-                    </div>
                 </div>
                 <div class="textt">
                     <h3>ประสงค์จะยื่นคำร้องขอลาป่วยหรือลากิจ</h3>
                 </div>
                 <div class="form-group multi-column">
                     <div>
-                        <label>ภาคเรียนที่</label>
-                        <input type="text" 
-                        id="semester"  
-                        placeholder="เช่น 1/2566" 
-                        required 
-                        maxlength="6"
-                        pattern="^[0-9]{1}/[0-9]{4}$"
-                        oninput="validateSemester()"
-                        >
-                        <span id="semester-error" style="color: red; display: none;">กรุณากรอกภาคการศึกษาให้ถูกต้อง เช่น 1/2566</span>
+                        <label>email dome</label>
+                        <input type="text" id="emaildome" required>
                     </div>
                     <div>
                         <label>รหัสวิชา</label>
@@ -165,10 +168,10 @@
                         <label>section</label>
                         <input type="text" id="section" required>
                     </div>
-                </div>
-                <div class="form-group">
-                    <label>เหตุผลที่ยื่นคำร้องเนื่องจาก</label>
-                    <textarea rows="4" id="reason" required></textarea>
+                    <div>
+                        <label>อาจารย์ผู้สอน</label>
+                        <input type="text" id="Instructor" required >
+                    </div>
                 </div>
                 <div class="form-group">
                     <label>แนบไฟล์:</label>

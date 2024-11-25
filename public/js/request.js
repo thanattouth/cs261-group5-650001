@@ -34,6 +34,16 @@ function disableCurrentPageLink() {
             document.getElementById('req1-nav').classList.add('active');
         }
     }
+
+    // Disable home link if on home page
+    if (currentPage === 'listrequest.html') {
+        const listLink = document.querySelector('a[href="listrequest.html"]');
+        if (listLink) {
+            listLink.style.pointerEvents = 'none';
+            listLink.style.cursor = 'default';
+            document.getElementById('list-nav').classList.add('active');
+        }
+    }
 }
 
 // Update the dynamic link based on selected request

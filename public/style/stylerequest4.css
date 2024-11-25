@@ -420,21 +420,70 @@ select#request option:focus {
     background-color: #BC2424;
     color: #ffffff;
 }
-body {
+
+.radio-group {
     font-family: Arial, sans-serif;
+    color: #000;
 }
-
-form {
-    margin: 20px;
-}
-
-label {
+  
+.radio-group label {
     display: block;
-    margin: 10px 0;
-    font-size: 18px;
+    font-size: 16px;
+    margin-bottom: 12px;
+    cursor: pointer;
+    position: relative;
+    padding-left: 35px; /* Adds space for custom radio button */
+    line-height: 20px;
 }
-
-input[type="radio"] {
-    margin-left: 10px;
-    transform: scale(1.5);
+  
+.radio-group input[type="radio"] {
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    appearance: none; /* Removes default radio button */
+    width: 20px;
+    height: 20px;
+    border: 2px solid #000;
+    border-radius: 50%;
+    background-color: #fff;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+  
+.radio-group input[type="radio"]:checked {
+    background-color: #000;
+    border-color: #000;
+}
+  
+.radio-group input[type="radio"]:checked::after {
+    content: '';
+    position: absolute;
+    left: 5px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 10px;
+    height: 10px;
+    background-color: #fff;
+    border-radius: 50%;
+}
+  
+.radio-group input[type="radio"]:hover {
+    border-color: #444;
+}
+  
+.radio-group input[type="radio"]:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.5);
+}
+  
+.inputdate input[type="text"] {
+    border-radius: 25px;
+    padding: 10px 20px; 
+    border: 1px solid #ccc; 
+    width: 150px; 
+    margin-right: 10px; 
+    box-sizing: border-box; 
+    margin-bottom: 20px;
+    margin-top: 20px;
 }

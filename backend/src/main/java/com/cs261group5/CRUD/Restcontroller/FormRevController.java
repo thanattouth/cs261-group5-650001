@@ -1,7 +1,7 @@
 package com.cs261group5.CRUD.Restcontroller;
 
 
-import com.cs261group5.CRUD.enitity.FormDelayedReg;
+import com.cs261group5.CRUD.enitity.FormRevocation;
 import com.cs261group5.CRUD.repository.FormRevRepository;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
@@ -27,7 +27,7 @@ public class FormRevController {
     }
 
     @PostMapping("/upload")
-    public ResponseEntity<FormDelayedReg> uploadStudentInfo(
+    public ResponseEntity<FormRevocation> uploadStudentInfo(
             @RequestParam("date") String date,
             @RequestParam("fullName") String fullName,
             @RequestParam("studentID") String studentID,
@@ -48,7 +48,7 @@ public class FormRevController {
             @RequestParam("files") List<MultipartFile> files
     ) {
         try {
-            FormDelayedReg requestform = new FormDelayedReg();
+            FormRevocation requestform = new FormRevocation();
             requestform.setDate(Date.valueOf(date));  // แปลง String เป็น Date
             requestform.setFullName(fullName);
             requestform.setStudentID(studentID);
@@ -67,7 +67,7 @@ public class FormRevController {
             requestform.setSection(section);
             requestform.setReason(reason);
 
-            FormDelayedReg savedInfo = requestformService.saveStudentInfoWithFiles(requestform, files);
+            FormRevocation savedInfo = requestformService.saveStudentInfoWithFiles(requestform, files);
             return new ResponseEntity<>(savedInfo, HttpStatus.CREATED);
         } catch (IOException e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);

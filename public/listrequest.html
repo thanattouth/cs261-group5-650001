@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thammasat University</title>
+    <link rel="stylesheet" href="./style/stylelistrequest.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=K2D:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800&family=Sarabun:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800&family=Trirong:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+    </style>
+</head>
+<body>
+    <header class="header">
+        <img src="./image/Emblem_of_Thammasat_University.svg.png" alt="Thammasat University Logo" class="logo">
+        <h1>มหาวิทยาลัยธรรมศาสตร์<br>THAMMASAT UNIVERSITY</h1>
+    </header>
+    <div class="container">
+        <nav class="sidebar">
+            <ul>
+                <a href="home.html"><li id="home-nav">หน้าแรก</li></a>
+                <a id="dynamicLink" href="request0.html">
+                    <li id="req1-nav">การเขียนคำร้อง</li>
+                </a>
+                <a href="listrequest.html"><li id="list-nav">รายการคำร้อง</li></a>
+            </ul>
+            <div class="logout-container">
+                <li id="logout-nav">ออกจากระบบ</li>
+            </div>
+        </nav>
+        <div class="main-content">
+            <div class="fixable">
+                <h3>รายการคำร้อง</h3>
+            </div>
+            <div class="draft">
+                <div class="section">
+                    <h5>คำร้องที่ยังไม่ถูกส่ง</h5>
+                    <div class="item">
+                        <span>คำร้องจดทะเบียนล่าช้า.sth</span>
+                        <span class="status">วว/ดด/ปปปป</span>
+                    </div>
+                </div>
+                <div class="section">
+                    <h5>คำร้องที่ถูกส่ง</h5>
+                    <div class="item">
+                        <span>คำร้องจดทะเบียนล่าช้า.sth</span>
+                        <span class="status success">ยืนยันแล้ว</span>
+                        <span class="status">วว/ดด/ปปปป</span>
+                    </div>
+                    <div class="item">
+                        <span>เขียนคำร้องใบลาป่วย/กิจ.sth</span>
+                        <span class="status error">แก้ไขได้</span>
+                        <span class="status">วว/ดด/ปปปป</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="./js/listrequest.js"></script>
+    <script src="./js/request.js"></script>
+    <script src="./js/sessionUtils.js"></script>
+    <script src="./js/auth.js"></script>
+    <script src="./js/requestHome.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+          sessionManager.preventBackAfterLogout();
+        });
+    </script> 
+</body>
+</html>

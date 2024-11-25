@@ -2,6 +2,8 @@ const express = require('express');
 const session = require('express-session');
 const path = require('path');
 const cors = require('cors');
+const multer = require('multer');
+const formRevocationService = require('./public/js/FormRevocationService.js');
 require('dotenv').config();
 
 const app = express();
@@ -91,6 +93,71 @@ app.get('/api/check-auth', (req, res) => {
         res.json({ authenticated: true });
     } else {
         res.json({ authenticated: false });
+    }
+});
+
+// Upload new form with files
+// app.post('/upload', upload.array('files'), async (req, res) => {
+//     try {
+//         const formData = {
+//             date: req.body.date,
+//             fullName: req.body.fullName,
+//             studentID: req.body.studentID,
+//             department: req.body.department,
+//             year: parseInt(req.body.year),
+//             address: req.body.address,
+//             district: req.body.district,
+//             subdistrict: req.body.subdistrict,
+//             province: req.body.province,
+//             studentTel: req.body.studentTel,
+//             parentTel: req.body.parentTel,
+//             advisor: req.body.advisor,
+//             semester: req.body.semester,
+//             courseID: req.body.courseID,
+//             courseName: req.body.courseName,
+//             section: req.body.section,
+//             reason: req.body.reason
+//         };
+
+//         const savedForm = await formRevocationService.saveFormWithFiles(formData, req.files);
+//         res.status(201).json(savedForm);
+//     } catch (err) {
+//         console.error('Error in form upload:', err);
+//         res.status(500).json({ message: 'Error uploading form' });
+//     }
+// });
+
+// Get form by student ID
+app.get('/student/:studentId', async (req, res) => {
+    try {
+        const form = await formRevocationService.getFormByStudentId(req.params.studentId);
+        if (form) {
+            res.json(form);
+        } else {
+            res.status(404).json({ message: 'Form not found' });
+        }
+    } catch (err) {
+        res.status(500).json({ message: 'Error fetching form' });
+    }
+});
+
+// Get all forms
+app.get('/', async (req, res) => {
+    try {
+        const forms = await formRevocationService.getAllForms();
+        res.json(forms);
+    } catch (err) {
+        res.status(500).json({ message: 'Error fetching forms' });
+    }
+});
+
+// Update form
+app.put('/:id', async (req, res) => {
+    try {
+        await formRevocationService.updateForm(parseInt(req.params.id), req.body);
+        res.json({ message: 'Form updated successfully' });
+    } catch (err) {
+        res.status(500).json({ message: 'Error updating form' });
     }
 });
 

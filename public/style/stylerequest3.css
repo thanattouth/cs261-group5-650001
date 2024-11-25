@@ -425,17 +425,17 @@ select#request option:focus {
     gap: 30px; /* ระยะห่างระหว่าง Checkbox */
     align-items: center;
     margin-top: 10px;
-  }
+}
   
-  .checkbox-group label {
+.checkbox-group label {
     display: flex;
     align-items: center;
     gap: 10px; /* ระยะห่างระหว่าง Checkbox กับข้อความ */
     font-size: 16px;
     cursor: pointer;
-  }
+}
   
-  .checkbox-group input[type="checkbox"] {
+.checkbox-group input[type="checkbox"] {
     appearance: none; /* ซ่อนสไตล์ดั้งเดิม */
     width: 20px;
     height: 20px;
@@ -445,14 +445,14 @@ select#request option:focus {
     cursor: pointer;
     transition: 0.2s all ease;
     position: relative;
-  }
+}
   
-  .checkbox-group input[type="checkbox"]:checked {
+.checkbox-group input[type="checkbox"]:checked {
     background-color: #000; /* สีพื้นหลังเมื่อเลือก */
     border-color: #000; /* สีเส้นขอบเมื่อเลือก */
-  }
+}
   
-  .checkbox-group input[type="checkbox"]:checked::after {
+.checkbox-group input[type="checkbox"]:checked::after {
     content: '✔';
     font-size: 12px;
     color: white;
@@ -460,4 +460,4 @@ select#request option:focus {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-  }
+}

@@ -237,24 +237,3 @@ document.getElementById("request").addEventListener("change", function () {
         window.location.href = "request0.html";
     }
 });
-
-document.addEventListener("DOMContentLoaded", function () {
-    const savedRequest = localStorage.getItem("selectedRequest");
-    const selectElement = document.getElementById("request");
-
-    if (savedRequest && selectElement) {
-        selectElement.value = savedRequest; // ตั้งค่า selection
-    }
-});
-
-document.addEventListener("DOMContentLoaded", function () {
-    const selectElement = document.getElementById("requestSelection");
-
-    // เมื่อมีการเลือกค่าใน select
-    selectElement.addEventListener("change", function () {
-        const selectedValue = selectElement.value;
-
-        // เก็บค่า selection ไว้ใน localStorage หรือ sessionStorage
-        localStorage.setItem("selectedRequest", selectedValue);
-    });
-});

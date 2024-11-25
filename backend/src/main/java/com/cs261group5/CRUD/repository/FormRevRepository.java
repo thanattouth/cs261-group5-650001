@@ -1,5 +1,5 @@
 package com.cs261group5.CRUD.repository;
-import com.cs261group5.CRUD.enitity.FormDelayedReg;
+import com.cs261group5.CRUD.enitity.FormRevocation;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -24,7 +24,7 @@ public class FormRevRepository {
         this.repository = repository;
     }
 
-    public FormDelayedReg saveStudentInfoWithFiles(FormDelayedReg FormDelayedReg, List<MultipartFile> files) throws IOException {
+    public FormRevocation saveStudentInfoWithFiles(FormRevocation formRevocation, List<MultipartFile> files) throws IOException {
         List<String> filePaths = new ArrayList<>();
 
         for (MultipartFile file : files) {
@@ -55,10 +55,10 @@ public class FormRevRepository {
         }
 
         // กำหนดชื่อไฟล์ลงใน requestForm
-        FormDelayedReg.setAttachmentFiles(filePaths);
+        formRevocation.setAttachmentFiles(filePaths);
 
         // บันทึกข้อมูลลงในฐานข้อมูล
-        return repository.save(FormDelayedReg);
+        return repository.save(formRevocation);
     }
 
     private String getFileExtension(String fileName) {
@@ -72,11 +72,11 @@ public class FormRevRepository {
 
     public List<String> getFilesByStudentID(String studentID) {
         // ค้นหาฟอร์มที่ตรงกับ studentID
-        FormDelayedReg FormDelayedReg = repository.findByStudentID(studentID); // สมมติว่าใช้เมธอด findByStudentID()
+        FormRevocation formRevocation = repository.findByStudentID(studentID); // สมมติว่าใช้เมธอด findByStudentID()
 
-        if (FormDelayedReg != null) {
+        if (formRevocation != null) {
             // ถ้ามีข้อมูล studentForm, คืนค่ารายการไฟล์
-            return FormDelayedReg.getAttachmentFiles();
+            return formRevocation.getAttachmentFiles();
         }
 
         // ถ้าไม่พบข้อมูล studentForm, คืนค่า empty list
@@ -84,7 +84,7 @@ public class FormRevRepository {
     }
 
 
-    public FormDelayedReg findByStudentID(String studentID) {
+    public FormRevocation findByStudentID(String studentID) {
         return repository.findByStudentID(studentID);  // เรียกใช้เมธอดที่มาจาก JpaRepository
     }
 

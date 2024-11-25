@@ -105,251 +105,6 @@ function validateForm() {
 
 }
 
-
-class FileHandler {
-    constructor() {
-        this.dt = new DataTransfer();
-        this.MAX_FILES = 5;
-        this.MAX_SIZE = 302400; // 300 KB in bytes
-        this.attachmentInput = document.getElementById('attachment');
-        this.fileListContainer = document.getElementById('file-list');
-
-        this.initializeEventListeners();
-        this.createNotificationStyle();
-    }
-
-    initializeEventListeners() {
-        this.attachmentInput.addEventListener('change', this.handleFileSelection.bind(this));
-    }
-
-    handleFileSelection(event) {
-        const newFiles = Array.from(event.target.files);
-        const currentFileCount = this.dt.items.length;
-
-        if (currentFileCount + newFiles.length > this.MAX_FILES) {
-            this.showNotification(`คุณสามารถแนบไฟล์ได้สูงสุด ${this.MAX_FILES} ไฟล์ (ปัจจุบัน: ${currentFileCount} ไฟล์)`);
-            this.attachmentInput.value = '';
-            return;
-        }
-
-        newFiles.forEach(file => {
-            if ((file.type === "application/pdf" || file.type.startsWith('image/')) && file.size > this.MAX_SIZE) {
-                this.showNotification("ไฟล์ PDF และไฟล์รูปภาพต้องมีขนาดไม่เกิน 300 KB");
-                return;
-            }
-            this.dt.items.add(file);
-            this.addFileItem(file);
-        });
-
-        this.attachmentInput.files = this.dt.files;
-    }
-
-    addFileItem(file) {
-        const fileItem = document.createElement('div');
-        fileItem.classList.add('file-item');
-
-        const fileLink = document.createElement('a');
-        fileLink.href = URL.createObjectURL(file);
-        fileLink.download = file.name;
-        fileLink.classList.add('file-name');
-        fileLink.target = '_blank';
-        fileLink.textContent = file.type === "application/pdf" ? '📄 ' : (file.type.startsWith('image/') ? '🖼️ ' : '📄 ');
-        fileLink.appendChild(document.createTextNode(`${file.name} (${(file.size / 1024).toFixed(2)} KB)`));
-
-        fileItem.appendChild(fileLink);
-
-        const renameButton = this.createRenameButton(file, fileLink);
-        fileItem.appendChild(renameButton);
-
-        const removeButton = this.createRemoveButton(file, fileItem);
-        fileItem.appendChild(removeButton);
-
-        this.fileListContainer.appendChild(fileItem);
-        
-        const remainingFiles = this.dt.files.length;
-        this.showNotification(`เพิ่มไฟล์เรียบร้อย (เหลือ ${remainingFiles} จาก ${this.MAX_FILES} ไฟล์)`);
-    }
-
-    createRenameButton(file, fileLink) {
-        const button = document.createElement('button');
-        button.textContent = "เปลี่ยนชื่อ";
-        button.classList.add('rename-file-button');
-
-        const updateRenameHandler = (currentFile) => {
-            return (event) => {
-                event.preventDefault();
-                const newName = prompt("กรุณากรอกชื่อไฟล์ใหม่:", currentFile.name);
-                if (newName && newName !== currentFile.name) {
-                    const updatedFile = new File([currentFile], newName, { type: currentFile.type });
-    
-                    const fileIndex = Array.from(this.dt.files).findIndex(f => 
-                        f.name === currentFile.name && 
-                        f.size === currentFile.size && 
-                        f.type === currentFile.type
-                    );
-
-                    if (fileIndex !== -1) {
-                        const newDt = new DataTransfer();
-                        Array.from(this.dt.files).forEach((f, index) => {
-                            newDt.items.add(index === fileIndex ? updatedFile : f);
-                        });
-
-                        this.dt.items.clear();
-                        Array.from(newDt.files).forEach(f => this.dt.items.add(f));
-    
-                        this.attachmentInput.files = this.dt.files;
-
-                        fileLink.href = URL.createObjectURL(updatedFile);
-                        fileLink.download = newName;
-                        const fileIcon = fileLink.textContent.split(' ')[0];
-                        fileLink.textContent = `${fileIcon} ${newName} (${(updatedFile.size / 1024).toFixed(2)} KB)`;
-    
-                        const removeButton = fileLink.parentElement.querySelector('.remove-file-button');
-                        if (removeButton) {
-                            removeButton.onclick = this.createRemoveButton(updatedFile, fileLink.parentElement).onclick;
-                        }
-
-                        button.onclick = updateRenameHandler(updatedFile);
-                    }
-                }
-            };
-        };
-
-        button.onclick = updateRenameHandler(file);
-        return button;
-    }
-
-    createRemoveButton(file, fileItem) {
-        const button = document.createElement('button');
-        button.innerHTML = "&#10006;";
-        button.classList.add('remove-file-button');
-        button.onclick = () => {
-            const fileIndex = Array.from(this.dt.files).findIndex(f => 
-                f.name === file.name && f.size === file.size && f.type === file.type
-            );
-    
-            if (fileIndex !== -1) {
-                const newDt = new DataTransfer();
-                Array.from(this.dt.files).forEach((f, index) => {
-                    if (index !== fileIndex) newDt.items.add(f);
-                });
-        
-                this.dt.items.clear();
-                Array.from(newDt.files).forEach(f => this.dt.items.add(f));
-                this.attachmentInput.files = this.dt.files;
-
-                fileItem.remove();
-        
-                const remainingFiles = this.dt.files.length;
-                this.showNotification(`ลบไฟล์เรียบร้อย (เหลือ ${remainingFiles} จาก ${this.MAX_FILES} ไฟล์)`);
-            }
-        };
-        return button;
-    }
-
-    showNotification(message) {
-        const notification = document.createElement("div");
-        notification.className = "notification-popup";
-        notification.innerText = message;
-    
-        document.body.appendChild(notification);
-
-        setTimeout(() => {
-            notification.classList.add("fade-out");
-            setTimeout(() => {
-                notification.remove();
-            }, 500);
-        }, 3000);
-    }
-
-    createNotificationStyle() {
-        const style = document.createElement('style');
-        style.textContent = `
-            .notification-popup {
-                position: fixed;
-                bottom: 20px;
-                right: 20px;
-                padding: 15px 20px;
-                background-color: #4CAF50;
-                color: white;
-                font-size: 16px;
-                border-radius: 5px;
-                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-                opacity: 1;
-                transition: opacity 0.5s ease;
-                z-index: 1000;
-                animation: slideIn 0.5s ease-out;
-            }
-
-            .fade-out {
-                opacity: 0;
-                transition: opacity 0.5s;
-            }
-
-            @keyframes slideIn {
-                from {
-                    transform: translateX(100%);
-                    opacity: 0;
-                }
-                to {
-                    transform: translateX(0);
-                    opacity: 1;
-                }
-            }
-        `;
-        document.head.appendChild(style);
-    }
-
-    resetFiles() {
-        this.dt.items.clear();
-        this.attachmentInput.value = '';
-        this.fileListContainer.innerHTML = '';
-        this.attachmentInput.files = this.dt.files;
-    }
-
-    async mergePDFs() {
-        const pdfFiles = Array.from(this.dt.files).filter(file => file.type === "application/pdf");
-        if (pdfFiles.length === 0) {
-            alert("กรุณาเลือกไฟล์ PDF สำหรับการรวม");
-            return;
-        }
-
-        const { PDFDocument } = PDFLib;
-        const mergedPdf = await PDFDocument.create();
-        
-        for (const file of pdfFiles) {
-            const arrayBuffer = await file.arrayBuffer();
-            const pdf = await PDFDocument.load(arrayBuffer);
-            const copiedPages = await mergedPdf.copyPages(pdf, pdf.getPageIndices());
-            copiedPages.forEach(page => mergedPdf.addPage(page));
-        }
-
-        const pdfBytes = await mergedPdf.save();
-        const blob = new Blob([pdfBytes], { type: "application/pdf" });
-        const mergedFile = new File([blob], "merged.pdf", { type: "application/pdf" });
-
-        const nonPdfFiles = Array.from(this.dt.files).filter(file => file.type !== "application/pdf");
-        this.dt.items.clear();
-        this.dt.items.add(mergedFile);
-        nonPdfFiles.forEach(file => this.dt.items.add(file));
-        this.attachmentInput.files = this.dt.files;
-
-        this.fileListContainer.innerHTML = '';
-        Array.from(this.dt.files).forEach(file => this.addFileItem(file));
-    }
-}
-
-// Initialize the FileHandler when the document is ready
-document.addEventListener('DOMContentLoaded', () => {
-    const fileHandler = new FileHandler();
-
-    // Merge PDF button event listener
-    document.querySelector('.merge-pdf-button').addEventListener('click', () => {
-        fileHandler.mergePDFs();
-    });
-});
-
-
 function validateExamday() {
     const examdayInput = document.getElementById("examday");
     const examdayPattern = /^(0[1-9]|1[0-2])\/(0[1-9]|[12][0-9]|3[01])\/[0-9]{4}$/;
@@ -485,6 +240,33 @@ function clearNonReadOnlyFields() {
         }
     });
 }
+
+function clearCheckboxData() {
+    const userId = sessionStorage.getItem('userId') || 'defaultUser';
+    const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+    
+    checkboxes.forEach(checkbox => {
+        const storageKey = `checkbox_${userId}_${checkbox.name}`;
+        localStorage.removeItem(storageKey);
+    });
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    const userId = sessionStorage.getItem('userId') || 'defaultUser';
+    const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+
+    // Restore checkbox states
+    checkboxes.forEach(checkbox => {
+        const storageKey = `checkbox_${userId}_${checkbox.name}`;
+        const isChecked = localStorage.getItem(storageKey) === 'true';
+        checkbox.checked = isChecked;
+
+        // Add event listener to save state when changed
+        checkbox.addEventListener('change', function() {
+            localStorage.setItem(storageKey, this.checked);
+        });
+    });
+});
 
 document.getElementById("request").addEventListener("change", function () {
     const selectedValue = this.value;

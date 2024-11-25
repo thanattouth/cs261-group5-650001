@@ -112,7 +112,7 @@ function getFormDataFromLocalStorage() {
     const userId = sessionStorage.getItem('userId') || 'defaultUser';
     const fields = ['name', 'id', 'faculty', 'year', 'moo', 'soy', 'address', 'district', 'subdistrict', 
         'province', 'student-tel', 'tanont', 'emaildome', 'Instructor', 'courseCode', 'courseName', 
-        'section', 'reason', 'start-date', 'end-date', 'document1', 'document2'];
+        'section', 'reason', 'start-date', 'end-date', 'document1'];
     
     fields.forEach(field => {
         const value = localStorage.getItem(getStorageKey(field, userId));
@@ -124,7 +124,7 @@ function saveFormDataToLocalStorage() {
     const userId = sessionStorage.getItem('userId') || 'defaultUser'; // Fallback if no userId
     const fields = ['name', 'id', 'faculty', 'year', 'moo', 'soy', 'address', 'district', 'subdistrict', 
         'province', 'student-tel', 'tanont', 'emaildome', 'Instructor', 'courseCode', 'courseName', 
-        'section', 'reason', 'start-date', 'end-date', 'document1', 'document2'];
+        'section', 'reason', 'start-date', 'end-date', 'document1'];
     
     fields.forEach(field => {
         const value = document.getElementById(field).value;
@@ -138,7 +138,7 @@ function clearUserFormData() {
     const formFields = [
         'date', 'name', 'id', 'faculty', 'year', 'moo', 'soy', 'address', 'district', 'subdistrict', 
         'province', 'student-tel', 'tanont', 'emaildome', 'Instructor', 'courseCode', 'courseName', 
-        'section', 'reason', 'start-date', 'end-date', 'document1', 'document2'
+        'section', 'reason', 'start-date', 'end-date', 'document1'
     ];
     
     formFields.forEach(field => {
@@ -197,7 +197,7 @@ function clearNonReadOnlyFields() {
     const fields = [
         'year', 'moo', 'soy', 'address', 'district', 'subdistrict', 
         'province', 'student-tel', 'tanont', 'emaildome', 'Instructor', 'courseCode', 'courseName', 
-        'section', 'reason', 'start-date', 'end-date', 'document1', 'document2'
+        'section', 'reason', 'start-date', 'end-date', 'document1'
     ];
     
     fields.forEach(fieldId => {
@@ -280,4 +280,40 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     });
+});
+
+document.addEventListener('DOMContentLoaded', () => {
+    const radioButtons = document.querySelectorAll('input[name="document1"]');
+    const userId = sessionStorage.getItem('userId') || 'defaultUser';
+    const storageKey = `selected_document_option_${userId}`;
+
+    // Restore previous selection on page load
+    const savedSelection = localStorage.getItem(storageKey);
+    if (savedSelection) {
+        const radioToSelect = document.querySelector(`input[name="document1"][value="${savedSelection}"]`);
+        if (radioToSelect) {
+            radioToSelect.checked = true;
+        }
+    }
+
+    // Save selection when a radio button is clicked
+    radioButtons.forEach((radio) => {
+        radio.addEventListener('click', (e) => {
+            // If the clicked radio is already checked, toggle it
+            if (radio.checked) {
+                radioButtons.forEach((btn) => {
+                    btn.checked = false; // Uncheck all radios first
+                });
+                radio.checked = true; // Check only the clicked one
+                
+                // Save the selected value to localStorage
+                localStorage.setItem(storageKey, radio.value);
+            }
+        });
+    });
+
+    // Clear the saved selection when logging out or clearing form
+    window.clearDocumentSelection = function() {
+        localStorage.removeItem(storageKey);
+    };
 });

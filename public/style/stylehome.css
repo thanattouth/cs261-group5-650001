@@ -154,3 +154,31 @@ body {
     font-weight: bold;
     text-decoration: underline;
 }
+
+@media screen and (max-width: 768px) {
+    .container {
+        flex-direction: column; /* เปลี่ยนเป็นแนวตั้งเมื่อหน้าจอแคบ */
+    }
+
+    .sidebar {
+        width: 100%; /* ให้ sidebar กินความกว้างเต็มหน้าจอ */
+        min-height: auto; /* ปรับความสูงตามเนื้อหา */
+    }
+
+    .main-content {
+        margin: 0;
+        padding: 10px;
+    }
+
+    /* ปรับขนาด input fields สำหรับหน้าจอเล็ก */
+    .date-input,
+    .p-input,
+    .name-input,
+    .faculty-input {
+        width: 100% !important; /* ให้ input เต็มความกว้างที่มี */
+    }
+
+    .multi-column > div {
+        flex: 1 1 100%; /* ให้แต่ละคอลัมน์ใช้พื้นที่เต็มความกว้าง */
+    }
+}

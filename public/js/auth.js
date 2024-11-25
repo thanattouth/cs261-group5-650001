@@ -86,9 +86,10 @@ document.addEventListener('DOMContentLoaded', function() {
         logoutButton.addEventListener('click', function(e) {
             e.preventDefault();
             sessionManager.showLogoutModal();
-            clearUserFormData();
             localStorage.removeItem("selectedRequest");
             localStorage.clear();
+            clearUserFormData();
+            clearCheckboxData()
         });
     }
 

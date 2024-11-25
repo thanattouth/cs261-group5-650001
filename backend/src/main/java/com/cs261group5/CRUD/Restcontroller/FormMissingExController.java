@@ -14,7 +14,7 @@ import java.sql.Date;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/form")
+@RequestMapping("/api/form/missing")
 public class FormMissingExController {
 
     private final FormMissingExRepository requestformService;
@@ -36,11 +36,13 @@ public class FormMissingExController {
             @RequestParam("advisor") String advisor,
             @RequestParam("courseID") String courseID,
             @RequestParam("courseName") String courseName,
-            @RequestParam("dateExam") String dateExam,
+            @RequestParam("examDate") String examDate,
             @RequestParam("teacher") String teacher,
             @RequestParam("reasonMissing") String reasonMissing,
             @RequestParam("reason") String reason,
+            @RequestParam("typeDocument") String typeDocument,
             @RequestParam("files") List<MultipartFile> files
+
     ) {
         try {
             FormMissingExam requestform = new FormMissingExam();
@@ -52,10 +54,11 @@ public class FormMissingExController {
             requestform.setAdvisor(advisor);
             requestform.setCourseID(courseID);
             requestform.setCourseName(courseName);
-            requestform.setExamDate(dateExam);
+            requestform.setExamDate(examDate);
             requestform.setTeacher(teacher);
             requestform.setReasonMissing(reasonMissing);
             requestform.setReason(reason);
+            requestform.setTypeDocuments(typeDocument);
 
             FormMissingExam savedInfo = requestformService.saveFormWithFiles(requestform, files);
             return new ResponseEntity<>(savedInfo, HttpStatus.CREATED);

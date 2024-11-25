@@ -14,7 +14,7 @@ import java.sql.Date;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/form")
+@RequestMapping("/api/form/delayedReg")
 public class FormDelayedRegController {
 
     private final FormDelayedRegRepository requestformService;

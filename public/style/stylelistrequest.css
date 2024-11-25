@@ -80,11 +80,12 @@ body {
 
 /* Main content styling */
 .main-content {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+    margin: 20px;
     padding: 20px;
+    width: 100%;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 /* Header with logo */
@@ -153,4 +154,54 @@ body {
     text-align: left;
     font-weight: bold;
     text-decoration: underline;
+}
+
+.fixable h3 {
+    font-size: 30px;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+.draft .section {
+    margin-bottom: 30px;
+}
+
+.draft .section h5 {
+    font-size: 18px;
+    color: #555;
+    margin-bottom: 10px;
+}
+
+.draft .item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 15px;
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+    margin-bottom: 8px;
+    background-color: #fefefe;
+}
+
+.draft .item .status {
+    font-size: 14px;
+    color: #777;
+    margin-right: 1rem;
+}
+
+.draft .item .status.success {
+    color: green;
+    font-weight: bold;
+    margin-left: auto;
+}
+
+.draft .item .status.error {
+    color: red;
+    font-weight: bold;
+    margin-left: auto;
+}
+
+.draft .item .status:last-child {
+    color: #aaa;
+    font-style: italic;
 }

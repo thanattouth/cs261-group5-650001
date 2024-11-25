@@ -98,7 +98,15 @@
                     </div>
                     <div>
                         <label>ซึ่งสอบในวันที่</label>
-                        <input type="text" id="date" placeholder="วว/ดด/ปปปป" required>
+                        <input type="text"   
+                        id="examday"
+                        placeholder="วว/ดด/ปปปป"
+                        required 
+                        maxlength="10"
+                        pattern="^(0[1-9]|1[0-2])\/(0[1-9]|[12][0-9]|3[01])\/[0-9]{4}$"
+                        oninput="validateExamday()"
+                        >
+                        <span id="examday-error" style="color: red; display: none;">กรุณากรอกวันที่ทำการสอบให้ถูกต้อง เช่น 08/12/2567</span>
                     </div>
                 </div>
                 <div class="form-group multi-column">
@@ -153,7 +161,7 @@
         </div>
     </div>
     <script src="./js/saveRequesttoBackend.js"></script>
-    <script src="./js/request1.js"></script>
+    <script src="./js/request3.js"></script>
     <script src="./js/request.js"></script>
     <script src="./js/sessionUtils.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>  

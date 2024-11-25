@@ -83,13 +83,16 @@
                 </div>
                 <div class="radio-group">
                     <label>
-                      <input type="radio" name="document1" value="medical_form" />
+                      <input type="radio" name="document1" value="medical_form" id="document1"
+                      /> 
                       ลาป่วย
+                      
                     </label>
                     <br>
                     <label>
-                      <input type="radio" name="document2" value="doctor_certificate" />
+                      <input type="radio" name="document1" value="doctor_certificate" id="document1" />
                       ลากิจ
+                      
                     </label>
                 </div>
                 <div class="form-group">
@@ -155,7 +158,13 @@
                 <div class="form-group multi-column">
                     <div>
                         <label>email dome</label>
-                        <input type="text" id="emaildome" required>
+                        <input type="text" 
+                        id="emaildome" 
+                        placeholder="example@dome.tu.ac.th"
+                        oninput="validateEmail()"
+                        required
+                        >
+                        <span id="email-error" style="color: red; display: none;">กรุณากรอกอีเมลเป็นรูปแบบ @dome.tu.ac.th</span>
                     </div>
                     <div>
                         <label>รหัสวิชา</label>

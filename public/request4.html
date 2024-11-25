@@ -90,9 +90,8 @@
                     </label>
                     <br>
                     <label>
-                      <input type="radio" name="document1" value="doctor_certificate" id="document1" />
+                      <input type="radio" name="document1" value="doctor_certificate" id="document2" />
                       ลากิจ
-                      
                     </label>
                 </div>
                 <div class="form-group">
@@ -454,10 +453,9 @@
                 }
                 const userId = sessionStorage.getItem('userId') || 'defaultUser';
                 const fields = [
-                    'name', 'id', 'faculty', 'year', 'address', 'district', 
-                    'subdistrict', 'province', 'student-tel', 'parent-tel', 
-                    'advisor', 'semester', 'courseCode', 'courseName', 
-                    'section', 'reason'
+                    'name', 'id', 'faculty', 'year', 'moo', 'soy', 'address', 'district', 'subdistrict', 
+                    'province', 'student-tel', 'tanont', 'emaildome', 'Instructor', 'courseCode', 'courseName', 
+                    'section', 'reason', 'start-date', 'end-date', 'document1', 'document2'
                 ];
     
                 fields.forEach(field => {

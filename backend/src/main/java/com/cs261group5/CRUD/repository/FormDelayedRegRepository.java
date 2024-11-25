@@ -24,7 +24,7 @@ public class FormDelayedRegRepository {
         this.repository = repository;
     }
 
-    public FormDelayedReg saveStudentInfoWithFiles(FormDelayedReg studentForm, List<MultipartFile> files) throws IOException {
+    public FormDelayedReg saveStudentInfoWithFiles(FormDelayedReg formDelayedReg, List<MultipartFile> files) throws IOException {
         List<String> filePaths = new ArrayList<>();
 
         for (MultipartFile file : files) {
@@ -55,10 +55,10 @@ public class FormDelayedRegRepository {
         }
 
         // กำหนดชื่อไฟล์ลงใน requestForm
-        studentForm.setAttachmentFiles(filePaths);
+        formDelayedReg.setAttachmentFiles(filePaths);
 
         // บันทึกข้อมูลลงในฐานข้อมูล
-        return repository.save(studentForm);
+        return repository.save(formDelayedReg);
     }
 
     private String getFileExtension(String fileName) {
@@ -72,11 +72,11 @@ public class FormDelayedRegRepository {
 
     public List<String> getFilesByStudentID(String studentID) {
         // ค้นหาฟอร์มที่ตรงกับ studentID
-        FormDelayedReg FormDelayedReg = repository.findByStudentID(studentID); // สมมติว่าใช้เมธอด findByStudentID()
+        FormDelayedReg formDelayedReg = repository.findByStudentID(studentID); // สมมติว่าใช้เมธอด findByStudentID()
 
-        if (FormDelayedReg != null) {
+        if (formDelayedReg != null) {
             // ถ้ามีข้อมูล studentForm, คืนค่ารายการไฟล์
-            return FormDelayedReg.getAttachmentFiles();
+            return formDelayedReg.getAttachmentFiles();
         }
 
         // ถ้าไม่พบข้อมูล studentForm, คืนค่า empty list

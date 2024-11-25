@@ -1,3 +1,100 @@
+function validateForm() {
+    // Get form values
+    const date = document.getElementById("date").value;
+    const name = document.getElementById("name").value;
+    const id = document.getElementById("id").value;
+    const faculty = document.getElementById("faculty").value;
+    const year = document.getElementById("year").value;
+    const address = document.getElementById("address").value;
+    const moo = document.getElementById("moo").value;
+    const soy = document.getElementById("soy").value;
+    const tanont = document.getElementById("tanont").value;
+    const district = document.getElementById("district").value;
+    const subdistrict = document.getElementById("subdistrict").value;
+    const province = document.getElementById("province").value;
+    const studentPhone = document.getElementById("student-tel").value;
+    const emaildome = document.getElementById("emaildome").value;
+    const courseCode = document.getElementById("courseCode").value;
+    const courseName = document.getElementById("courseName").value;
+    const section = document.getElementById("section").value;
+    const Instructor = document.getElementById("Instructor").value;
+    const start = document.getElementById("start-date").value;
+    const end = document.getElementById("end-date").value;
+    const reason = document.getElementById("reason").value;
+    const document1 = document.getElementById("document1").value;
+    const selectedRadio = document.querySelector('input[name="document1"]:checked');
+
+    if (year < 1 || year > 8 || isNaN(year) || year.length !== 1) {
+        Swal.fire({
+          icon: 'error',
+          title: 'กรุณากรอกชั้นปีเป็นตัวเลข 1-8',
+          text: '',
+          confirmButtonText: 'ตกลง'
+        });
+        return false;
+    }   
+    
+
+    // Validate student phone (10 digits)
+    if (studentPhone.length !== 10 || isNaN(studentPhone)) {
+        Swal.fire({
+          icon: 'error', 
+          title: 'กรุณากรอกหมายเลขโทรศัพท์นักศึกษาให้ครบ 10 หลัก',
+          text: '',
+          confirmButtonText: 'ตกลง'
+        });
+        return false;
+    }
+
+    // Validate that all fields are filled
+    if (
+        !date || !name || !id || !faculty || !address || !moo || !soy || !tanont ||  !district || !subdistrict || !province  || !courseCode || !courseName || !section || !Instructor || !start-date || !end-date || !reason
+    ) {
+        Swal.fire({
+            icon: 'error',
+            title: 'กรุณากรอกข้อมูลให้ครบถ้วน',
+            text: '',
+            confirmButtonText: 'ตกลง'
+        });
+        return false;
+    }
+
+    if (!selectedRadio) {
+        Swal.fire({
+          icon: 'error', 
+          title: 'กรุณาเลือกตัวเลือกการลา',
+          text: '',
+          confirmButtonText: 'ตกลง'
+        });
+        return false;
+    }
+
+    return true;
+}
+
+function validateEmail() {
+    const emailInput = document.getElementById("emaildome");
+    const emailPattern = /^[a-zA-Z0-9._%+-]+@dome\.tu\.ac\.th$/;
+    const errorElement = document.getElementById("email-error");
+
+    // ถ้าฟิลด์ว่าง ให้ซ่อนข้อความเตือน
+    if (emailInput.value === "") {
+        errorElement.style.display = "none";
+        emailInput.classList.remove("error");
+        return;
+    }
+
+    // ตรวจสอบว่าข้อมูลตรงตามรูปแบบหรือไม่
+    if (!emailPattern.test(emailInput.value)) {
+        errorElement.style.display = "inline"; // แสดงข้อความเตือนเมื่อรูปแบบไม่ถูกต้อง
+        emailInput.classList.add("error");    // เพิ่มสไตล์สำหรับฟิลด์ที่ไม่ถูกต้อง
+    } else {
+        errorElement.style.display = "none"; // ซ่อนข้อความเตือนเมื่อรูปแบบถูกต้อง
+        emailInput.classList.remove("error"); // ลบสไตล์ error
+    }
+}
+
+
 document.addEventListener('DOMContentLoaded', function() {
     const currentPage = window.location.pathname.split('/').pop(); // Gets the current file name
 

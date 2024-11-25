@@ -14,7 +14,7 @@ import java.sql.Date;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/form")
+@RequestMapping("/api/form/rev")
 public class FormRevController {
 
     private final FormRevRepository requestformService;

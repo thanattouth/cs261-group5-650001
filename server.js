@@ -261,6 +261,56 @@ app.delete('/api/form/missing/:studentid', async (req, res) => {
     }
 });
 
+app.get('/api/form/absence', async (req, res) => {
+    try {
+        const pool = await sql.connect(dbConfig);
+        const result = await pool.request().query('SELECT TOP (1000) * FROM form_absence');
+        res.json(result.recordset);
+    } catch (err) {
+        console.error('Error fetching student forms:', err);
+        res.status(500).json({ error: 'Database query failed' });
+    }
+});
+
+app.put('/api/form/absence/:studentid', async (req, res) => {
+    const { studentid } = req.params;
+    const { full_name, start_date, end_date, reason } = req.body; // ปรับคอลัมน์ที่ต้องการแก้ไขตามความต้องการ
+
+    try {
+        const pool = await sql.connect(dbConfig);
+        await pool.request()
+            .input('studentid', sql.VarChar, studentid) // ใช้ VarChar เพราะ studentid เป็นข้อความ
+            .input('full_name', sql.VarChar, full_name)
+            .input('start_date', sql.VarChar, start_date)
+            .input('end_date', sql.VarChar, end_date)
+            .input('reason', sql.VarChar, reason)
+            .query(`
+                UPDATE form_absence
+                SET full_name = @full_name, start_date = @start_date, end_date = @end_date, reason = @reason
+                WHERE studentid = @studentid
+            `);
+        res.json({ success: true });
+    } catch (err) {
+        console.error('Error updating student form:', err);
+        res.status(500).json({ error: 'Database update failed' });
+    }
+});
+
+app.delete('/api/form/absence/:studentid', async (req, res) => {
+    const { studentid } = req.params;
+
+    try {
+        const pool = await sql.connect(dbConfig);
+        await pool.request()
+            .input('studentid', sql.VarChar, studentid) // ใช้ VarChar เพราะ studentid เป็นข้อความ
+            .query('DELETE FROM form_absence WHERE studentid = @studentid');
+        res.json({ success: true });
+    } catch (err) {
+        console.error('Error deleting student form:', err);
+        res.status(500).json({ error: 'Database delete failed' });
+    }
+});
+
 async function testConnection() {
     try {
         const pool = await sql.connect(dbConfig);

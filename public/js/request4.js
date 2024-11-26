@@ -249,40 +249,6 @@ document.getElementById("request").addEventListener("change", function () {
 });
 
 document.addEventListener('DOMContentLoaded', () => {
-    const radioButtons = document.querySelectorAll('input[type="radio"]');
-    let lastSelected = null; // To track the last selected radio button
-
-    radioButtons.forEach((radio) => {
-        radio.addEventListener('click', (e) => {
-            // If the same radio button is clicked again, uncheck it
-            if (lastSelected === e.target) {
-                e.target.checked = false;
-                lastSelected = null; // Reset the tracker
-            } else {
-                // Otherwise, update the tracker to the currently clicked radio
-                lastSelected = e.target;
-            }
-        });
-    });
-});
-
-document.addEventListener('DOMContentLoaded', () => {
-    const radioButtons = document.querySelectorAll('input[type="radio"]');
-
-    radioButtons.forEach((radio) => {
-        radio.addEventListener('click', (e) => {
-            // If the clicked radio is already checked, uncheck it
-            if (radio.checked) {
-                radioButtons.forEach((btn) => {
-                    btn.checked = false; // Uncheck all radios first
-                });
-                radio.checked = true; // Check only the clicked one
-            }
-        });
-    });
-});
-
-document.addEventListener('DOMContentLoaded', () => {
     const radioButtons = document.querySelectorAll('input[name="document1"]');
     const userId = sessionStorage.getItem('userId') || 'defaultUser';
     const storageKey = `selected_document_option_${userId}`;
@@ -296,29 +262,31 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // Save or remove selection when a radio button is clicked
+    // Save the selected radio button's value to localStorage when clicked
     radioButtons.forEach((radio) => {
-        radio.addEventListener('click', (e) => {
+        radio.addEventListener('change', () => {
             if (radio.checked) {
-                // Save the selected value to localStorage
+                // Save the selection
                 localStorage.setItem(storageKey, radio.value);
-            } else {
-                // Remove the value from localStorage if unchecked
-                localStorage.removeItem(storageKey);
             }
         });
     });
 
-    // Clear the saved selection manually
-    window.clearDocumentSelection = function () {
+    // Clear all radio button selections and localStorage
+    function clearRadioSelection() {
         localStorage.removeItem(storageKey);
-        radioButtons.forEach((btn) => {
-            btn.checked = false;
+        radioButtons.forEach((radio) => {
+            radio.checked = false;
         });
-    };
+    }
 
-    // Clear the saved selection when logging out or clearing form
-    window.clearDocumentSelection = function() {
-        localStorage.removeItem(storageKey);
-    };
+    // Add form submission event listener to reset radios
+    const form = document.querySelector('form'); // Adjust the selector if necessary
+    if (form) {
+        form.addEventListener('submit', (e) => {
+            e.preventDefault(); // Prevent default form submission (remove this line if not needed)
+            clearRadioSelection(); // Reset radio selections
+            form.reset(); // Optionally reset other form elements
+        });
+    }
 });

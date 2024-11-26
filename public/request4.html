@@ -449,6 +449,7 @@
                     });
                     clearNonReadOnlyFields();
                     resetFiles();
+                    clearRadioSelection()
                 }
 
                 // รีเซ็ต radio buttons
@@ -499,6 +500,37 @@
                 fileListContainer.innerHTML = '';
                 Array.from(dt.files).forEach(file => addFileItem(file));
             });
+
+            const radioButtons = document.querySelectorAll('input[name="document1"]');
+            const userId = sessionStorage.getItem('userId') || 'defaultUser';
+            const storageKey = `selected_document_option_${userId}`;
+
+            // Restore previous selection on page load
+            const savedSelection = localStorage.getItem(storageKey);
+            if (savedSelection) {
+                const radioToSelect = document.querySelector(`input[name="document1"][value="${savedSelection}"]`);
+                if (radioToSelect) {
+                    radioToSelect.checked = true;
+                }
+            }
+
+            // Save the selected radio button's value to localStorage when clicked
+            radioButtons.forEach((radio) => {
+                radio.addEventListener('change', () => {
+                    if (radio.checked) {
+                        // Save the selection
+                        localStorage.setItem(storageKey, radio.value);
+                    }
+                });
+            });
+
+            // Clear all radio button selections and localStorage
+            function clearRadioSelection() {
+                localStorage.removeItem(storageKey);
+                radioButtons.forEach((radio) => {
+                    radio.checked = false;
+                });
+            }
         });
     </script>
     <script src="./js/auth.js"></script>

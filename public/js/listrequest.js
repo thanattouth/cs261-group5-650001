@@ -63,11 +63,11 @@ async function fetchFormData1() {
         formData.forEach(student => {
             const row = document.createElement('tr');
             row.innerHTML = `
-                <td>${student.studentid}</td>
+                <td>${student.id}</td>
                 <td>${student.full_name}</td>
                 <td>
-                    <button class="modify" onclick="redirectToEditPage1('${student.studentid}')">แก้ไข</button>
-                    <button class="delete" onclick="deleteStudent('${student.studentid}')">ยกเลิก</button>
+                    <button class="modify" onclick="redirectToEditPage1('${student.id}')">แก้ไข</button>
+                    <button class="delete" onclick="deleteStudent('${student.id}')">ยกเลิก</button>
                 </td>
             `;
             tableBody.appendChild(row);
@@ -78,8 +78,8 @@ async function fetchFormData1() {
 }
 
 // ฟังก์ชันสำหรับลบข้อมูล
-async function deleteStudent1(studentid) {
-    const response = await fetch(`http://localhost:3000/api/form/delayedReg/${studentid}`, {
+async function deleteStudent1(id) {
+    const response = await fetch(`http://localhost:3000/api/form/delayedReg/${id}`, {
         method: 'DELETE'
     });
 
@@ -115,11 +115,11 @@ async function fetchFormData2() {
         formData.forEach(student => {
             const row = document.createElement('tr');
             row.innerHTML = `
-                <td>${student.studentid}</td>
+                <td>${student.id}</td>
                 <td>${student.full_name}</td>
                 <td>
-                    <button class="modify" onclick="redirectToEditPage2('${student.studentid}')">แก้ไข</button>
-                    <button class="delete" onclick="deleteStudent('${student.studentid}')">ยกเลิก</button>
+                    <button class="modify" onclick="redirectToEditPage2('${student.id}')">แก้ไข</button>
+                    <button class="delete" onclick="deleteStudent('${student.id}')">ยกเลิก</button>
                 </td>
             `;
             tableBody.appendChild(row);
@@ -131,8 +131,8 @@ async function fetchFormData2() {
 }
 
 // ฟังก์ชันสำหรับลบข้อมูล
-async function deleteStudent2(studentid) {
-    const response = await fetch(`http://localhost:3000/api/form/rev/${studentid}`, {
+async function deleteStudent2(id) {
+    const response = await fetch(`http://localhost:3000/api/form/rev/${id}`, {
         method: 'DELETE'
     });
 
@@ -168,11 +168,11 @@ async function fetchFormData3() {
         formData.forEach(student => {
             const row = document.createElement('tr');
             row.innerHTML = `
-                <td>${student.studentid}</td>
+                <td>${student.id}</td>
                 <td>${student.full_name}</td>
                 <td>
-                    <button class="modify" onclick="redirectToEditPage3('${student.studentid}')">แก้ไข</button>
-                    <button class="delete" onclick="deleteStudent('${student.studentid}')">ยกเลิก</button>
+                    <button class="modify" onclick="redirectToEditPage3('${student.id}')">แก้ไข</button>
+                    <button class="delete" onclick="deleteStudent('${student.id}')">ยกเลิก</button>
                 </td>
             `;
             tableBody.appendChild(row);
@@ -184,8 +184,8 @@ async function fetchFormData3() {
 }
 
 // ฟังก์ชันสำหรับลบข้อมูล
-async function deleteStudent3(studentid) {
-    const response = await fetch(`http://localhost:3000/api/form/missing/${studentid}`, {
+async function deleteStudent3(id) {
+    const response = await fetch(`http://localhost:3000/api/form/missing/${id}`, {
         method: 'DELETE'
     });
 
@@ -221,11 +221,11 @@ async function fetchFormData4() {
         formData.forEach(student => {
             const row = document.createElement('tr');
             row.innerHTML = `
-                <td>${student.studentid}</td>
+                <td>${student.id}</td>
                 <td>${student.full_name}</td>
                 <td>
-                    <button class="modify" onclick="redirectToEditPage4('${student.studentid}')">แก้ไข</button>
-                    <button class="delete" onclick="deleteStudent('${student.studentid}')">ยกเลิก</button>
+                    <button class="modify" onclick="redirectToEditPage4('${student.id}')">แก้ไข</button>
+                    <button class="delete" onclick="deleteStudent('${student.id}')">ยกเลิก</button>
                 </td>
             `;
             tableBody.appendChild(row);
@@ -237,8 +237,8 @@ async function fetchFormData4() {
 }
 
 // ฟังก์ชันสำหรับลบข้อมูล
-async function deleteStudent4(studentid) {
-    const response = await fetch(`http://localhost:3000/api/form/absence/${studentid}`, {
+async function deleteStudent4(id) {
+    const response = await fetch(`http://localhost:3000/api/form/absence/${id}`, {
         method: 'DELETE'
     });
 
@@ -273,19 +273,19 @@ document.addEventListener('DOMContentLoaded', function() {
     fetchFormData4();  // เรียกใช้ฟังก์ชันดึงข้อมูลสำหรับตาราง 4
 });
 
-function redirectToEditPage1(studentid) {
-    // เปลี่ยนเส้นทางไปยังหน้า edit.html พร้อมส่ง studentid เป็น query parameter
-    window.location.href = `editrequest1.html?studentid=${studentid}`;
+function redirectToEditPage1(id) {
+    // เปลี่ยนเส้นทางไปยังหน้า edit.html พร้อมส่ง id เป็น query parameter
+    window.location.href = `editrequest1.html?id=${id}`;
 }
-function redirectToEditPage2(studentid) {
-    // เปลี่ยนเส้นทางไปยังหน้า edit.html พร้อมส่ง studentid เป็น query parameter
-    window.location.href = `editrequest2.html?studentid=${studentid}`;
+function redirectToEditPage2(id) {
+    // เปลี่ยนเส้นทางไปยังหน้า edit.html พร้อมส่ง id เป็น query parameter
+    window.location.href = `editrequest2.html?id=${id}`;
 }
-function redirectToEditPage3(studentid) {
-    // เปลี่ยนเส้นทางไปยังหน้า edit.html พร้อมส่ง studentid เป็น query parameter
-    window.location.href = `editrequest3.html?studentid=${studentid}`;
+function redirectToEditPage3(id) {
+    // เปลี่ยนเส้นทางไปยังหน้า edit.html พร้อมส่ง id เป็น query parameter
+    window.location.href = `editrequest3.html?id=${id}`;
 }
-function redirectToEditPage4(studentid) {
-    // เปลี่ยนเส้นทางไปยังหน้า edit.html พร้อมส่ง studentid เป็น query parameter
-    window.location.href = `editrequest4.html?studentid=${studentid}`;
+function redirectToEditPage4(id) {
+    // เปลี่ยนเส้นทางไปยังหน้า edit.html พร้อมส่ง id เป็น query parameter
+    window.location.href = `editrequest4.html?id=${id}`;
 }

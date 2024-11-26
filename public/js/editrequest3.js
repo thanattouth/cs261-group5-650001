@@ -13,13 +13,13 @@ async function fetchFormData() {
     formData.forEach(student => {
         const row = document.createElement('tr');
         row.innerHTML = `
-            <td>${student.studentid}</td>
+            <td>${student.id}</td>
             <td contenteditable="true" data-field="full_name">${student.full_name}</td>
             <td contenteditable="true" data-field="exam_date">${student.exam_date}</td>
             <td contenteditable="true" data-field="reason_missing">${student.reason_missing}</td>
             <td contenteditable="true" data-field="reason">${student.reason}</td>
             <td>
-                <button class="modify" onclick="updateStudent('${student.studentid}', this)">แก้ไข</button>
+                <button class="modify" onclick="updateStudent('${student.id}', this)">แก้ไข</button>
                 <button class="back">ย้อนกลับ</button>
             </td>
         `;
@@ -36,14 +36,14 @@ async function fetchFormData() {
 }
 
 // ฟังก์ชันสำหรับอัปเดตข้อมูล
-async function updateStudent(studentid, button) {
+async function updateStudent(id, button) {
     const row = button.closest('tr');
     const fullName = row.querySelector('[data-field="full_name"]').textContent;
     const exam_date = row.querySelector('[data-field="exam_date"]').textContent;
     const reason_missing = row.querySelector('[data-field="reason_missing"]').textContent;
     const reason = row.querySelector('[data-field="reason"]').textContent;
 
-    const response = await fetch(`http://localhost:3000/api/form/missing/${studentid}`, {
+    const response = await fetch(`http://localhost:3000/api/form/missing/${id}`, {
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json'

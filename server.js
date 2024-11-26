@@ -122,14 +122,14 @@ app.get('/api/form/delayedReg', async (req, res) => {
     }
 });
 
-app.put('/api/form/delayedReg/:studentid', async (req, res) => {
-    const { studentid } = req.params;
+app.put('/api/form/delayedReg/:id', async (req, res) => {
+    const { id } = req.params;
     const { full_name, address, parent_number, reason } = req.body; // ปรับคอลัมน์ที่ต้องการแก้ไขตามความต้องการ
 
     try {
         const pool = await sql.connect(dbConfig);
         await pool.request()
-            .input('studentid', sql.VarChar, studentid) // ใช้ VarChar เพราะ studentid เป็นข้อความ
+            .input('id', sql.VarChar, id) // ใช้ VarChar เพราะ id เป็นข้อความ
             .input('full_name', sql.VarChar, full_name)
             .input('address', sql.VarChar, address)
             .input('parent_number', sql.VarChar, parent_number)
@@ -137,7 +137,7 @@ app.put('/api/form/delayedReg/:studentid', async (req, res) => {
             .query(`
                 UPDATE form_delayed_reg
                 SET full_name = @full_name, address = @address, parent_number = @parent_number, reason = @reason
-                WHERE studentid = @studentid
+                WHERE id = @id
             `);
         res.json({ success: true });
     } catch (err) {
@@ -146,14 +146,14 @@ app.put('/api/form/delayedReg/:studentid', async (req, res) => {
     }
 });
 
-app.delete('/api/form/delayedReg/:studentid', async (req, res) => {
-    const { studentid } = req.params;
+app.delete('/api/form/delayedReg/:id', async (req, res) => {
+    const { id } = req.params;
 
     try {
         const pool = await sql.connect(dbConfig);
         await pool.request()
-            .input('studentid', sql.VarChar, studentid) // ใช้ VarChar เพราะ studentid เป็นข้อความ
-            .query('DELETE FROM form_delayed_reg WHERE studentid = @studentid');
+            .input('id', sql.VarChar, id) // ใช้ VarChar เพราะ id เป็นข้อความ
+            .query('DELETE FROM form_delayed_reg WHERE id = @id');
         res.json({ success: true });
     } catch (err) {
         console.error('Error deleting student form:', err);
@@ -172,14 +172,14 @@ app.get('/api/form/rev', async (req, res) => {
     }
 });
 
-app.put('/api/form/rev/:studentid', async (req, res) => {
-    const { studentid } = req.params;
+app.put('/api/form/rev/:id', async (req, res) => {
+    const { id } = req.params;
     const { full_name, address, parent_number, reason } = req.body; // ปรับคอลัมน์ที่ต้องการแก้ไขตามความต้องการ
 
     try {
         const pool = await sql.connect(dbConfig);
         await pool.request()
-            .input('studentid', sql.VarChar, studentid) // ใช้ VarChar เพราะ studentid เป็นข้อความ
+            .input('id', sql.VarChar, id) // ใช้ VarChar เพราะ id เป็นข้อความ
             .input('full_name', sql.VarChar, full_name)
             .input('address', sql.VarChar, address)
             .input('parent_number', sql.VarChar, parent_number)
@@ -187,7 +187,7 @@ app.put('/api/form/rev/:studentid', async (req, res) => {
             .query(`
                 UPDATE form_revocation
                 SET full_name = @full_name, address = @address, parent_number = @parent_number, reason = @reason
-                WHERE studentid = @studentid
+                WHERE id = @id
             `);
         res.json({ success: true });
     } catch (err) {
@@ -196,14 +196,14 @@ app.put('/api/form/rev/:studentid', async (req, res) => {
     }
 });
 
-app.delete('/api/form/rev/:studentid', async (req, res) => {
-    const { studentid } = req.params;
+app.delete('/api/form/rev/:id', async (req, res) => {
+    const { id } = req.params;
 
     try {
         const pool = await sql.connect(dbConfig);
         await pool.request()
-            .input('studentid', sql.VarChar, studentid) // ใช้ VarChar เพราะ studentid เป็นข้อความ
-            .query('DELETE FROM form_revocation WHERE studentid = @studentid');
+            .input('id', sql.VarChar, id) // ใช้ VarChar เพราะ id เป็นข้อความ
+            .query('DELETE FROM form_revocation WHERE id = @id');
         res.json({ success: true });
     } catch (err) {
         console.error('Error deleting student form:', err);
@@ -222,14 +222,14 @@ app.get('/api/form/missing', async (req, res) => {
     }
 });
 
-app.put('/api/form/missing/:studentid', async (req, res) => {
-    const { studentid } = req.params;
+app.put('/api/form/missing/:id', async (req, res) => {
+    const { id } = req.params;
     const { full_name, exam_date, reason_missing, reason } = req.body; // ปรับคอลัมน์ที่ต้องการแก้ไขตามความต้องการ
 
     try {
         const pool = await sql.connect(dbConfig);
         await pool.request()
-            .input('studentid', sql.VarChar, studentid) // ใช้ VarChar เพราะ studentid เป็นข้อความ
+            .input('id', sql.VarChar, id) // ใช้ VarChar เพราะ id เป็นข้อความ
             .input('full_name', sql.VarChar, full_name)
             .input('exam_date', sql.VarChar, exam_date)
             .input('reason_missing', sql.VarChar, reason_missing)
@@ -237,7 +237,7 @@ app.put('/api/form/missing/:studentid', async (req, res) => {
             .query(`
                 UPDATE form_missing_exam
                 SET full_name = @full_name, exam_date = @exam_date, reason_missing = @reason_missing, reason = @reason
-                WHERE studentid = @studentid
+                WHERE id = @id
             `);
         res.json({ success: true });
     } catch (err) {
@@ -246,14 +246,14 @@ app.put('/api/form/missing/:studentid', async (req, res) => {
     }
 });
 
-app.delete('/api/form/missing/:studentid', async (req, res) => {
-    const { studentid } = req.params;
+app.delete('/api/form/missing/:id', async (req, res) => {
+    const { id } = req.params;
 
     try {
         const pool = await sql.connect(dbConfig);
         await pool.request()
-            .input('studentid', sql.VarChar, studentid) // ใช้ VarChar เพราะ studentid เป็นข้อความ
-            .query('DELETE FROM form_missing_exam WHERE studentid = @studentid');
+            .input('id', sql.VarChar, id) // ใช้ VarChar เพราะ id เป็นข้อความ
+            .query('DELETE FROM form_missing_exam WHERE id = @id');
         res.json({ success: true });
     } catch (err) {
         console.error('Error deleting student form:', err);
@@ -272,14 +272,14 @@ app.get('/api/form/absence', async (req, res) => {
     }
 });
 
-app.put('/api/form/absence/:studentid', async (req, res) => {
-    const { studentid } = req.params;
+app.put('/api/form/absence/:id', async (req, res) => {
+    const { id } = req.params;
     const { full_name, start_date, end_date, reason } = req.body; // ปรับคอลัมน์ที่ต้องการแก้ไขตามความต้องการ
 
     try {
         const pool = await sql.connect(dbConfig);
         await pool.request()
-            .input('studentid', sql.VarChar, studentid) // ใช้ VarChar เพราะ studentid เป็นข้อความ
+            .input('id', sql.VarChar, id) // ใช้ VarChar เพราะ id เป็นข้อความ
             .input('full_name', sql.VarChar, full_name)
             .input('start_date', sql.VarChar, start_date)
             .input('end_date', sql.VarChar, end_date)
@@ -287,7 +287,7 @@ app.put('/api/form/absence/:studentid', async (req, res) => {
             .query(`
                 UPDATE form_absence
                 SET full_name = @full_name, start_date = @start_date, end_date = @end_date, reason = @reason
-                WHERE studentid = @studentid
+                WHERE id = @id
             `);
         res.json({ success: true });
     } catch (err) {
@@ -296,14 +296,14 @@ app.put('/api/form/absence/:studentid', async (req, res) => {
     }
 });
 
-app.delete('/api/form/absence/:studentid', async (req, res) => {
-    const { studentid } = req.params;
+app.delete('/api/form/absence/:id', async (req, res) => {
+    const { id } = req.params;
 
     try {
         const pool = await sql.connect(dbConfig);
         await pool.request()
-            .input('studentid', sql.VarChar, studentid) // ใช้ VarChar เพราะ studentid เป็นข้อความ
-            .query('DELETE FROM form_absence WHERE studentid = @studentid');
+            .input('id', sql.VarChar, id) // ใช้ VarChar เพราะ id เป็นข้อความ
+            .query('DELETE FROM form_absence WHERE id = @id');
         res.json({ success: true });
     } catch (err) {
         console.error('Error deleting student form:', err);

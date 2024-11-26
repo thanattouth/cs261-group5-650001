@@ -13,13 +13,13 @@ async function fetchFormData() {
     formData.forEach(student => {
         const row = document.createElement('tr');
         row.innerHTML = `
-            <td>${student.studentid}</td>
+            <td>${student.id}</td>
             <td contenteditable="true" data-field="full_name">${student.full_name}</td>
             <td contenteditable="true" data-field="start_date">${student.start_date}</td>
             <td contenteditable="true" data-field="end_date">${student.end_date}</td>
             <td contenteditable="true" data-field="reason">${student.reason}</td>
             <td>
-                <button class="modify" onclick="updateStudent('${student.studentid}', this)">แก้ไข</button>
+                <button class="modify" onclick="updateStudent('${student.id}', this)">แก้ไข</button>
                 <button class="back">ย้อนกลับ</button>
             </td>
         `;
@@ -36,14 +36,14 @@ async function fetchFormData() {
 }
 
 // ฟังก์ชันสำหรับอัปเดตข้อมูล
-async function updateStudent(studentid, button) {
+async function updateStudent(id, button) {
     const row = button.closest('tr');
     const fullName = row.querySelector('[data-field="full_name"]').textContent;
     const start_date = row.querySelector('[data-field="start_date"]').textContent;
     const end_date = row.querySelector('[data-field="end_date"]').textContent;
     const reason = row.querySelector('[data-field="reason"]').textContent;
 
-    const response = await fetch(`http://localhost:3000/api/form/absence/${studentid}`, {
+    const response = await fetch(`http://localhost:3000/api/form/absence/${id}`, {
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json'

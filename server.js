@@ -211,6 +211,56 @@ app.delete('/api/form/rev/:studentid', async (req, res) => {
     }
 });
 
+app.get('/api/form/missing', async (req, res) => {
+    try {
+        const pool = await sql.connect(dbConfig);
+        const result = await pool.request().query('SELECT TOP (1000) * FROM form_missing_exam');
+        res.json(result.recordset);
+    } catch (err) {
+        console.error('Error fetching student forms:', err);
+        res.status(500).json({ error: 'Database query failed' });
+    }
+});
+
+app.put('/api/form/missing/:studentid', async (req, res) => {
+    const { studentid } = req.params;
+    const { full_name, exam_date, reason_missing, reason } = req.body; // ปรับคอลัมน์ที่ต้องการแก้ไขตามความต้องการ
+
+    try {
+        const pool = await sql.connect(dbConfig);
+        await pool.request()
+            .input('studentid', sql.VarChar, studentid) // ใช้ VarChar เพราะ studentid เป็นข้อความ
+            .input('full_name', sql.VarChar, full_name)
+            .input('exam_date', sql.VarChar, exam_date)
+            .input('reason_missing', sql.VarChar, reason_missing)
+            .input('reason', sql.VarChar, reason)
+            .query(`
+                UPDATE form_missing_exam
+                SET full_name = @full_name, exam_date = @exam_date, reason_missing = @reason_missing, reason = @reason
+                WHERE studentid = @studentid
+            `);
+        res.json({ success: true });
+    } catch (err) {
+        console.error('Error updating student form:', err);
+        res.status(500).json({ error: 'Database update failed' });
+    }
+});
+
+app.delete('/api/form/missing/:studentid', async (req, res) => {
+    const { studentid } = req.params;
+
+    try {
+        const pool = await sql.connect(dbConfig);
+        await pool.request()
+            .input('studentid', sql.VarChar, studentid) // ใช้ VarChar เพราะ studentid เป็นข้อความ
+            .query('DELETE FROM form_missing_exam WHERE studentid = @studentid');
+        res.json({ success: true });
+    } catch (err) {
+        console.error('Error deleting student form:', err);
+        res.status(500).json({ error: 'Database delete failed' });
+    }
+});
+
 async function testConnection() {
     try {
         const pool = await sql.connect(dbConfig);

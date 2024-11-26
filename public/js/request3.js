@@ -252,10 +252,15 @@ function clearNonReadOnlyFields() {
 function clearCheckboxData() {
     const userId = sessionStorage.getItem('userId') || 'defaultUser';
     const checkboxes = document.querySelectorAll('input[type="checkbox"]');
-    
+
     checkboxes.forEach(checkbox => {
         const storageKey = `checkbox_${userId}_${checkbox.name}`;
+        
+        // ลบข้อมูลที่เก็บใน localStorage
         localStorage.removeItem(storageKey);
+
+        // Uncheck Checkbox
+        checkbox.checked = false;
     });
 }
 
@@ -263,13 +268,13 @@ document.addEventListener('DOMContentLoaded', function() {
     const userId = sessionStorage.getItem('userId') || 'defaultUser';
     const checkboxes = document.querySelectorAll('input[type="checkbox"]');
 
-    // Restore checkbox states
+    // Restore checkbox states จาก localStorage
     checkboxes.forEach(checkbox => {
         const storageKey = `checkbox_${userId}_${checkbox.name}`;
         const isChecked = localStorage.getItem(storageKey) === 'true';
         checkbox.checked = isChecked;
 
-        // Add event listener to save state when changed
+        // Add event listener เพื่อเก็บสถานะเมื่อมีการเปลี่ยนแปลง
         checkbox.addEventListener('change', function() {
             localStorage.setItem(storageKey, this.checked);
         });

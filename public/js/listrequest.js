@@ -159,11 +159,64 @@ async function deleteStudent2(studentid) {
     }
 }
 
+async function fetchFormData3() {
+    try {
+        const response = await fetch('http://localhost:3000/api/form/missing');
+        const formData = await response.json();
+        const tableBody = document.querySelector('#studentTable3 tbody');
+        tableBody.innerHTML = '';
+        formData.forEach(student => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${student.studentid}</td>
+                <td>${student.full_name}</td>
+                <td>
+                    <button class="modify" onclick="redirectToEditPage3('${student.studentid}')">แก้ไข</button>
+                    <button class="delete" onclick="deleteStudent('${student.studentid}')">ยกเลิก</button>
+                </td>
+            `;
+            tableBody.appendChild(row);
+        });
+    } catch (error) {
+        console.error('Error fetching data for table 3:', error);
+        alert('Failed to fetch data. Please try again.');
+    }
+}
+
+// ฟังก์ชันสำหรับลบข้อมูล
+async function deleteStudent3(studentid) {
+    const response = await fetch(`http://localhost:3000/api/form/missing/${studentid}`, {
+        method: 'DELETE'
+    });
+
+    if (response.ok) {
+        Swal.fire({
+            title: "คุณต้องการลบ?",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "ยืนยัน",
+            cancelButtonText: "ยกเลิก"  // เพิ่มข้อความสำหรับปุ่มยกเลิก
+          }).then((result) => {
+            if (result.isConfirmed) {
+              Swal.fire({
+                title: "การลบสำเร็จ",
+                icon: "success"
+              });
+              fetchFormData3(); // รีเฟรชข้อมูลหลังจากลบ
+            }
+          });
+    } else {
+        alert('Delete failed!');
+    }
+}
+
 // เรียกใช้ฟังก์ชันทุกครั้งเมื่อโหลดหน้าสำเร็จ
 document.addEventListener('DOMContentLoaded', function() {
     fetchFormData1();  // เรียกใช้ฟังก์ชันดึงข้อมูลสำหรับตาราง 1
     fetchFormData2();  // เรียกใช้ฟังก์ชันดึงข้อมูลสำหรับตาราง 2
-    // fetchFormData3();  // เรียกใช้ฟังก์ชันดึงข้อมูลสำหรับตาราง 3
+    fetchFormData3();  // เรียกใช้ฟังก์ชันดึงข้อมูลสำหรับตาราง 3
     // fetchFormData4();  // เรียกใช้ฟังก์ชันดึงข้อมูลสำหรับตาราง 4
 });
 
@@ -174,4 +227,8 @@ function redirectToEditPage1(studentid) {
 function redirectToEditPage2(studentid) {
     // เปลี่ยนเส้นทางไปยังหน้า edit.html พร้อมส่ง studentid เป็น query parameter
     window.location.href = `editrequest2.html?studentid=${studentid}`;
+}
+function redirectToEditPage3(studentid) {
+    // เปลี่ยนเส้นทางไปยังหน้า edit.html พร้อมส่ง studentid เป็น query parameter
+    window.location.href = `editrequest3.html?studentid=${studentid}`;
 }

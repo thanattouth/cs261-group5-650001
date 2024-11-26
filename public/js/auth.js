@@ -86,16 +86,16 @@ document.addEventListener('DOMContentLoaded', function() {
         logoutButton.addEventListener('click', function(e) {
             e.preventDefault();
             sessionManager.showLogoutModal();
-            localStorage.removeItem("selectedRequest");
-            localStorage.clear();
-            clearUserFormData();
-            clearCheckboxData()
         });
     }
 
     // Event listeners สำหรับปุ่มใน Modal
     document.getElementById('confirmLogout').addEventListener('click', function() {
         sessionManager.logout();
+        localStorage.removeItem("selectedRequest");
+        localStorage.clear();
+        clearUserFormData();
+        clearCheckboxData()
     });
 
     document.getElementById('cancelLogout').addEventListener('click', function() {

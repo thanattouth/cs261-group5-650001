@@ -1,5 +1,5 @@
 //โค้ดสำหรับส่งฟอร์มไปเซฟในbackend ปิดไว้อยู่
-//document.getElementById("confirmBtn").addEventListener("click", async function () {
+document.getElementById("confirmBtn").addEventListener("click", async function () {
     console.log("sending form1 to backend");
 
     const formData = new FormData();

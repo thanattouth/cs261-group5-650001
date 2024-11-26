@@ -41,16 +41,21 @@
                 </div>
                 <div class="section">
                     <h5>คำร้องที่ถูกส่ง</h5>
-                    <div class="item">
-                        <span>คำร้องจดทะเบียนล่าช้า.sth</span>
-                        <span class="status success">ยืนยันแล้ว</span>
-                        <span class="status">วว/ดด/ปปปป</span>
-                    </div>
-                    <div class="item">
-                        <span>เขียนคำร้องใบลาป่วย/กิจ.sth</span>
-                        <span class="status error">แก้ไขได้</span>
-                        <span class="status">วว/ดด/ปปปป</span>
-                    </div>
+                    <table id="studentTable" border="1">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Full Name</th>
+                                <th>Address</th>
+                                <th>Parent-tel</th>
+                                <th>Reason</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- ข้อมูลจะถูกใส่ที่นี่ -->
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
@@ -64,6 +69,6 @@
         document.addEventListener('DOMContentLoaded', function() {
           sessionManager.preventBackAfterLogout();
         });
-    </script> 
+    </script>
 </body>
 </html>

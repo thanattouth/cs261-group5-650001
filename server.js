@@ -3,11 +3,15 @@ const session = require('express-session');
 const path = require('path');
 const cors = require('cors');
 const multer = require('multer');
-const formRevocationService = require('./public/js/FormRevocationService.js');
 require('dotenv').config();
+const sql = require('mssql');
 
 const app = express();
-app.use(cors());
+app.use(cors({
+    origin: 'http://localhost:3000', // URL ที่อนุญาตให้เชื่อมต่อ
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    allowedHeaders: ['Content-Type']
+}));
 
 // Middleware
 app.use(express.json());
@@ -96,70 +100,78 @@ app.get('/api/check-auth', (req, res) => {
     }
 });
 
-// Upload new form with files
-// app.post('/upload', upload.array('files'), async (req, res) => {
-//     try {
-//         const formData = {
-//             date: req.body.date,
-//             fullName: req.body.fullName,
-//             studentID: req.body.studentID,
-//             department: req.body.department,
-//             year: parseInt(req.body.year),
-//             address: req.body.address,
-//             district: req.body.district,
-//             subdistrict: req.body.subdistrict,
-//             province: req.body.province,
-//             studentTel: req.body.studentTel,
-//             parentTel: req.body.parentTel,
-//             advisor: req.body.advisor,
-//             semester: req.body.semester,
-//             courseID: req.body.courseID,
-//             courseName: req.body.courseName,
-//             section: req.body.section,
-//             reason: req.body.reason
-//         };
+const dbConfig = {
+    user: 'sa',
+    password: 'YourStrong@Passw0rd',
+    server: 'localhost', // เช่น 'localhost'
+    database: 'myDB', // เช่น 'myDB'
+    options: {
+        encrypt: true, // ใช้เมื่อเชื่อมต่อกับ Azure
+        trustServerCertificate: true // ตั้งค่าให้เชื่อมต่อได้โดยไม่ตรวจสอบใบรับรอง SSL
+    }
+};
 
-//         const savedForm = await formRevocationService.saveFormWithFiles(formData, req.files);
-//         res.status(201).json(savedForm);
-//     } catch (err) {
-//         console.error('Error in form upload:', err);
-//         res.status(500).json({ message: 'Error uploading form' });
-//     }
-// });
-
-// Get form by student ID
-app.get('/student/:studentId', async (req, res) => {
+app.get('/api/form/delayedReg', async (req, res) => {
     try {
-        const form = await formRevocationService.getFormByStudentId(req.params.studentId);
-        if (form) {
-            res.json(form);
-        } else {
-            res.status(404).json({ message: 'Form not found' });
-        }
+        const pool = await sql.connect(dbConfig);
+        const result = await pool.request().query('SELECT TOP (1000) * FROM student_form');
+        res.json(result.recordset);
     } catch (err) {
-        res.status(500).json({ message: 'Error fetching form' });
+        console.error('Error fetching student forms:', err);
+        res.status(500).json({ error: 'Database query failed' });
     }
 });
 
-// Get all forms
-app.get('/', async (req, res) => {
+app.put('/api/form/delayedReg/:studentid', async (req, res) => {
+    const { studentid } = req.params;
+    const { full_name, address, reason } = req.body; // ปรับคอลัมน์ที่ต้องการแก้ไขตามความต้องการ
+
     try {
-        const forms = await formRevocationService.getAllForms();
-        res.json(forms);
+        const pool = await sql.connect(dbConfig);
+        await pool.request()
+            .input('studentid', sql.VarChar, studentid) // ใช้ VarChar เพราะ studentid เป็นข้อความ
+            .input('full_name', sql.VarChar, full_name)
+            .input('address', sql.VarChar, address)
+            .input('parent', sql.VarChar, parent)
+            .input('reason', sql.VarChar, reason)
+            .query(`
+                UPDATE student_form
+                SET full_name = @full_name, address = @address, parent = @parent_number, reason = @reason
+                WHERE studentid = @studentid
+            `);
+        res.json({ success: true });
     } catch (err) {
-        res.status(500).json({ message: 'Error fetching forms' });
+        console.error('Error updating student form:', err);
+        res.status(500).json({ error: 'Database update failed' });
     }
 });
 
-// Update form
-app.put('/:id', async (req, res) => {
+app.delete('/api/form/delayedReg/:studentid', async (req, res) => {
+    const { studentid } = req.params;
+
     try {
-        await formRevocationService.updateForm(parseInt(req.params.id), req.body);
-        res.json({ message: 'Form updated successfully' });
+        const pool = await sql.connect(dbConfig);
+        await pool.request()
+            .input('studentid', sql.VarChar, studentid) // ใช้ VarChar เพราะ studentid เป็นข้อความ
+            .query('DELETE FROM student_form WHERE studentid = @studentid');
+        res.json({ success: true });
     } catch (err) {
-        res.status(500).json({ message: 'Error updating form' });
+        console.error('Error deleting student form:', err);
+        res.status(500).json({ error: 'Database delete failed' });
     }
 });
+
+async function testConnection() {
+    try {
+        const pool = await sql.connect(dbConfig);
+        console.log('Database connected successfully');
+        await pool.close();
+    } catch (err) {
+        console.error('Database connection failed:', err.message);
+    }
+}
+
+testConnection();
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {

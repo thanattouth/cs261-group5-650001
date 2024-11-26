@@ -450,6 +450,13 @@
                     clearNonReadOnlyFields();
                     resetFiles();
                 }
+
+                // รีเซ็ต radio buttons
+                const radioButtons = document.querySelectorAll('input[name="document1"]');
+                    radioButtons.forEach(radio => {
+                    radio.checked = false; // รีเซ็ตสถานะของทุก radio
+                });
+
                 const userId = sessionStorage.getItem('userId') || 'defaultUser';
                 const fields = [
                     'name', 'id', 'faculty', 'year', 'moo', 'soy', 'address', 'district', 'subdistrict', 

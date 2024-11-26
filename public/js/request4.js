@@ -296,21 +296,26 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // Save selection when a radio button is clicked
+    // Save or remove selection when a radio button is clicked
     radioButtons.forEach((radio) => {
         radio.addEventListener('click', (e) => {
-            // If the clicked radio is already checked, toggle it
             if (radio.checked) {
-                radioButtons.forEach((btn) => {
-                    btn.checked = false; // Uncheck all radios first
-                });
-                radio.checked = true; // Check only the clicked one
-                
                 // Save the selected value to localStorage
                 localStorage.setItem(storageKey, radio.value);
+            } else {
+                // Remove the value from localStorage if unchecked
+                localStorage.removeItem(storageKey);
             }
         });
     });
+
+    // Clear the saved selection manually
+    window.clearDocumentSelection = function () {
+        localStorage.removeItem(storageKey);
+        radioButtons.forEach((btn) => {
+            btn.checked = false;
+        });
+    };
 
     // Clear the saved selection when logging out or clearing form
     window.clearDocumentSelection = function() {

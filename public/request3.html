@@ -124,15 +124,15 @@
                     <label>และได้แนบเอกสาร</label>
                     <div class="checkbox-group">
                       <label>
-                        <input type="checkbox" name="document1" value="medical_form" />
+                        <input type="checkbox" id="reciept" name="document1" value="medical_form" />
                         สำเนาใบเสร็จรักษาพยาบาล
                       </label>
                       <label>
-                        <input type="checkbox" name="document2" value="doctor_certificate" />
+                        <input type="checkbox" id="doctor" name="document2" value="doctor_certificate" />
                         ใบรับรองแพทย์
                       </label>
                       <label>
-                        <input type="checkbox" name="document3" value="registration_card" />
+                        <input type="checkbox" id="personal" name="document3" value="registration_card" />
                         สำเนาบัตรเอกสารจดทะเบียน
                       </label>
                     </div>
@@ -161,7 +161,7 @@
             </form>
         </div>
     </div>
-    <script src="./js/request3ToBackend.js"></script>
+    <script src="./js/saveRequesttoBackend.js"></script>
     <script src="./js/request3.js"></script>
     <script src="./js/request.js"></script>
     <script src="./js/sessionUtils.js"></script>
@@ -413,10 +413,10 @@
                 }
                 const userId = sessionStorage.getItem('userId') || 'defaultUser';
                 const fields = [
-                    'name', 'id', 'faculty', 'year', 'address', 'district', 
-                    'subdistrict', 'province', 'student-tel', 'parent-tel', 
-                    'advisor', 'semester', 'courseCode', 'courseName', 
-                    'section', 'reason'
+                    'name', 'id', 'faculty', 'year', 'examday', 'Instructor', 
+                    'reciept', 'doctor', 'personal', 'then', 
+                    'advisor', 'courseCode', 'courseName', 
+                    'reason'
                 ];
     
                 fields.forEach(field => {

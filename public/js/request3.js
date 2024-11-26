@@ -147,7 +147,10 @@ function getStorageKey(fieldName, userId) {
 // Function to get data from localStorage
 function getFormDataFromLocalStorage() {
     const userId = sessionStorage.getItem('userId') || 'defaultUser';
-    const fields = ['name', 'id', 'faculty', 'year', 'address', 'district', 'subdistrict', 'province', 'student-tel', 'parent-tel', 'advisor', 'semester', 'courseCode', 'courseName', 'section', 'reason'];
+    const fields = ['name', 'id', 'faculty', 'year', 'examday', 'Instructor', 
+                    'reciept', 'doctor', 'personal', 'then', 
+                    'advisor', 'courseCode', 'courseName', 
+                    'reason'];
     
     fields.forEach(field => {
         const value = localStorage.getItem(getStorageKey(field, userId));
@@ -157,7 +160,10 @@ function getFormDataFromLocalStorage() {
 
 function saveFormDataToLocalStorage() {
     const userId = sessionStorage.getItem('userId') || 'defaultUser'; // Fallback if no userId
-    const fields = ['name', 'id', 'faculty', 'year', 'address', 'district', 'subdistrict', 'province', 'student-tel', 'parent-tel', 'advisor', 'semester', 'courseCode', 'courseName', 'section', 'reason'];
+    const fields = ['name', 'id', 'faculty', 'year', 'examday', 'Instructor', 
+                    'reciept', 'doctor', 'personal', 'then', 
+                    'advisor', 'courseCode', 'courseName', 
+                    'reason'];
     
     fields.forEach(field => {
         const value = document.getElementById(field).value;
@@ -169,9 +175,10 @@ function saveFormDataToLocalStorage() {
 function clearUserFormData() {
     const userId = sessionStorage.getItem('userId') || 'defaultUser';
     const formFields = [
-        'date', 'name', 'id', 'faculty', 'year', 'address', 'district', 
-        'subdistrict', 'province', 'student-tel', 'parent-tel', 'advisor', 
-        'semester', 'courseCode', 'courseName', 'section', 'reason'
+        'date', 'name', 'id', 'faculty', 'year', 'examday', 'Instructor', 
+        'reciept', 'doctor', 'personal', 'then', 
+        'advisor', 'courseCode', 'courseName', 
+        'reason'
     ];
     
     formFields.forEach(field => {
@@ -228,9 +235,10 @@ document.addEventListener('DOMContentLoaded', function() {
 
 function clearNonReadOnlyFields() {
     const fields = [
-        'year', 'address', 'district', 'subdistrict', 'province', 
-        'student-tel', 'parent-tel', 'advisor', 'semester', 
-        'courseCode', 'courseName', 'section', 'reason'
+        'year', 'examday', 'Instructor', 
+        'reciept', 'doctor', 'personal', 'then', 
+        'advisor', 'courseCode', 'courseName', 
+        'reason'
     ];
     
     fields.forEach(fieldId => {

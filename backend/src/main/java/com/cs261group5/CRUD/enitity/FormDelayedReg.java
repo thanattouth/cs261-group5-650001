@@ -6,7 +6,7 @@ import java.sql.Date;
 import java.util.List;
 
 @Entity
-@Table(name="form-delayed-reg")
+@Table(name="form_delayed_reg")
 public class FormDelayedReg {
 
     @Id

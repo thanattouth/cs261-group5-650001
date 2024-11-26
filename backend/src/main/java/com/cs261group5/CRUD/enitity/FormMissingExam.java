@@ -6,7 +6,7 @@ import java.sql.Date;
 import java.util.List;
 
 @Entity
-@Table(name="form-missingExam")
+@Table(name="form_missingExam")
 public class FormMissingExam {
 
     @Id

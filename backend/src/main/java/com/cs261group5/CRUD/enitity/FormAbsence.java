@@ -5,7 +5,7 @@ import jakarta.persistence.*;
 import java.sql.Date;
 import java.util.List;
 @Entity
-@Table(name="form-absence")
+@Table(name="form_absence")
 public class FormAbsence {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

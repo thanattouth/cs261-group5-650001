@@ -6,7 +6,7 @@ import java.sql.Date;
 import java.util.List;
 
 @Entity
-@Table(name="form-revocation")
+@Table(name="form_revocation")
 public class FormRevocation {
 
     @Id

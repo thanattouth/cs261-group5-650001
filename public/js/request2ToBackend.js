@@ -1,6 +1,6 @@
 //โค้ดสำหรับส่งฟอร์มไปเซฟในbackend ปิดไว้อยู่
 //document.getElementById("confirmBtn").addEventListener("click", async function () {
-    console.log("sending form to backend");
+    console.log("sending form2 to backend");
 
     const formData = new FormData();
 
@@ -29,7 +29,7 @@
 
     // ส่งข้อมูลไปที่ backend API ผ่าน HTTP POST request
     try {
-        const response = await fetch("http://localhost:8080/api/form/upload", {
+        const response = await fetch("http://localhost:8080/api/form/rev/upload", {
             method: "POST",
             body: formData
         });

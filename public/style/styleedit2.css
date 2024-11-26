@@ -44,7 +44,6 @@ body {
     padding: 20px 0;
     border-bottom: 1px solid rgb(255, 255, 255);
     cursor: pointer;
-
 }
 
 .sidebar a {
@@ -215,131 +214,34 @@ body {
 }
 
 /* ตกแต่งตาราง */
-#studentTable1 {
+#studentTable {
     width: 100%;
     border-collapse: collapse;
-    border: none; /* ลบเส้นขอบของเซลล์ */
     margin-top: 20px;
-    table-layout: fixed; /* กำหนดให้คอลัมน์มีขนาดคงที่ */
 }
 
-#studentTable1 th, #studentTable1 td {
+#studentTable th, #studentTable td {
     padding: 12px;
     text-align: left;
-    border: none; /* ลบเส้นขอบของเซลล์ */
-    word-wrap: break-word; /* แบ่งคำเมื่อข้อความยาวเกินไป */
-    overflow: hidden; /* ซ่อนข้อความที่ยาวเกินขนาด */
+    border: 1px solid #ddd;
 }
 
-#studentTable1 th {
+#studentTable th {
     background-color: #990000;
     color: white;
 }
 
-#studentTable1 td {
+#studentTable td {
     background-color: #f9f9f9;
 }
 
 /* เพิ่มการทำให้แถวตารางโดดเด่นเมื่อ hover */
-#studentTable1 tr:hover {
-    background-color: #f1f1f1;
-}
-
-/* ตกแต่งตาราง */
-#studentTable2 {
-    width: 100%;
-    border-collapse: collapse;
-    border: none; /* ลบเส้นขอบของเซลล์ */
-    margin-top: 20px;
-    table-layout: fixed; /* กำหนดให้คอลัมน์มีขนาดคงที่ */
-}
-
-#studentTable2 th, #studentTable2 td {
-    padding: 12px;
-    text-align: left;
-    border: none; /* ลบเส้นขอบของเซลล์ */
-    word-wrap: break-word; /* แบ่งคำเมื่อข้อความยาวเกินไป */
-    overflow: hidden; /* ซ่อนข้อความที่ยาวเกินขนาด */
-}
-
-#studentTable2 th {
-    background-color: #990000;
-    color: white;
-}
-
-#studentTable2 td {
-    background-color: #f9f9f9;
-}
-
-/* เพิ่มการทำให้แถวตารางโดดเด่นเมื่อ hover */
-#studentTable2 tr:hover {
-    background-color: #f1f1f1;
-}
-
-/* ตกแต่งตาราง */
-#studentTable3 {
-    width: 100%;
-    border-collapse: collapse;
-    border: none; /* ลบเส้นขอบของเซลล์ */
-    margin-top: 20px;
-    table-layout: fixed; /* กำหนดให้คอลัมน์มีขนาดคงที่ */
-}
-
-#studentTable3 th, #studentTable3 td {
-    padding: 12px;
-    text-align: left;
-    border: none; /* ลบเส้นขอบของเซลล์ */
-    word-wrap: break-word; /* แบ่งคำเมื่อข้อความยาวเกินไป */
-    overflow: hidden; /* ซ่อนข้อความที่ยาวเกินขนาด */
-}
-
-#studentTable3 th {
-    background-color: #990000;
-    color: white;
-}
-
-#studentTable3 td {
-    background-color: #f9f9f9;
-}
-
-/* ตกแต่งตาราง */
-#studentTable4 {
-    width: 100%;
-    border-collapse: collapse;
-    border: none; /* ลบเส้นขอบของเซลล์ */
-    margin-top: 20px;
-    table-layout: fixed; /* กำหนดให้คอลัมน์มีขนาดคงที่ */
-}
-
-#studentTable4 th, #studentTable4 td {
-    padding: 12px;
-    text-align: left;
-    border: none; /* ลบเส้นขอบของเซลล์ */
-    word-wrap: break-word; /* แบ่งคำเมื่อข้อความยาวเกินไป */
-    overflow: hidden; /* ซ่อนข้อความที่ยาวเกินขนาด */
-}
-
-#studentTable4 th {
-    background-color: #990000;
-    color: white;
-}
-
-#studentTable4 td {
-    background-color: #f9f9f9;
-}
-
-/* เพิ่มการทำให้แถวตารางโดดเด่นเมื่อ hover */
-#studentTable4 tr:hover {
-    background-color: #f1f1f1;
-}
-
-/* เพิ่มการทำให้แถวตารางโดดเด่นเมื่อ hover */
-#studentTable3 tr:hover {
+#studentTable tr:hover {
     background-color: #f1f1f1;
 }
 
 /* ตกแต่งปุ่ม */
-button.modify, button.delete {
+button.modify, button.back {
     padding: 8px 16px;
     margin: 4px;
     background-color: rgba(255, 117, 24, 0.884);
@@ -351,12 +253,12 @@ button.modify, button.delete {
     transition: background-color 0.3s ease;
 }
 
-button.modify:hover, button.delete:hover {
+button.modify:hover, button.back:hover {
     background-color: #990000;
 }
 
 /* ปรับปุ่มเมื่ออยู่ในสถานะ disabled */
-button.modify:disabled, button.delete:disabled {
+button.modify:disabled, button.back:disabled {
     background-color: #ccc;
     cursor: not-allowed;
 }

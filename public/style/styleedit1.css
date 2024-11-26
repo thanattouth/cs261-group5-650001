@@ -44,7 +44,6 @@ body {
     padding: 20px 0;
     border-bottom: 1px solid rgb(255, 255, 255);
     cursor: pointer;
-
 }
 
 .sidebar a {
@@ -218,14 +217,13 @@ body {
 #studentTable {
     width: 100%;
     border-collapse: collapse;
-    border: none; /* ลบเส้นขอบของเซลล์ */
     margin-top: 20px;
 }
 
 #studentTable th, #studentTable td {
     padding: 12px;
     text-align: left;
-    border: none; /* ลบเส้นขอบของเซลล์ */
+    border: 1px solid #ddd;
 }
 
 #studentTable th {
@@ -243,7 +241,7 @@ body {
 }
 
 /* ตกแต่งปุ่ม */
-button.modify, button.delete {
+button.modify, button.back {
     padding: 8px 16px;
     margin: 4px;
     background-color: rgba(255, 117, 24, 0.884);
@@ -255,12 +253,12 @@ button.modify, button.delete {
     transition: background-color 0.3s ease;
 }
 
-button.modify:hover, button.delete:hover {
+button.modify:hover, button.back:hover {
     background-color: #990000;
 }
 
 /* ปรับปุ่มเมื่ออยู่ในสถานะ disabled */
-button.modify:disabled, button.delete:disabled {
+button.modify:disabled, button.back:disabled {
     background-color: #ccc;
     cursor: not-allowed;
 }

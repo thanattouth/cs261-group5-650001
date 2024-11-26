@@ -57,57 +57,31 @@ const apiUrl = 'http://localhost:3000/api/form/delayedReg';
 
 // ฟังก์ชันสำหรับดึงข้อมูลจาก API
 async function fetchFormData() {
-    const response = await fetch(apiUrl);
-    const formData = await response.json();
+    try {
+        const response = await fetch(apiUrl); // ดึงข้อมูลจาก API
+        const formData = await response.json();
 
-    // ตรวจสอบข้อมูลที่ได้จาก API
-    console.log(formData);
+        // ตรวจสอบข้อมูลที่ได้จาก API (ใช้สำหรับ debug)
+        console.log(formData);
 
-    const tableBody = document.querySelector('#studentTable tbody');
-    tableBody.innerHTML = '';  // ลบข้อมูลเก่าออกก่อน
+        const tableBody = document.querySelector('#studentTable tbody');
+        tableBody.innerHTML = ''; // ลบข้อมูลเก่าออกก่อน
 
-    formData.forEach(student => {
-        const row = document.createElement('tr');
-        row.innerHTML = `
-            <td>${student.studentid}</td>
-            <td contenteditable="true" data-field="full_name">${student.full_name}</td>
-            <td contenteditable="true" data-field="address">${student.address}</td>
-            <td contenteditable="true" data-field="paren-tel">${student.parent_number}</td>
-            <td contenteditable="true" data-field="reason">${student.reason}</td>
-            <td>
-                <button class="modify" onclick="updateStudent('${student.studentid}', this)">Update</button>
-                <button class="delete" onclick="deleteStudent('${student.studentid}')">Delete</button>
-            </td>
-        `;
-        tableBody.appendChild(row);
-    });
-}
-
-// ฟังก์ชันสำหรับอัปเดตข้อมูล
-async function updateStudent(studentid, button) {
-    const row = button.closest('tr');
-    const fullName = row.querySelector('[data-field="full_name"]').textContent;
-    const address = row.querySelector('[data-field="address"]').textContent;
-    const parent = row.querySelector('[data-field="parent"]').textContent;
-    const reason = row.querySelector('[data-field="reason"]').textContent;
-
-    const response = await fetch(`http://localhost:3000/api/form/delayedReg/${studentid}`, {
-        method: 'PUT',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-            full_name: fullName,
-            address: address,
-            parent_number: parent,
-            reason: reason
-        })
-    });
-
-    if (response.ok) {
-        alert('Updated successfully!');
-    } else {
-        alert('Update failed!');
+        formData.forEach(student => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${student.studentid}</td>
+                <td>${student.full_name}</td>
+                <td>
+                    <button class="modify" onclick="redirectToEditPage('${student.studentid}')">แก้ไข</button>
+                    <button class="delete" onclick="deleteStudent('${student.studentid}')">ยกเลิก</button>
+                </td>
+            `;
+            tableBody.appendChild(row);
+        });
+    } catch (error) {
+        console.error('Error fetching form data:', error);
+        alert('Failed to fetch data. Please try again.');
     }
 }
 
@@ -118,8 +92,23 @@ async function deleteStudent(studentid) {
     });
 
     if (response.ok) {
-        alert('Deleted successfully!');
-        fetchFormData(); // รีเฟรชข้อมูลหลังจากลบ
+        Swal.fire({
+            title: "คุณต้องการลบ?",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "ยืนยัน",
+            cancelButtonText: "ยกเลิก"  // เพิ่มข้อความสำหรับปุ่มยกเลิก
+          }).then((result) => {
+            if (result.isConfirmed) {
+              Swal.fire({
+                title: "การลบสำเร็จ",
+                icon: "success"
+              });
+              fetchFormData(); // รีเฟรชข้อมูลหลังจากลบ
+            }
+          });
     } else {
         alert('Delete failed!');
     }
@@ -127,3 +116,8 @@ async function deleteStudent(studentid) {
 
 //เรียกใช้ฟังก์ชันดึงข้อมูลเมื่อโหลดหน้า
 window.onload = fetchFormData;
+
+function redirectToEditPage(studentid) {
+    // เปลี่ยนเส้นทางไปยังหน้า edit.html พร้อมส่ง studentid เป็น query parameter
+    window.location.href = `editrequest1.html?studentid=${studentid}`;
+}

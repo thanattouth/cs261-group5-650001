@@ -2,7 +2,6 @@ const express = require('express');
 const session = require('express-session');
 const path = require('path');
 const cors = require('cors');
-const multer = require('multer');
 require('dotenv').config();
 const sql = require('mssql');
 
@@ -56,7 +55,8 @@ const protectedPages = [
     './request1.html',
     './request2.html',
     './request3.html',
-    './request4.html'
+    './request4.html',
+    './editrequest1.html',
     // เพิ่มหน้าอื่นๆ ที่ต้องการป้องกัน
 ];
 
@@ -114,7 +114,7 @@ const dbConfig = {
 app.get('/api/form/delayedReg', async (req, res) => {
     try {
         const pool = await sql.connect(dbConfig);
-        const result = await pool.request().query('SELECT TOP (1000) * FROM student_form');
+        const result = await pool.request().query('SELECT TOP (1000) * FROM form_delayed_reg');
         res.json(result.recordset);
     } catch (err) {
         console.error('Error fetching student forms:', err);
@@ -124,7 +124,7 @@ app.get('/api/form/delayedReg', async (req, res) => {
 
 app.put('/api/form/delayedReg/:studentid', async (req, res) => {
     const { studentid } = req.params;
-    const { full_name, address, reason } = req.body; // ปรับคอลัมน์ที่ต้องการแก้ไขตามความต้องการ
+    const { full_name, address, parent_number, reason } = req.body; // ปรับคอลัมน์ที่ต้องการแก้ไขตามความต้องการ
 
     try {
         const pool = await sql.connect(dbConfig);
@@ -132,11 +132,11 @@ app.put('/api/form/delayedReg/:studentid', async (req, res) => {
             .input('studentid', sql.VarChar, studentid) // ใช้ VarChar เพราะ studentid เป็นข้อความ
             .input('full_name', sql.VarChar, full_name)
             .input('address', sql.VarChar, address)
-            .input('parent', sql.VarChar, parent)
+            .input('parent_number', sql.VarChar, parent_number)
             .input('reason', sql.VarChar, reason)
             .query(`
-                UPDATE student_form
-                SET full_name = @full_name, address = @address, parent = @parent_number, reason = @reason
+                UPDATE form_delayed_reg
+                SET full_name = @full_name, address = @address, parent_number = @parent_number, reason = @reason
                 WHERE studentid = @studentid
             `);
         res.json({ success: true });
@@ -153,7 +153,7 @@ app.delete('/api/form/delayedReg/:studentid', async (req, res) => {
         const pool = await sql.connect(dbConfig);
         await pool.request()
             .input('studentid', sql.VarChar, studentid) // ใช้ VarChar เพราะ studentid เป็นข้อความ
-            .query('DELETE FROM student_form WHERE studentid = @studentid');
+            .query('DELETE FROM form_delayed_reg WHERE studentid = @studentid');
         res.json({ success: true });
     } catch (err) {
         console.error('Error deleting student form:', err);

@@ -57,6 +57,10 @@ const protectedPages = [
     './request3.html',
     './request4.html',
     './editrequest1.html',
+    './editrequest2.html',
+    './editrequest3.html',
+    './editrequest4.html',
+    './listrequest.html',
     // เพิ่มหน้าอื่นๆ ที่ต้องการป้องกัน
 ];
 

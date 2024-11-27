@@ -429,6 +429,7 @@
                     });
                     clearNonReadOnlyFields();
                     resetFiles();
+                    clearDraftAfterSubmit();
                 }
                 const userId = sessionStorage.getItem('userId') || 'defaultUser';
                 const fields = [

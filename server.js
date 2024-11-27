@@ -151,13 +151,21 @@ app.delete('/api/form/delayedReg/:id', async (req, res) => {
 
     try {
         const pool = await sql.connect(dbConfig);
+        
+        // ลบข้อมูลในตาราง attachment ก่อน
         await pool.request()
-            .input('id', sql.VarChar, id) // ใช้ VarChar เพราะ id เป็นข้อความ
+            .input('id', sql.VarChar, id)
+            .query('DELETE FROM form_delayed_reg_attachment_files WHERE form_delayed_reg_id = @id');
+
+        // จากนั้นจึงลบข้อมูลหลัก
+        await pool.request()
+            .input('id', sql.VarChar, id)
             .query('DELETE FROM form_delayed_reg WHERE id = @id');
+        
         res.json({ success: true });
     } catch (err) {
         console.error('Error deleting student form:', err);
-        res.status(500).json({ error: 'Database delete failed' });
+        res.status(500).json({ error: 'Database delete failed', details: err.message });
     }
 });
 
@@ -201,13 +209,21 @@ app.delete('/api/form/rev/:id', async (req, res) => {
 
     try {
         const pool = await sql.connect(dbConfig);
+        
+        // ลบข้อมูลในตาราง attachment ก่อน
         await pool.request()
-            .input('id', sql.VarChar, id) // ใช้ VarChar เพราะ id เป็นข้อความ
+            .input('id', sql.VarChar, id)
+            .query('DELETE FROM form_revocation_attachment_files WHERE form_revocation_id = @id');
+
+        // จากนั้นจึงลบข้อมูลหลัก
+        await pool.request()
+            .input('id', sql.VarChar, id)
             .query('DELETE FROM form_revocation WHERE id = @id');
+        
         res.json({ success: true });
     } catch (err) {
         console.error('Error deleting student form:', err);
-        res.status(500).json({ error: 'Database delete failed' });
+        res.status(500).json({ error: 'Database delete failed', details: err.message });
     }
 });
 
@@ -251,13 +267,21 @@ app.delete('/api/form/missing/:id', async (req, res) => {
 
     try {
         const pool = await sql.connect(dbConfig);
+        
+        // ลบข้อมูลในตาราง attachment ก่อน
         await pool.request()
-            .input('id', sql.VarChar, id) // ใช้ VarChar เพราะ id เป็นข้อความ
+            .input('id', sql.VarChar, id)
+            .query('DELETE FROM form_missing_exam_attachment_files WHERE form_missing_exam_id = @id');
+
+        // จากนั้นจึงลบข้อมูลหลัก
+        await pool.request()
+            .input('id', sql.VarChar, id)
             .query('DELETE FROM form_missing_exam WHERE id = @id');
+        
         res.json({ success: true });
     } catch (err) {
         console.error('Error deleting student form:', err);
-        res.status(500).json({ error: 'Database delete failed' });
+        res.status(500).json({ error: 'Database delete failed', details: err.message });
     }
 });
 
@@ -301,13 +325,21 @@ app.delete('/api/form/absence/:id', async (req, res) => {
 
     try {
         const pool = await sql.connect(dbConfig);
+        
+        // ลบข้อมูลในตาราง attachment ก่อน
         await pool.request()
-            .input('id', sql.VarChar, id) // ใช้ VarChar เพราะ id เป็นข้อความ
+            .input('id', sql.VarChar, id)
+            .query('DELETE FROM form_absence_attachment_files WHERE form_absence_id = @id');
+
+        // จากนั้นจึงลบข้อมูลหลัก
+        await pool.request()
+            .input('id', sql.VarChar, id)
             .query('DELETE FROM form_absence WHERE id = @id');
+        
         res.json({ success: true });
     } catch (err) {
         console.error('Error deleting student form:', err);
-        res.status(500).json({ error: 'Database delete failed' });
+        res.status(500).json({ error: 'Database delete failed', details: err.message });
     }
 });
 

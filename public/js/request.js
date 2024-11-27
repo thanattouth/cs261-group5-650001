@@ -139,13 +139,28 @@ function loadDraft(formId, requestType) {
     const formElements = document.querySelectorAll(`#${formId} input, #${formId} select, #${formId} textarea`);
     
     formElements.forEach(element => {
-        if (element.id) { // โหลดเฉพาะฟิลด์ที่มี ID
-            const storageKey = getStorageKey(formId, requestType, element.id);
-            const savedValue = localStorage.getItem(storageKey);
-            
-            if (savedValue !== null) {
-                element.value = savedValue; // โหลดข้อมูลจาก LocalStorage
-                console.log(`Draft loaded: ${storageKey} = ${savedValue}`);
+        if (element && element.id) {
+            try {
+                const storageKey = getStorageKey(formId, requestType, element.id);
+                const savedValue = localStorage.getItem(storageKey);
+                
+                // Special handling for file inputs
+                if (element.type === 'file') {
+                    console.log('Skipping file input draft loading');
+                    return;
+                }
+                
+                if (savedValue !== null) {
+                    // Additional check to prevent setting value on invalid elements
+                    if (element.value !== undefined) {
+                        element.value = savedValue;
+                        console.log(`Draft loaded: ${storageKey} = ${savedValue}`);
+                    } else {
+                        console.warn(`Cannot set value for element: ${element.id}`);
+                    }
+                }
+            } catch (error) {
+                console.error('Error loading draft for element:', element.id, error);
             }
         }
     });
@@ -153,8 +168,21 @@ function loadDraft(formId, requestType) {
 
 // ฟังก์ชันจัดการหน้า
 document.addEventListener('DOMContentLoaded', function () {
-    const formId = 'requestForm'; // ID ฟอร์มเดียวกัน
-    const requestType = document.getElementById('requestType').value; // ใช้ `value` เป็นตัวเลข เช่น "1"
+    const formId = 'requestForm';
+    const requestTypeElement = document.getElementById('requestType');
+
+    if (!requestTypeElement) {
+        console.error('Request type element not found');
+        return;
+    }
+
+    const requestType = requestTypeElement.value;
+
+    const form = document.getElementById(formId);
+    if (!form) {
+        console.error('Form not found');
+        return;
+    }
 
     // โหลด draft ของฟอร์มปัจจุบัน
     loadDraft(formId, requestType);
@@ -181,3 +209,18 @@ document.addEventListener('DOMContentLoaded', function () {
         requestDropdown.value = requestType;
     }
 });
+
+// หลังจากส่งฟอร์มสำเร็จ
+function clearDraftAfterSubmit() {
+    const formId = 'requestForm';
+    const requestType = document.getElementById('requestType').value;
+    
+    const formElements = document.querySelectorAll(`#${formId} input, #${formId} select, #${formId} textarea`);
+    
+    formElements.forEach(element => {
+        if (element.id) {
+            const storageKey = getStorageKey(formId, requestType, element.id);
+            localStorage.removeItem(storageKey);
+        }
+    });
+}

@@ -78,32 +78,45 @@ async function fetchFormData1() {
 }
 
 // ฟังก์ชันสำหรับลบข้อมูล
+// ฟังก์ชันสำหรับลบข้อมูล
 async function deleteStudent1(id) {
-    const response = await fetch(`http://localhost:3000/api/form/delayedReg/${id}`, {
-        method: 'DELETE'
-    });
+    Swal.fire({
+        title: "คุณต้องการลบ?",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "ยืนยัน",
+        cancelButtonText: "ยกเลิก"
+    }).then(async (result) => {
+        if (result.isConfirmed) {
+            try {
+                const response = await fetch(`http://localhost:3000/api/form/delayedReg/${id}`, {
+                    method: 'DELETE'
+                });
 
-    if (response.ok) {
-        Swal.fire({
-            title: "คุณต้องการลบ?",
-            icon: "warning",
-            showCancelButton: true,
-            confirmButtonColor: "#3085d6",
-            cancelButtonColor: "#d33",
-            confirmButtonText: "ยืนยัน",
-            cancelButtonText: "ยกเลิก"  // เพิ่มข้อความสำหรับปุ่มยกเลิก
-          }).then((result) => {
-            if (result.isConfirmed) {
-              Swal.fire({
-                title: "การลบสำเร็จ",
-                icon: "success"
-              });
-              fetchFormData1(); // รีเฟรชข้อมูลหลังจากลบ
+                if (response.ok) {
+                    await Swal.fire({
+                        title: "การลบสำเร็จ",
+                        icon: "success"
+                    });
+                    fetchFormData1(); // รีเฟรชข้อมูลหลังจากลบ
+                } else {
+                    await Swal.fire({
+                        title: "การลบล้มเหลว",
+                        icon: "error"
+                    });
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                await Swal.fire({
+                    title: "เกิดข้อผิดพลาด",
+                    text: error.message,
+                    icon: "error"
+                });
             }
-          });
-    } else {
-        alert('Delete failed!');
-    }
+        }
+    });
 }
 
 async function fetchFormData2() {
@@ -132,31 +145,43 @@ async function fetchFormData2() {
 
 // ฟังก์ชันสำหรับลบข้อมูล
 async function deleteStudent2(id) {
-    const response = await fetch(`http://localhost:3000/api/form/rev/${id}`, {
-        method: 'DELETE'
-    });
+    Swal.fire({
+        title: "คุณต้องการลบ?",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "ยืนยัน",
+        cancelButtonText: "ยกเลิก"
+    }).then(async (result) => {
+        if (result.isConfirmed) {
+            try {
+                const response = await fetch(`http://localhost:3000/api/form/rev/${id}`, {
+                    method: 'DELETE'
+                });
 
-    if (response.ok) {
-        Swal.fire({
-            title: "คุณต้องการลบ?",
-            icon: "warning",
-            showCancelButton: true,
-            confirmButtonColor: "#3085d6",
-            cancelButtonColor: "#d33",
-            confirmButtonText: "ยืนยัน",
-            cancelButtonText: "ยกเลิก"  // เพิ่มข้อความสำหรับปุ่มยกเลิก
-          }).then((result) => {
-            if (result.isConfirmed) {
-              Swal.fire({
-                title: "การลบสำเร็จ",
-                icon: "success"
-              });
-              fetchFormData2(); // รีเฟรชข้อมูลหลังจากลบ
+                if (response.ok) {
+                    await Swal.fire({
+                        title: "การลบสำเร็จ",
+                        icon: "success"
+                    });
+                    fetchFormData2(); // รีเฟรชข้อมูลหลังจากลบ
+                } else {
+                    await Swal.fire({
+                        title: "การลบล้มเหลว",
+                        icon: "error"
+                    });
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                await Swal.fire({
+                    title: "เกิดข้อผิดพลาด",
+                    text: error.message,
+                    icon: "error"
+                });
             }
-          });
-    } else {
-        alert('Delete failed!');
-    }
+        }
+    });
 }
 
 async function fetchFormData3() {
@@ -185,32 +210,45 @@ async function fetchFormData3() {
 
 // ฟังก์ชันสำหรับลบข้อมูล
 async function deleteStudent3(id) {
-    const response = await fetch(`http://localhost:3000/api/form/missing/${id}`, {
-        method: 'DELETE'
-    });
+    Swal.fire({
+        title: "คุณต้องการลบ?",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "ยืนยัน",
+        cancelButtonText: "ยกเลิก"
+    }).then(async (result) => {
+        if (result.isConfirmed) {
+            try {
+                const response = await fetch(`http://localhost:3000/api/form/missing/${id}`, {
+                    method: 'DELETE'
+                });
 
-    if (response.ok) {
-        Swal.fire({
-            title: "คุณต้องการลบ?",
-            icon: "warning",
-            showCancelButton: true,
-            confirmButtonColor: "#3085d6",
-            cancelButtonColor: "#d33",
-            confirmButtonText: "ยืนยัน",
-            cancelButtonText: "ยกเลิก"  // เพิ่มข้อความสำหรับปุ่มยกเลิก
-          }).then((result) => {
-            if (result.isConfirmed) {
-              Swal.fire({
-                title: "การลบสำเร็จ",
-                icon: "success"
-              });
-              fetchFormData3(); // รีเฟรชข้อมูลหลังจากลบ
+                if (response.ok) {
+                    await Swal.fire({
+                        title: "การลบสำเร็จ",
+                        icon: "success"
+                    });
+                    fetchFormData3(); // รีเฟรชข้อมูลหลังจากลบ
+                } else {
+                    await Swal.fire({
+                        title: "การลบล้มเหลว",
+                        icon: "error"
+                    });
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                await Swal.fire({
+                    title: "เกิดข้อผิดพลาด",
+                    text: error.message,
+                    icon: "error"
+                });
             }
-          });
-    } else {
-        alert('Delete failed!');
-    }
+        }
+    });
 }
+
 
 async function fetchFormData4() {
     try {
@@ -238,31 +276,43 @@ async function fetchFormData4() {
 
 // ฟังก์ชันสำหรับลบข้อมูล
 async function deleteStudent4(id) {
-    const response = await fetch(`http://localhost:3000/api/form/absence/${id}`, {
-        method: 'DELETE'
-    });
+    Swal.fire({
+        title: "คุณต้องการลบ?",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "ยืนยัน",
+        cancelButtonText: "ยกเลิก"
+    }).then(async (result) => {
+        if (result.isConfirmed) {
+            try {
+                const response = await fetch(`http://localhost:3000/api/form/absence/${id}`, {
+                    method: 'DELETE'
+                });
 
-    if (response.ok) {
-        Swal.fire({
-            title: "คุณต้องการลบ?",
-            icon: "warning",
-            showCancelButton: true,
-            confirmButtonColor: "#3085d6",
-            cancelButtonColor: "#d33",
-            confirmButtonText: "ยืนยัน",
-            cancelButtonText: "ยกเลิก"  // เพิ่มข้อความสำหรับปุ่มยกเลิก
-          }).then((result) => {
-            if (result.isConfirmed) {
-              Swal.fire({
-                title: "การลบสำเร็จ",
-                icon: "success"
-              });
-              fetchFormData4(); // รีเฟรชข้อมูลหลังจากลบ
+                if (response.ok) {
+                    await Swal.fire({
+                        title: "การลบสำเร็จ",
+                        icon: "success"
+                    });
+                    fetchFormData4(); // รีเฟรชข้อมูลหลังจากลบ
+                } else {
+                    await Swal.fire({
+                        title: "การลบล้มเหลว",
+                        icon: "error"
+                    });
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                await Swal.fire({
+                    title: "เกิดข้อผิดพลาด",
+                    text: error.message,
+                    icon: "error"
+                });
             }
-          });
-    } else {
-        alert('Delete failed!');
-    }
+        }
+    });
 }
 
 // เรียกใช้ฟังก์ชันทุกครั้งเมื่อโหลดหน้าสำเร็จ

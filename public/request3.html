@@ -410,7 +410,8 @@
                     });
                     clearNonReadOnlyFields();
                     resetFiles();
-                    clearCheckboxData()
+                    clearCheckboxData();
+                    clearDraftAfterSubmit();
                 }
                 const userId = sessionStorage.getItem('userId') || 'defaultUser';
                 const fields = [

@@ -9,7 +9,7 @@ public interface StudentDAO {
 
     Student save(Student student);
     public Student findByUsername(String username) ;
-    public Student findByStudentID(String studentID);
+    public Student findByEngName(String engName);
     void delete(Integer id);
     Student get(Integer id);
     List<Student> getAll();

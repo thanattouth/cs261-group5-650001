@@ -115,3 +115,69 @@ document.addEventListener("DOMContentLoaded", function () {
         selectElement.value = savedRequest; // ตั้งค่า selection
     }
 });
+
+// ฟังก์ชันสำหรับสร้าง key ที่ไม่ซ้ำใน LocalStorage
+function getStorageKey(formId, requestType, fieldId) {
+    return `${formId}_type${requestType}_${fieldId}`; // Key ที่ไม่ซ้ำกัน
+}
+
+// ฟังก์ชันบันทึก Draft ลง LocalStorage
+function saveDraft(formId, requestType) {
+    const formElements = document.querySelectorAll(`#${formId} input, #${formId} select, #${formId} textarea`);
+    
+    formElements.forEach(element => {
+        if (element.id) { // บันทึกเฉพาะฟิลด์ที่มี ID
+            const storageKey = getStorageKey(formId, requestType, element.id);
+            localStorage.setItem(storageKey, element.value); // เก็บข้อมูลใน LocalStorage
+            console.log(`Draft saved: ${storageKey} = ${element.value}`);
+        }
+    });
+}
+
+// ฟังก์ชันโหลด Draft จาก LocalStorage
+function loadDraft(formId, requestType) {
+    const formElements = document.querySelectorAll(`#${formId} input, #${formId} select, #${formId} textarea`);
+    
+    formElements.forEach(element => {
+        if (element.id) { // โหลดเฉพาะฟิลด์ที่มี ID
+            const storageKey = getStorageKey(formId, requestType, element.id);
+            const savedValue = localStorage.getItem(storageKey);
+            
+            if (savedValue !== null) {
+                element.value = savedValue; // โหลดข้อมูลจาก LocalStorage
+                console.log(`Draft loaded: ${storageKey} = ${savedValue}`);
+            }
+        }
+    });
+}
+
+// ฟังก์ชันจัดการหน้า
+document.addEventListener('DOMContentLoaded', function () {
+    const formId = 'requestForm'; // ID ฟอร์มเดียวกัน
+    const requestType = document.getElementById('requestType').value; // ใช้ `value` เป็นตัวเลข เช่น "1"
+
+    // โหลด draft ของฟอร์มปัจจุบัน
+    loadDraft(formId, requestType);
+
+    // บันทึก draft เมื่อผู้ใช้กรอกข้อมูล
+    document.querySelectorAll(`#${formId} input, #${formId} select, #${formId} textarea`).forEach(element => {
+        element.addEventListener('input', () => saveDraft(formId, requestType));
+    });
+
+    // จัดการการเปลี่ยนหน้าเมื่อเปลี่ยน dropdown
+    const requestDropdown = document.getElementById('request');
+    if (requestDropdown) {
+        requestDropdown.addEventListener('change', function () {
+            const selectedRequestType = requestDropdown.value;
+
+            // บันทึก draft ของคำร้องปัจจุบันก่อนเปลี่ยนหน้า
+            saveDraft(formId, requestType);
+
+            // เปลี่ยนหน้าโดยไม่บันทึกค่าเดิม
+            window.location.href = `request${selectedRequestType}.html`;
+        });
+
+        // ตั้งค่า dropdown ให้ตรงกับ `requestType` ปัจจุบัน
+        requestDropdown.value = requestType;
+    }
+});

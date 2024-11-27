@@ -2,7 +2,11 @@ package com.cs261group5.CRUD.Restcontroller;
 
 
 import com.cs261group5.CRUD.enitity.FormRevocation;
+import com.cs261group5.CRUD.enitity.Student;
+import com.cs261group5.CRUD.repository.EmailService;
 import com.cs261group5.CRUD.repository.FormRevRepository;
+import com.cs261group5.CRUD.repository.StudentRepository;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -18,12 +22,16 @@ import java.util.List;
 public class FormRevController {
 
     private final FormRevRepository requestformService;
+    private final StudentRepository studentRepository;
+    private final EmailService emailService;
 
     @Value("${file.upload-dir}")
     private String uploadDir;
 
-    public FormRevController(FormRevRepository requestformService) {
+    public FormRevController(FormRevRepository requestformService, StudentRepository studentRepository, EmailService emailService) {
         this.requestformService = requestformService;
+        this.studentRepository = studentRepository;
+        this.emailService = emailService;
     }
 
     @PostMapping("/upload")
@@ -48,6 +56,16 @@ public class FormRevController {
             @RequestParam("files") List<MultipartFile> files
     ) {
         try {
+            // ค้นหานักศึกษาโดย studentID
+            Student student = studentRepository.findByUsername(studentID);
+            if (student == null) {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND); // หากไม่พบข้อมูลนักศึกษา
+            }
+
+            // ดึงข้อมูล email และ fullName ของนักศึกษา
+            String email = student.getEmail();
+
+
             FormRevocation requestform = new FormRevocation();
             requestform.setDate(Date.valueOf(date));  // แปลง String เป็น Date
             requestform.setFullName(fullName);
@@ -68,6 +86,18 @@ public class FormRevController {
             requestform.setReason(reason);
 
             FormRevocation savedInfo = requestformService.saveStudentInfoWithFiles(requestform, files);
+
+                    // ส่งอีเมลแจ้งเตือน
+                        String subject = "คำร้องถูกส่งสำเร็จ";
+                        String body = "คำร้องของคุณถูกส่งเรียบร้อยแล้วเมื่อวันที่: " + date + "\n\n" +
+                                        "รายละเอียดคำร้อง:\n" +
+                                        reason + "\n\n" +
+                                        "ขอบคุณที่ใช้บริการ";
+
+                    // ส่งอีเมลไปยังที่อยู่อีเมลที่ดึงมา
+                    emailService.sendEmail(email, subject, body);
+
+
             return new ResponseEntity<>(savedInfo, HttpStatus.CREATED);
         } catch (IOException e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);

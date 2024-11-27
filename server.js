@@ -103,8 +103,8 @@ app.get('/api/check-auth', (req, res) => {
 const dbConfig = {
     user: 'sa',
     password: 'YourStrong@Passw0rd',
-    port: 1433,
-    server: 'host.docker.internal', // เช่น 'localhost'
+    // port: 1433,
+    server: 'localhost', // เช่น 'localhost' , 'host.docker.internal'
     database: 'myDB', // เช่น 'myDB'
     options: {
         encrypt: true, // ใช้เมื่อเชื่อมต่อกับ Azure

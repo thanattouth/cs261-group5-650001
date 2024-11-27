@@ -39,18 +39,16 @@ document.getElementById("confirmBtn").addEventListener("click", async function (
     
     // ส่งข้อมูลไปที่ backend API ผ่าน HTTP POST request
     try {
-        const response = await fetch("http://localhost:8080/api/form/rev/upload", {
+        const response1 = await fetch("http://localhost:8080/api/form/rev/upload", {
             method: "POST",
             body: formData
         });
 
         // ตรวจสอบการตอบกลับ
-        if (response.ok) {
+        if (response1.ok) {
             console.log("sending sucess");
-
         } else {
-        console.log("sending fail");
-
+            console.log("sending fail");
         }
     } catch (error) {
         console.error("Error:", error);

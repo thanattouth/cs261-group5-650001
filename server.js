@@ -350,82 +350,48 @@ app.delete('/api/form/absence/:id', async (req, res) => {
     }
 });
 
-// API สำหรับส่งข้อมูลและอีเมล
-app.post('/api/form/rev/upload', async (req, res) => {
-    try {
-        const {
-            date,
-            fullName, 
-            studentID, 
-            department, 
-            year,
-            courseID,
-            courseName,
-            section,
-            reason,
-            email
-        } = req.body;
-
-        // สร้าง transporter สำหรับ Nodemailer
-        const transporter = nodemailer.createTransport({
-            service: 'gmail',
-            auth: {
-                user: process.env.EMAIL_USER,  // อีเมลผู้ส่งจาก .env
-                pass: process.env.EMAIL_PASS  // รหัสผ่านของอีเมล
-            }
-        });
-
-        // สร้าง HTML email template
-        const mailOptions = {
-            from: process.env.EMAIL_USER,
-            to: email,
-            subject: 'ยืนยันการส่งคำร้อง - ระบบบริการการศึกษา',
-            html: `
-                <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; background-color: #f4f4f4;">
-                    <h2 style="color: #333;">ยืนยันการส่งคำร้อง</h2>
-                    <p>เรียนคุณ ${fullName},</p>
-                    <p>คำร้องของคุณถูกส่งเรียบร้อยแล้ว โปรดตรวจสอบรายละเอียดดังนี้:</p>
-                    <table style="width: 100%; border-collapse: collapse; margin-top: 15px;">
-                        <tr><td style="padding: 10px; border: 1px solid #ddd;">วันที่ส่งคำร้อง</td><td style="padding: 10px; border: 1px solid #ddd;">${date}</td></tr>
-                        <tr><td style="padding: 10px; border: 1px solid #ddd;">รหัสนักศึกษา</td><td style="padding: 10px; border: 1px solid #ddd;">${studentID}</td></tr>
-                        <tr><td style="padding: 10px; border: 1px solid #ddd;">ภาควิชา/คณะ</td><td style="padding: 10px; border: 1px solid #ddd;">${department}</td></tr>
-                        <tr><td style="padding: 10px; border: 1px solid #ddd;">ชั้นปี</td><td style="padding: 10px; border: 1px solid #ddd;">${year}</td></tr>
-                        <tr><td style="padding: 10px; border: 1px solid #ddd;">รหัสวิชา</td><td style="padding: 10px; border: 1px solid #ddd;">${courseID}</td></tr>
-                        <tr><td style="padding: 10px; border: 1px solid #ddd;">ชื่อวิชา</td><td style="padding: 10px; border: 1px solid #ddd;">${courseName}</td></tr>
-                        <tr><td style="padding: 10px; border: 1px solid #ddd;">ตอนเรียน</td><td style="padding: 10px; border: 1px solid #ddd;">${section}</td></tr>
-                        <tr><td style="padding: 10px; border: 1px solid #ddd;">เหตุผล</td><td style="padding: 10px; border: 1px solid #ddd;">${reason}</td></tr>
-                    </table>
-                    <p style="margin-top: 20px;">กรุณารอการตอบกลับจากเจ้าหน้าที่</p>
-                    <p style="color: #666; font-size: 0.9em;">หากมีข้อสงสัย กรุณาติดต่อฝ่ายทะเบียน</p>
-                </div>
-            `
-        };
-
-        // ตรวจสอบว่า transporter พร้อมทำงานหรือไม่
-        await transporter.verify();
-        console.log('Transporter is ready.');
-
-        // ส่งอีเมล
-        transporter.sendMail(mailOptions, (error, info) => {
-            if (error) {
-                console.error('Error sending email:', error);
-            } else {
-                console.log('Email sent: ' + info.response);
-            }
-        });        
-
-        // ตอบกลับไปยังไคลเอนต์
-        res.status(201).json({
-            success: true,
-            message: 'Form submitted and email sent successfully'
-        });
-    } catch (error) {
-        console.error('Error occurred:', error);
-        res.status(500).json({
-            success: false,
-            message: 'An error occurred while processing the request'
-        });
+// สร้าง transporter ด้วยข้อมูล SMTP
+const transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+        user: 'requestverify1234@gmail.com', // อีเมลที่ใช้ส่ง
+        pass: 'hcfz qsxb ljhz mtnw'   // รหัสผ่านของอีเมล (ถ้าใช้ Gmail ต้องใช้ App Password)
     }
+});
+
+// API สำหรับส่งอีเมล
+app.post('/send-confirmation-email', (req, res) => {
+    const { email, name } = req.body;
+
+    if (!email || !name) {
+        return res.status(400).json({ success: false, message: 'Missing email or name' });
+    }
+
+    const mailOptions = {
+        from: 'requestverify1234@gmail.com',
+        to: email, 
+        subject: 'การยืนยันการส่งคำร้องขอเพิกถอน',
+        html: `
+             <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; background-color: #f4f4f4;">
+                <h2 style="color: #333;">ยืนยันการส่งคำร้องขอเพิกถอน</h2>
+                <p>เรียนคุณ ${name},</p>
+                <p>คำร้องของคุณถูกส่งเรียบร้อยแล้ว โปรดตรวจสอบรายละเอียดดังนี้:</p>
+                <p style="margin-top: 20px;">กรุณารอการตอบกลับจากเจ้าหน้าที่</p>
+                <p style="color: #666; font-size: 0.9em;">หากมีข้อสงสัย กรุณาติดต่อฝ่ายทะเบียน</p>
+            </div>
+         `
+    };
+
+    // ส่งอีเมล
+    transporter.sendMail(mailOptions, (error, info) => {
+        if (error) {
+            console.log('Error sending email:', error);
+            return res.status(500).json({ success: false, message: 'Error sending email' });
+        } else {
+            console.log('Email sent: ' + info.response);
+            return res.status(200).json({ success: true });
+        }
+    });
 });
 
 async function testConnection() {

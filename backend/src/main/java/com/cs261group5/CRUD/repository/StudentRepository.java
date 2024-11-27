@@ -28,13 +28,22 @@ public class StudentRepository implements StudentDAO{
         return  student;
     }
 
-    @Override
+    @Transactional
     public Student findByUsername(String username) {
-        String jpql = "SELECT s FROM Student s WHERE s.userName = :username";
-        return entityManager.createQuery(jpql, Student.class)
-                .setParameter("username", username)
-                .getSingleResult();
+        String jpql = "SELECT s FROM Student s WHERE s.userName = :username";  // ใช้ JPQL เพื่อค้นหาจาก username
+        TypedQuery<Student> query = entityManager.createQuery(jpql, Student.class);
+        query.setParameter("username", username);
+        return query.getSingleResult();  // คืนค่าผลลัพธ์ของการค้นหาตาม username
     }
+
+    @Transactional
+    public Student findByStudentID(String studentID) {
+        String jpql = "SELECT s FROM Student s WHERE s.studentID = :studentID";  // ใช้ JPQL เพื่อค้นหาจาก studentID
+        TypedQuery<Student> query = entityManager.createQuery(jpql, Student.class);
+        query.setParameter("studentID", studentID);
+        return query.getSingleResult();  // คืนค่าผลลัพธ์ของการค้นหาตาม studentID
+    }
+
 
     @Override
     @Transactional
@@ -61,5 +70,4 @@ public class StudentRepository implements StudentDAO{
         entityManager.merge(student);
 
     }
-
 }

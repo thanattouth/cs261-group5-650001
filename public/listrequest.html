@@ -33,34 +33,51 @@
             </div>
             <div class="draft">
                 <div class="section">
-                    <p>คำร้องขอจดทะเบียนล่าช้า</p>
-                    <table id="studentTable1" border="1">
-                        <tbody>
-                            <!-- ข้อมูลจะถูกใส่ที่นี่ -->
-                        </tbody>
-                    </table>
-                    <br>
-                    <p>คำร้องขอเพิกถอน</p>
-                    <table id="studentTable2" border="1">
-                        <tbody>
-                            <!-- ข้อมูลจะถูกใส่ที่นี่ -->
-                        </tbody>
-                    </table>
-                    <br>
-                    <p>คำร้องขอขาดสอบ</p>
-                    <table id="studentTable3" border="1">
-                        <tbody>
-                            <!-- ข้อมูลจะถูกใส่ที่นี่ -->
-                        </tbody>
-                    </table>
-                    <br>
-                    <p>คำร้องขอลาป่วยหรือลากิจ</p>
-                    <table id="studentTable4" border="1">
-                        <tbody>
-                            <!-- ข้อมูลจะถูกใส่ที่นี่ -->
-                        </tbody>
-                    </table>
-                </div>
+                    <div class="dropdown">
+                        <p class="toggle">
+                            คำร้องขอจดทะเบียนล่าช้า
+                            <span class="arrow">&#9660;</span> <!-- ลูกศรแสดงสถานะ -->
+                        </p>
+                        <table id="studentTable1" class="hidden styled-table">
+                            <tbody>
+                                <!-- ข้อมูลจะถูกใส่ที่นี่ -->
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="dropdown">
+                        <p class="toggle">
+                            คำร้องขอเพิกถอน
+                            <span class="arrow">&#9660;</span>
+                        </p>
+                        <table id="studentTable2" class="hidden styled-table">
+                            <tbody>
+                                <!-- ข้อมูลจะถูกใส่ที่นี่ -->
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="dropdown">
+                        <p class="toggle">
+                            คำร้องขอขาดสอบ
+                            <span class="arrow">&#9660;</span>
+                        </p>
+                        <table id="studentTable3" class="hidden styled-table">
+                            <tbody>
+                                <!-- ข้อมูลจะถูกใส่ที่นี่ -->
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="dropdown">
+                        <p class="toggle">
+                            คำร้องขอลาป่วยหรือลากิจ
+                            <span class="arrow">&#9660;</span>
+                        </p>
+                        <table id="studentTable4" class="hidden styled-table">
+                            <tbody>
+                                <!-- ข้อมูลจะถูกใส่ที่นี่ -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>  
             </div>
         </div>
     </div>
@@ -73,6 +90,27 @@
     <script>
         document.addEventListener('DOMContentLoaded', function() {
           sessionManager.preventBackAfterLogout();
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const toggles = document.querySelectorAll('.toggle');
+
+            toggles.forEach(toggle => {
+                toggle.addEventListener('click', () => {
+                    const table = toggle.nextElementSibling;
+                    const arrow = toggle.querySelector('.arrow');
+
+                    // สลับการเปิด/ปิดตาราง
+                    table.classList.toggle('hidden');
+            
+                    // สลับลูกศรขึ้น/ลง
+                    if (table.classList.contains('hidden')) {
+                        arrow.innerHTML = '&#9660;'; // ลูกศรลง
+                    } else {
+                        arrow.innerHTML = '&#9650;'; // ลูกศรขึ้น
+                    }
+                });
+            });
         });
     </script>
 </body>

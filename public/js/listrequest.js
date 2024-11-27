@@ -67,7 +67,7 @@ async function fetchFormData1() {
                 <td>${student.full_name}</td>
                 <td>
                     <button class="modify" onclick="redirectToEditPage1('${student.id}')">แก้ไข</button>
-                    <button class="delete" onclick="deleteStudent('${student.id}')">ยกเลิก</button>
+                    <button class="delete" onclick="deleteStudent1('${student.id}')">ยกเลิก</button>
                 </td>
             `;
             tableBody.appendChild(row);
@@ -119,14 +119,14 @@ async function fetchFormData2() {
                 <td>${student.full_name}</td>
                 <td>
                     <button class="modify" onclick="redirectToEditPage2('${student.id}')">แก้ไข</button>
-                    <button class="delete" onclick="deleteStudent('${student.id}')">ยกเลิก</button>
+                    <button class="delete" onclick="deleteStudent2('${student.id}')">ยกเลิก</button>
                 </td>
             `;
             tableBody.appendChild(row);
         });
     } catch (error) {
         console.error('Error fetching data for table 2:', error);
-        alert('Failed to fetch data. Please try again.');
+        // alert('Failed to fetch data. Please try again.');
     }
 }
 
@@ -172,14 +172,14 @@ async function fetchFormData3() {
                 <td>${student.full_name}</td>
                 <td>
                     <button class="modify" onclick="redirectToEditPage3('${student.id}')">แก้ไข</button>
-                    <button class="delete" onclick="deleteStudent('${student.id}')">ยกเลิก</button>
+                    <button class="delete" onclick="deleteStudent3('${student.id}')">ยกเลิก</button>
                 </td>
             `;
             tableBody.appendChild(row);
         });
     } catch (error) {
         console.error('Error fetching data for table 3:', error);
-        alert('Failed to fetch data. Please try again.');
+        // alert('Failed to fetch data. Please try again.');
     }
 }
 
@@ -225,14 +225,14 @@ async function fetchFormData4() {
                 <td>${student.full_name}</td>
                 <td>
                     <button class="modify" onclick="redirectToEditPage4('${student.id}')">แก้ไข</button>
-                    <button class="delete" onclick="deleteStudent('${student.id}')">ยกเลิก</button>
+                    <button class="delete" onclick="deleteStudent4('${student.id}')">ยกเลิก</button>
                 </td>
             `;
             tableBody.appendChild(row);
         });
     } catch (error) {
         console.error('Error fetching data for table 4:', error);
-        alert('Failed to fetch data. Please try again.');
+        // alert('Failed to fetch data. Please try again.');
     }
 }
 

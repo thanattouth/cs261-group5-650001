@@ -142,6 +142,15 @@ body {
     color: #333;
 }
 
+.section {
+    width: 100%;
+    margin: 20px auto;
+    padding: 10px;
+    background-color: #fff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+}
+
 .draft .section {
     margin-bottom: 30px;
 }
@@ -372,4 +381,66 @@ button.modify:disabled, button.delete:disabled {
         font-size: 12px;
         padding: 6px 12px;
     }
+}
+
+.dropdown {
+    margin-bottom: 15px;
+    padding: 10px 15px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #fdfdfd;
+}
+
+.toggle {
+    cursor: pointer;
+    font-weight: 500;
+    font-size: 18px;
+    color: #333;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 0;
+}
+
+.toggle:hover {
+    color: #007bff;
+    transition: color 0.3s;
+}
+
+.arrow {
+    font-size: 16px;
+    transition: transform 0.3s;
+}
+
+/* หมุนลูกศรเมื่อเปิด */
+.toggle.active .arrow {
+    transform: rotate(180deg);
+}
+
+.styled-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+    background-color: #fff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.styled-table th,
+.styled-table td {
+    padding: 12px;
+    border: 1px solid #ddd;
+    text-align: left;
+    font-size: 14px;
+    color: #333;
+}
+
+.styled-table th {
+    background-color: #007bff;
+    color: #fff;
+}
+
+.hidden {
+    display: none;
 }

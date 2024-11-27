@@ -421,6 +421,7 @@
             document.getElementById("confirmBtn").onclick = function() {        
                 if (validateForm()) {
                     document.getElementById("myModal").style.display = "none";
+                    const userData = JSON.parse(localStorage.getItem('userData'));
                     Swal.fire({
                         icon: "success",
                         title: "ส่งคำร้องสำเร็จแล้ว",
@@ -430,6 +431,14 @@
                     clearNonReadOnlyFields();
                     resetFiles();
                     clearDraftAfterSubmit();
+
+                    fetch('/send-confirmation-email', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ email: userData.email, name: userData.displayname_th})
+                    })
                 }
                 const userId = sessionStorage.getItem('userId') || 'defaultUser';
                 const fields = [

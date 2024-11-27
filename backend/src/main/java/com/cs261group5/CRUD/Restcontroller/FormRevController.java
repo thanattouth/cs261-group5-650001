@@ -2,8 +2,6 @@ package com.cs261group5.CRUD.Restcontroller;
 
 
 import com.cs261group5.CRUD.enitity.FormRevocation;
-import com.cs261group5.CRUD.enitity.Student;
-import com.cs261group5.CRUD.repository.EmailService;
 import com.cs261group5.CRUD.repository.FormRevRepository;
 import com.cs261group5.CRUD.repository.StudentRepository;
 
@@ -24,24 +22,16 @@ public class FormRevController {
 
     private final FormRevRepository requestformService;
     
-     @Autowired
-    private StudentRepository studentRepository;
-    
-    @Autowired
-    private EmailService emailService;
 
     @Value("${file.upload-dir}")
     private String uploadDir;
 
-    public FormRevController(FormRevRepository requestformService, StudentRepository studentRepository, EmailService emailService) {
+    public FormRevController(FormRevRepository requestformService, StudentRepository studentRepository) {
         this.requestformService = requestformService;
-        this.studentRepository = studentRepository;
-        this.emailService = emailService;
     }
 
     @PostMapping("/upload")
     public ResponseEntity<FormRevocation> uploadStudentInfo(
-            @RequestParam("engName") String engName,
             @RequestParam("date") String date,
             @RequestParam("fullName") String fullName,
             @RequestParam("studentID") String studentID,
@@ -62,16 +52,7 @@ public class FormRevController {
             @RequestParam("files") List<MultipartFile> files
     ) {
         try {
-            // ค้นหานักศึกษาจาก engName
-            Student student = studentRepository.findByEngName(engName);  // ใช้ findByEngName
-            if (student == null) {
-                return new ResponseEntity<>(HttpStatus.NOT_FOUND);  // ถ้าไม่พบข้อมูลนักศึกษา
-            }
-    
-            // ดึงข้อมูล email จาก Student
-            String email = student.getEmail();
-
-
+            
             FormRevocation requestform = new FormRevocation();
             requestform.setDate(Date.valueOf(date));  // แปลง String เป็น Date
             requestform.setFullName(fullName);
@@ -92,17 +73,6 @@ public class FormRevController {
             requestform.setReason(reason);
 
             FormRevocation savedInfo = requestformService.saveStudentInfoWithFiles(requestform, files);
-
-                    // ส่งอีเมลแจ้งเตือน
-                        String subject = "คำร้องถูกส่งสำเร็จ";
-                        String body = "คำร้องของคุณถูกส่งเรียบร้อยแล้วเมื่อวันที่: " + date + "\n\n" +
-                                        "รายละเอียดคำร้อง:\n" +
-                                        reason + "\n\n" +
-                                        "ขอบคุณที่ใช้บริการ";
-
-                    // ส่งอีเมลไปยังที่อยู่อีเมลที่ดึงมา
-                    emailService.sendEmail(email, subject, body);
-
 
             return new ResponseEntity<>(savedInfo, HttpStatus.CREATED);
         } catch (IOException e) {

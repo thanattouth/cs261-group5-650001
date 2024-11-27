@@ -27,14 +27,15 @@ document.getElementById("confirmBtn").addEventListener("click", async function (
     const attachmentFiles = Array.from(document.getElementById("attachment").files);
     attachmentFiles.forEach(file => formData.append("files", file));
 
-
     // ดึง email จาก localStorage
-    const email = localStorage.getItem('userEmail');
-    if (!email) {
+    const userData = JSON.parse(localStorage.getItem('userData'));
+    if (userData && userData.email) {
+        const email = userData.email;
+        formData.append("email", email);
+    } else {
         alert('Email not found. Please log in first.');
         return;
     }
-    formData.append("email", email);  // เพิ่ม email ใน formData
     
     // ส่งข้อมูลไปที่ backend API ผ่าน HTTP POST request
     try {

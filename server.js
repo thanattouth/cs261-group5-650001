@@ -2,14 +2,16 @@ const express = require('express');
 const session = require('express-session');
 const path = require('path');
 const cors = require('cors');
+const nodemailer = require('nodemailer');
 require('dotenv').config();
 const sql = require('mssql');
 
 const app = express();
+app.use(express.urlencoded({ extended: true }));
 app.use(cors({
-    origin: 'http://localhost:3000', // URL ที่อนุญาตให้เชื่อมต่อ
+    origin: 'http://localhost:3000', 
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
-    allowedHeaders: ['Content-Type']
+    allowedHeaders: ['Content-Type', 'Authorization']
 }));
 
 // Middleware
@@ -348,45 +350,84 @@ app.delete('/api/form/absence/:id', async (req, res) => {
     }
 });
 
-// สร้าง transporter สำหรับ Nodemailer
-const transporter = nodemailer.createTransport({
-    service: 'gmail',
-    auth: {
-        user: process.env.EMAIL_USER,  // อีเมลผู้ส่งจาก .env
-        pass: process.env.EMAIL_PASSWORD  // รหัสผ่านของอีเมล
-    }
-});
-
-// API route สำหรับรับข้อมูลคำร้องและส่งอีเมล
+// API สำหรับส่งข้อมูลและอีเมล
 app.post('/api/form/rev/upload', async (req, res) => {
-    const { fullName, reason, email } = req.body;  // รับข้อมูลจาก frontend
-
     try {
-        // ส่งอีเมลยืนยันการส่งคำร้อง
+        const {
+            date,
+            fullName, 
+            studentID, 
+            department, 
+            year,
+            courseID,
+            courseName,
+            section,
+            reason,
+            email
+        } = req.body;
+
+        // สร้าง transporter สำหรับ Nodemailer
+        const transporter = nodemailer.createTransport({
+            service: 'gmail',
+            auth: {
+                user: process.env.EMAIL_USER,  // อีเมลผู้ส่งจาก .env
+                pass: process.env.EMAIL_PASS  // รหัสผ่านของอีเมล
+            }
+        });
+
+        // สร้าง HTML email template
         const mailOptions = {
-            from: process.env.EMAIL_USER,  // อีเมลผู้ส่งจาก .env
-            to: email,                    // อีเมลของผู้รับที่รับจาก frontend
-            subject: 'คำร้องของคุณถูกส่งสำเร็จ',
-            text: `คำร้องของคุณถูกส่งเรียบร้อยแล้ว\n\nรายละเอียด:\n${reason}\n\nขอบคุณที่ใช้บริการ`
+            from: process.env.EMAIL_USER,
+            to: email,
+            subject: 'ยืนยันการส่งคำร้อง - ระบบบริการการศึกษา',
+            html: `
+                <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; background-color: #f4f4f4;">
+                    <h2 style="color: #333;">ยืนยันการส่งคำร้อง</h2>
+                    <p>เรียนคุณ ${fullName},</p>
+                    <p>คำร้องของคุณถูกส่งเรียบร้อยแล้ว โปรดตรวจสอบรายละเอียดดังนี้:</p>
+                    <table style="width: 100%; border-collapse: collapse; margin-top: 15px;">
+                        <tr><td style="padding: 10px; border: 1px solid #ddd;">วันที่ส่งคำร้อง</td><td style="padding: 10px; border: 1px solid #ddd;">${date}</td></tr>
+                        <tr><td style="padding: 10px; border: 1px solid #ddd;">รหัสนักศึกษา</td><td style="padding: 10px; border: 1px solid #ddd;">${studentID}</td></tr>
+                        <tr><td style="padding: 10px; border: 1px solid #ddd;">ภาควิชา/คณะ</td><td style="padding: 10px; border: 1px solid #ddd;">${department}</td></tr>
+                        <tr><td style="padding: 10px; border: 1px solid #ddd;">ชั้นปี</td><td style="padding: 10px; border: 1px solid #ddd;">${year}</td></tr>
+                        <tr><td style="padding: 10px; border: 1px solid #ddd;">รหัสวิชา</td><td style="padding: 10px; border: 1px solid #ddd;">${courseID}</td></tr>
+                        <tr><td style="padding: 10px; border: 1px solid #ddd;">ชื่อวิชา</td><td style="padding: 10px; border: 1px solid #ddd;">${courseName}</td></tr>
+                        <tr><td style="padding: 10px; border: 1px solid #ddd;">ตอนเรียน</td><td style="padding: 10px; border: 1px solid #ddd;">${section}</td></tr>
+                        <tr><td style="padding: 10px; border: 1px solid #ddd;">เหตุผล</td><td style="padding: 10px; border: 1px solid #ddd;">${reason}</td></tr>
+                    </table>
+                    <p style="margin-top: 20px;">กรุณารอการตอบกลับจากเจ้าหน้าที่</p>
+                    <p style="color: #666; font-size: 0.9em;">หากมีข้อสงสัย กรุณาติดต่อฝ่ายทะเบียน</p>
+                </div>
+            `
         };
+
+        // ตรวจสอบว่า transporter พร้อมทำงานหรือไม่
+        await transporter.verify();
+        console.log('Transporter is ready.');
 
         // ส่งอีเมล
         transporter.sendMail(mailOptions, (error, info) => {
             if (error) {
-                console.log('Error sending email:', error);
-                return res.status(500).json({ success: false, message: 'Email sending failed' });
+                console.error('Error sending email:', error);
+            } else {
+                console.log('Email sent: ' + info.response);
             }
-            console.log('Email sent: ' + info.response);
+        });        
+
+        // ตอบกลับไปยังไคลเอนต์
+        res.status(201).json({
+            success: true,
+            message: 'Form submitted and email sent successfully'
         });
-
-        // ส่งคำตอบกลับไปที่ frontend
-        res.status(201).json({ success: true, message: 'Form submitted and email sent' });
-
-    } catch (err) {
-        console.error('Error submitting form:', err);
-        res.status(500).json({ success: false, message: 'Form submission failed' });
+    } catch (error) {
+        console.error('Error occurred:', error);
+        res.status(500).json({
+            success: false,
+            message: 'An error occurred while processing the request'
+        });
     }
 });
+
 async function testConnection() {
     try {
         const pool = await sql.connect(dbConfig);

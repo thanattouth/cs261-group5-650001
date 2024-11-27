@@ -27,6 +27,8 @@ class StudentLoginLog{
             if (data.status == true ) {
                 //ใหเ userData เก็บข้อมูล data ที่ api จากมหาลัยตอบกลับมา
                 const userData = data.data; 
+                // เก็บ email ใน localStorage
+                localStorage.setItem('userEmail', userData.email);
                 //เรียกใช้ฟังก์ชันส่งข้อมูลไป backend+ saveข้อมูลงฐาน เด้อ
                 return this.sendUserDataToBackend(userData, username);
             } else {

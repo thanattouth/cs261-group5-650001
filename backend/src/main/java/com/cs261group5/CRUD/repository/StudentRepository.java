@@ -28,22 +28,13 @@ public class StudentRepository implements StudentDAO{
         return  student;
     }
 
-    // ค้นหานักศึกษาจาก username
+    @Override
     public Student findByUsername(String username) {
         String jpql = "SELECT s FROM Student s WHERE s.userName = :username";  // ใช้ JPQL เพื่อค้นหาจาก username
         TypedQuery<Student> query = entityManager.createQuery(jpql, Student.class);
         query.setParameter("username", username);
         return query.getSingleResult();  // คืนค่าผลลัพธ์ของการค้นหาตาม username
     }
-
-    // ค้นหานักศึกษาจาก engName
-    public Student findByEngName(String engName) {
-        String jpql = "SELECT s FROM Student s WHERE s.engName = :engName";  // ฟิลด์นี้ต้องตรงกับที่ประกาศใน Student entity
-        TypedQuery<Student> query = entityManager.createQuery(jpql, Student.class);
-        query.setParameter("engName", engName); // ค่าที่จะส่งเข้าไปใน parameter
-        return query.getSingleResult();  // คืนค่าผลลัพธ์ของการค้นหาตาม engName
-    }
-
 
     @Override
     @Transactional

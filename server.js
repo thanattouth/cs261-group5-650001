@@ -348,6 +348,45 @@ app.delete('/api/form/absence/:id', async (req, res) => {
     }
 });
 
+// สร้าง transporter สำหรับ Nodemailer
+const transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+        user: process.env.EMAIL_USER,  // อีเมลผู้ส่งจาก .env
+        pass: process.env.EMAIL_PASSWORD  // รหัสผ่านของอีเมล
+    }
+});
+
+// API route สำหรับรับข้อมูลคำร้องและส่งอีเมล
+app.post('/api/form/rev/upload', async (req, res) => {
+    const { fullName, reason, email } = req.body;  // รับข้อมูลจาก frontend
+
+    try {
+        // ส่งอีเมลยืนยันการส่งคำร้อง
+        const mailOptions = {
+            from: process.env.EMAIL_USER,  // อีเมลผู้ส่งจาก .env
+            to: email,                    // อีเมลของผู้รับที่รับจาก frontend
+            subject: 'คำร้องของคุณถูกส่งสำเร็จ',
+            text: `คำร้องของคุณถูกส่งเรียบร้อยแล้ว\n\nรายละเอียด:\n${reason}\n\nขอบคุณที่ใช้บริการ`
+        };
+
+        // ส่งอีเมล
+        transporter.sendMail(mailOptions, (error, info) => {
+            if (error) {
+                console.log('Error sending email:', error);
+                return res.status(500).json({ success: false, message: 'Email sending failed' });
+            }
+            console.log('Email sent: ' + info.response);
+        });
+
+        // ส่งคำตอบกลับไปที่ frontend
+        res.status(201).json({ success: true, message: 'Form submitted and email sent' });
+
+    } catch (err) {
+        console.error('Error submitting form:', err);
+        res.status(500).json({ success: false, message: 'Form submission failed' });
+    }
+});
 async function testConnection() {
     try {
         const pool = await sql.connect(dbConfig);

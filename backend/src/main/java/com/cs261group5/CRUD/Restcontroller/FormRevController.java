@@ -7,6 +7,7 @@ import com.cs261group5.CRUD.repository.EmailService;
 import com.cs261group5.CRUD.repository.FormRevRepository;
 import com.cs261group5.CRUD.repository.StudentRepository;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -22,8 +23,12 @@ import java.util.List;
 public class FormRevController {
 
     private final FormRevRepository requestformService;
-    private final StudentRepository studentRepository;
-    private final EmailService emailService;
+    
+     @Autowired
+    private StudentRepository studentRepository;
+    
+    @Autowired
+    private EmailService emailService;
 
     @Value("${file.upload-dir}")
     private String uploadDir;
@@ -56,14 +61,14 @@ public class FormRevController {
             @RequestParam("files") List<MultipartFile> files
     ) {
         try {
-            // ค้นหานักศึกษาโดย studentID
-            Student student = studentRepository.findByUsername(studentID);
-            if (student == null) {
-                return new ResponseEntity<>(HttpStatus.NOT_FOUND); // หากไม่พบข้อมูลนักศึกษา
-            }
+            // ค้นหานักศึกษาจาก StudentID
+        Student student = studentRepository.findByStudentID(studentID); 
+        if (student == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);  // ถ้าไม่พบข้อมูลนักศึกษา
+        }
 
-            // ดึงข้อมูล email และ fullName ของนักศึกษา
-            String email = student.getEmail();
+        // ดึงข้อมูล email จาก Student
+        String email = student.getEmail();
 
 
             FormRevocation requestform = new FormRevocation();

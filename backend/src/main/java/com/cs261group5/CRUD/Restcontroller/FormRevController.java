@@ -41,6 +41,7 @@ public class FormRevController {
 
     @PostMapping("/upload")
     public ResponseEntity<FormRevocation> uploadStudentInfo(
+            @RequestParam("engName") String engName,
             @RequestParam("date") String date,
             @RequestParam("fullName") String fullName,
             @RequestParam("studentID") String studentID,
@@ -61,14 +62,14 @@ public class FormRevController {
             @RequestParam("files") List<MultipartFile> files
     ) {
         try {
-            // ค้นหานักศึกษาจาก StudentID
-        Student student = studentRepository.findByStudentID(studentID); 
-        if (student == null) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);  // ถ้าไม่พบข้อมูลนักศึกษา
-        }
-
-        // ดึงข้อมูล email จาก Student
-        String email = student.getEmail();
+            // ค้นหานักศึกษาจาก engName
+            Student student = studentRepository.findByEngName(engName);  // ใช้ findByEngName
+            if (student == null) {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);  // ถ้าไม่พบข้อมูลนักศึกษา
+            }
+    
+            // ดึงข้อมูล email จาก Student
+            String email = student.getEmail();
 
 
             FormRevocation requestform = new FormRevocation();
